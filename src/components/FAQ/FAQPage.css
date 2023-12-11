@@ -1,0 +1,47 @@
+.faq-minor-wrapper {
+  display: flex;
+  flex-direction: column;
+}
+.faq-major {
+  display: inline-bolock;
+  margin: 30px 0px 20px 0px;
+  font-family: 'SDSamliphopangche_Basic';
+  font-size: 45px;
+}
+.faq-minor-wrapper {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+
+  height: auto;
+  width: 98%;
+  padding: 10px 15px;
+  margin-bottom: 15px;
+}
+.faq-minor {
+  padding: 3px 5px;
+  margin: 7px 15px;
+  /* border: 0.5px solid white; */
+  text-align: center;
+
+  font-family: 'SDSamliphopangche_Basic';
+  font-size: 21px;
+  color: var(--light-brown);
+}
+.faq-minor:hover {
+  color: var(--mint);
+}
+.faq-minor.faq-minor-selected {
+  color: var(--deep-brown);
+  font-weight: 600;
+}
+
+.page {
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.page .faq-wrapper {
+  margin: 5px 20px 10px 10px;
+  width: 80%;
+}

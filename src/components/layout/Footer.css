@@ -1,0 +1,36 @@
+.footer-body {
+}
+.footer-body .footer-area {
+  background-color: var(--light-brown);
+
+  /* overflow: hidden; */
+  text-align: left;
+  font-size: 14px;
+  color: #eaeaea;
+  font-family: 'Pretendard-Regular';
+  /* height: 150px; */
+  height: calc(100vh - 150px);
+
+  position: relative;
+
+  /* position: fixed;
+  bottom: 0;
+  width: 100%;
+  height: 150px;
+  margin-top: 150px; */
+  /* 푸터 heigth 변경 시 index.css의 body padding bottom 도 동일하게 수정해야함(안그러면 겹침) */
+
+  flex-shrink: 0;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  padding: 10px 55px 30px;
+}
+.footer-menu {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+.footer-info {
+  margin: 4px 0px;
+}

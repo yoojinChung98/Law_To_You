@@ -1,0 +1,29 @@
+.faqbox-header {
+  background-color: var(--title-brown);
+  border-top: 2.5px solid var(--black-brown);
+  border-bottom: 2.5px solid var(--black-brown);
+  box-sizing: border-box;
+
+  width: 100%;
+  height: 50px;
+  overflow: hidden;
+  text-align: center;
+  font-size: 21px;
+  color: var(--color-gray-100);
+  font-family: var(--font-sandoll-samliphopangche);
+
+  position: relative;
+  display: flex;
+  justify-items: center;
+  align-items: center;
+}
+
+.faqbox-header .faqbox-header-no {
+  width: 60px;
+}
+.faqbox-header .faqbox-header-categ {
+  width: 140px;
+}
+.faqbox-header .faqbox-header-title {
+  width: 1380px;
+}
