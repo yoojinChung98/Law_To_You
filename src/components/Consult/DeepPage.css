@@ -1,0 +1,9 @@
+.page {
+  padding-bottom: 150px; /* 푸터의 높이만큼 여백을 추가합니다. */
+  position: relative; /* ConsultPage의 position을 설정합니다. */
+}
+.consult-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
