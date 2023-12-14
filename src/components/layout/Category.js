@@ -1,23 +1,20 @@
 import './Category.css';
 
-const Category = () => {
-  return (
-    <ul className='category-wrapper'>
-      <li className='category-title'>카테고리제목</li>
-      <li className='category-list'>카테고리list</li>
-      <li className='category-list cate-selected'>선택된list</li>
-      <li className='category-list'>카테고리list</li>
-      <li className='category-list'>카테고리list</li>
-      <li className='category-list'>카테고리list</li>
-      <li className='category-list'>카테고리list</li>
-      <li className='category-list'>카테고리list</li>
-      <li className='category-list'>카테고리list</li>
-      <li className='category-list'>카테고리list</li>
-      <li className='category-list'>카테고리list</li>
-      <li className='category-list'>카테고리list</li>
-      <li className='category-list'>카테고리list</li>
-    </ul>
-  );
+const Category = ({ categoryList, clickedIDX }) => {
+  const renderCategoryList = () => {
+    return categoryList.map((category, index) => (
+      <li
+        key={index}
+        className={
+          index === clickedIDX ? 'category-list cate-selected' : 'category-list'
+        }
+      >
+        {category}
+      </li>
+    ));
+  };
+
+  return <ul className='category-wrapper'>{renderCategoryList()}</ul>;
 };
 
 export default Category;

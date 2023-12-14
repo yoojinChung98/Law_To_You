@@ -6,13 +6,18 @@ import Footer from '../layout/Footer';
 import Category from '../layout/Category';
 
 const FAQ = () => {
+  const categories = ['카테고리1', '카테고리2', '카테고리3', '카테고리4'];
+  const clickedIdx = 3;
   return (
     <>
       <Header />
 
       {/** 헤더푸터 제외 가운데정렬로 맞출 클래스 지정을 위해 div 태그로 감쌈 */}
       <div className='page'>
-        <Category />
+        <Category
+          categoryList={categories}
+          clickedIDX={clickedIdx}
+        />
         <div className='faq-wrapper'>
           <h1 className='faq-major'>대분류</h1>
           <div className='faq-minor-wrapper'>
