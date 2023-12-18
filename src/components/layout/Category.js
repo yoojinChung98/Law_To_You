@@ -14,7 +14,12 @@ const Category = ({ categoryList, clickedIDX }) => {
     ));
   };
 
-  return <ul className='category-wrapper'>{renderCategoryList()}</ul>;
+  return (
+    <ul className='category-wrapper'>
+      <li className='category-title'>카테고리제목</li>
+      {renderCategoryList()}
+    </ul>
+  );
 };
 
 export default Category;

@@ -1,0 +1,32 @@
+.board {
+  margin-right: 80px;
+}
+.board .title {
+  font-family: 'SDSamliphopangche_Basic';
+  font-size: 37px;
+}
+.board-table {
+  width: 1400px;
+  flex-shrink: 0;
+  border-collapse: collapse;
+
+  thead {
+    color: #000;
+    font-family: Sandoll Samliphopangche;
+    font-size: 20px;
+    height: 70px;
+    border-bottom: 2px solid black;
+    border-top: 2px solid black;
+  }
+
+  tbody {
+    font-family: Inter;
+    font-size: 15px;
+    letter-spacing: 1.5px;
+    height: 52px;
+    border-bottom: 1px solid #d8cec2;
+  }
+}
+.page {
+  background-image: url('../../assets/img/');
+}

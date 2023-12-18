@@ -1,17 +1,19 @@
 .footer-body {
   position: absolute;
   width: 100%;
+  background-color: var(--light-brown);
+  height: 100%;
   /* bottom: -100%; */
 }
 .footer-body .footer-area {
-  background-color: var(--light-brown);
-
   /* overflow: hidden; */
   text-align: left;
   font-size: 14px;
   color: #eaeaea;
   font-family: 'Pretendard-Regular';
   height: 250px;
+  width: 2000px;
+  margin: 0px auto;
 
   position: relative;
 
