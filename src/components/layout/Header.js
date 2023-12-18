@@ -17,14 +17,6 @@ const Header = () => {
         id='header'
         attriName='attriValue'
       >
-        {/* 
-      <img
-        className='logos-mint-icon1'
-        alt='Logo'
-        src={require('../../assets/img/LogoS_mint.png')}
-        onClick={onLogoSMintImageClick}
-      /> */}
-
         <div className='htab'>
           <div
             className='hbtndiv'

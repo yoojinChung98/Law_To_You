@@ -7,6 +7,9 @@ import FAQPage from './components/FAQ/FAQPage';
 import MainPage from './components/MainPage';
 import ConsultPage from './components/Consult/ConsultPage';
 import DeepPage from './components/Consult/DeepPage';
+import MyConsultListPage from './components/MyConsultList/MyConsultListPage';
+import MyPostListPage from './components/MyPostList/MyPostListPage';
+import JoinList from './components/JoinList/JoinListPage';
 
 function App() {
   return (
@@ -15,6 +18,9 @@ function App() {
       {/* <MainPage /> */}
       {/* <ConsultPage /> */}
       {/* <DeepPage /> */}
+      <MyConsultListPage />
+      {/* <MyPostListPage /> */}
+      {/* <JoinList /> */}
     </>
   );
 }
