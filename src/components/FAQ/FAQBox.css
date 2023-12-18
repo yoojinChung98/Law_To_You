@@ -17,6 +17,9 @@
   justify-items: center;
   align-items: center;
 }
+.faqbox-content {
+  margin-bottom: 20px;
+}
 
 .faqbox-header .faqbox-header-no {
   width: 60px;
