@@ -9,10 +9,11 @@
   font-size: 40px;
   color: var(--mint);
   font-family: 'SDSamliphopangche_Basic';
-
   display: flex;
   justify-content: space-evenly;
   align-items: center;
+  z-index: 10;
+  position: relative;
 }
 /* .logos-mint-icon1 {
   top: 9px;

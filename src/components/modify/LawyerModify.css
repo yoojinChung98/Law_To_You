@@ -1,0 +1,279 @@
+.texts {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.texts {
+  top: 136px;
+  left: 32px;
+  width: 240px;
+  height: 30px;
+  font-family: var(--font-sandoll-samliphopangche);
+}
+
+.texts1 {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.texts1 {
+  top: 236px;
+  left: 32px;
+  width: 240px;
+  height: 30px;
+  font-family: var(--font-sandoll-samliphopangche);
+}
+
+.texts2 {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.texts2 {
+  top: 336px;
+  left: 32px;
+  width: 240px;
+  height: 30px;
+  font-family: var(--font-sandoll-samliphopangche);
+}
+
+.texts3 {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.texts3 {
+  top: 436px;
+  left: 32px;
+  width: 240px;
+  height: 30px;
+  font-family: Sandoll Samliphopangche;
+}
+
+.texts4 {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.texts4 {
+  top: 536px;
+  left: 32px;
+  width: 240px;
+  height: 30px;
+  font-family: Sandoll Samliphopangche;
+}
+
+.texts5 {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.texts5 {
+  top: 636px;
+  left: 32px;
+  width: 220px;
+  height: 30px;
+  font-family: Sandoll Samliphopangche;
+}
+
+.maintext2 {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 950px;
+  height: 70px;
+  transform: translate(0%, 5%);
+  border-bottom: 1px solid gray;
+  text-align: center;
+  font-weight: bold;
+}
+/*닉네임 input*/
+.inputnewpassword2,
+.inputNickname1,
+.inputrecognize1 {
+  background-color: var(--color-whitesmoke-200);
+  position: absolute;
+  top: 536px;
+  left: 379px;
+  box-sizing: border-box;
+  width: 435px;
+  height: 40px;
+  border: none;
+  border-bottom: 1px solid black;
+}
+
+/*이름*/
+.inputname1 {
+  border: none;
+  background-color: var(--color-whitesmoke-200);
+  top: 136px;
+  left: 380px;
+  box-sizing: border-box;
+  width: 434px;
+  font-size: 22px;
+  color: gray;
+  position: absolute;
+}
+/*새 비밀번호*/
+.inputnewpasswordCheck2 {
+  border: 1px solid var(--color-darkgray-100);
+  background-color: var(--color-white);
+  position: absolute;
+  top: 336px;
+  left: 379px;
+  box-sizing: border-box;
+  width: 435px;
+  height: 40px;
+  border: none;
+  border-bottom: 1px solid black;
+  font-size: 22px;
+}
+
+/*새 비밀번호 확인*/
+.inputnewpassword2 {
+  border: 1px solid var(--color-darkgray-100);
+  background-color: var(--color-white);
+  position: absolute;
+  top: 436px;
+  left: 379px;
+  box-sizing: border-box;
+  width: 435px;
+  height: 40px;
+  border: none;
+  border-bottom: 1px solid black;
+  font-size: 22px;
+}
+/* .inputNickname {
+  border-bottom: 1px solid black;
+  background-color: var(--color-white);
+  position: absolute;
+  top: 416px;
+  left: 379px;
+  box-sizing: border-box;
+  width: 435px;
+  height: 40px;
+} */
+
+.btnleave2 {
+  cursor: pointer;
+  border: 0;
+  padding: 0;
+  background-color: rgba(80, 70, 57, 1);
+  position: absolute;
+  top: 740px;
+  left: 756px;
+  border-radius: var(--br-3xs);
+  width: 162px;
+  height: 41px;
+  text-align: center;
+  color: white;
+  font-size: 20px;
+}
+.div19 {
+  position: absolute;
+  top: 757px;
+  left: 798px;
+  font-size: var(--font-size-xl);
+  color: var(--color-white);
+  display: inline-block;
+  width: 83px;
+  height: 22px;
+}
+.btnchange3 {
+  cursor: pointer;
+  border: 0;
+  padding: 0;
+  background-color: var(--light-brown);
+  position: absolute;
+  top: 436px;
+  left: 858px;
+  border-radius: var(--br-3xs);
+  width: 70px;
+  height: 40px;
+  color: white;
+  font-size: 18px;
+}
+
+.btnchange4 {
+  cursor: pointer;
+  border: 0;
+  padding: 0;
+  background-color: var(--light-brown);
+  position: absolute;
+  top: 435px;
+  left: 858px;
+  border-radius: var(--br-3xs);
+  width: 70px;
+  height: 40px;
+  color: white;
+  font-size: 18px;
+}
+
+/*아이디*/
+.inputid2 {
+  border: none;
+  background-color: var(--color-whitesmoke-200);
+  top: 236px;
+  left: 380px;
+  box-sizing: border-box;
+  width: 434px;
+  font-size: 22px;
+  color: gray;
+  position: absolute;
+}
+
+.inputme {
+  border: none;
+  background-color: var(--color-whitesmoke-200);
+  top: 635px;
+  left: 382px;
+  box-sizing: border-box;
+  width: 434px;
+  font-size: 22px;
+  position: absolute;
+}
+/*이메일*/
+.email2 {
+  border: none;
+  background-color: var(--color-whitesmoke-200);
+  top: 535px;
+  left: 382px;
+  box-sizing: border-box;
+  width: 434px;
+  font-size: 22px;
+  position: absolute;
+}
+
+.lawyermodify1 {
+  border: 1px solid var(--color-white);
+  box-sizing: border-box;
+  width: 953px;
+  height: 540px;
+  text-align: left;
+  font-size: var(--font-size-11xl);
+  color: var(--color-black);
+  font-family: var(--font-sandoll-samliphopangche);
+  transform: translate(85%, -85%);
+  top: 0px;
+  left: 0px;
+  font-size: 30px;
+}
+
+.userCategory {
+  width: 224px;
+  height: 580px;
+  text-align: center;
+  font-size: var(--font-size-11xl);
+  color: var(--color-black);
+  font-family: var(--font-sandoll-samliphopangche);
+  top: 180px;
+  left: 200px;
+  font-size: 30px;
+  transform: translate(170%, 27%);
+}
