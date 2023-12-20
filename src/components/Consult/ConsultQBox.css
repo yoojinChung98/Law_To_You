@@ -1,0 +1,90 @@
+.consult-q-title-area {
+  display: flex;
+  flex-direction: row;
+  align-items: right;
+  width: 1400px;
+  margin-top: 20px;
+  position: relative;
+}
+.QAIcon {
+  width: 50px;
+  height: 50px;
+}
+.consult-q-title-area .consult-q-title-wrapper {
+  display: flex;
+
+  flex-direction: column;
+  margin-left: 10px;
+}
+
+.consult-q-title-area .consult-q-title-wrapper .id {
+  font-family: 'Pretendard-Regular';
+  font-size: 15px;
+  margin-top: 2px;
+}
+.consult-q-title-area .consult-q-title-wrapper .title {
+  font-family: 'SDSamliphopangche_Basic';
+  font-size: 25px;
+  margin-top: 5px;
+}
+.consult-q-title-area .consult-q-regdate-wrapper .regdate {
+  font-family: 'SDSamliphopangche_Basic';
+  color: #b9b9b9;
+  /* margin-left: 1000px; */
+
+  position: absolute;
+  top: 10px;
+  right: 0px;
+}
+
+.consult-q-content-area {
+  width: 1350px;
+  border-bottom: 2px solid #d9d9d9;
+  padding: 40px 30px 50px 30px;
+}
+
+.consult-preview-area {
+  display: flex;
+  flex-direction: row;
+  align-items: right;
+  width: 1400px;
+  margin-top: 20px;
+  position: relative;
+}
+.consult-preview-area span {
+  font-family: 'SDSamliphopangche_Basic';
+  font-size: 20px;
+  display: inline-block;
+  height: auto;
+  line-height: 110px;
+}
+.consult-preview-area .preview-box {
+  padding: 4px 10px 4px 15px;
+  margin-left: 0px;
+}
+.consult-preview-area .preview-box .previewImg {
+  width: 88px;
+  height: 95px;
+  margin: 3px 7px 3px 7px;
+}
+.consult-preview-area .consult-del-btn {
+  font-family: 'SDSamliphopangche_Basic';
+  letter-spacing: 2.5px;
+  background: var(--button-white, #ffffff);
+  border: 2px solid #504639;
+  color: #504639;
+  line-height: 45px;
+  height: 35px;
+  width: 100px;
+
+  position: absolute;
+  right: 10px;
+  bottom: 0;
+}
+
+.consult-preview-area .consult-del-btn:hover {
+  background: var(--light-brown);
+  border: 2px solid var(--deep-brown);
+  color: #ffffff;
+  line-height: 45px;
+}

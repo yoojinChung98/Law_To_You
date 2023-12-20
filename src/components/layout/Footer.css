@@ -1,15 +1,19 @@
 .footer-body {
+  position: absolute;
+  width: 100%;
+  background-color: var(--light-brown);
+  height: 100%;
+  /* bottom: -100%; */
 }
 .footer-body .footer-area {
-  background-color: var(--light-brown);
-
   /* overflow: hidden; */
   text-align: left;
   font-size: 14px;
   color: #eaeaea;
   font-family: 'Pretendard-Regular';
-  /* height: 150px; */
-  height: calc(100vh - 150px);
+  height: 250px;
+  width: 2000px;
+  margin: 0px auto;
 
   position: relative;
 
@@ -19,6 +23,7 @@
   height: 150px;
   margin-top: 150px; */
   /* 푸터 heigth 변경 시 index.css의 body padding bottom 도 동일하게 수정해야함(안그러면 겹침) */
+  bottom: 0px;
 
   flex-shrink: 0;
 

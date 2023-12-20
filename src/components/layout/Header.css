@@ -1,8 +1,17 @@
+.header-area {
+  width: 100%;
+  border-bottom: 2px solid #d9d9d9;
+  margin: 0px auto 30px auto;
+  display: flex;
+  align-items: center;
+}
 .header {
   background-color: white;
-  border-bottom: 2px solid #d9d9d9;
+  margin: 0px auto 0px auto;
+
   box-sizing: border-box;
-  width: 100%;
+  width: 2000px;
+
   height: 110px;
   overflow: hidden;
   text-align: center;

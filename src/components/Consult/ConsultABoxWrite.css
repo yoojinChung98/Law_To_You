@@ -1,0 +1,99 @@
+.consult-a-box {
+  border: 3px solid #b9b9b9;
+  background-color: #d9d9d9;
+  border-radius: 10px;
+  width: 1330px;
+  padding: 5px 35px 15px 35px;
+  margin-top: 20px;
+}
+.consult-aw-title-area {
+  font-family: 'SDSamliphopangche_Basic';
+  display: flex;
+  width: 1400px;
+  padding-left: 25px;
+  position: relative;
+  font-size: 28px;
+}
+
+.consult-aw-content-area {
+  font-family: 'Pretendard-Regular';
+  font-size: 19px;
+  width: 1260px;
+  height: 300px;
+  border: 2px solid #a9a9a9;
+  background-color: #fbfbfb;
+  padding: 25px;
+  resize: none;
+  outline: none;
+  line-height: 26px;
+}
+
+.consult-aw-content-area::placeholder {
+  color: #d9d9d9;
+}
+
+.consult-gavel-area {
+  display: flex;
+  flex-direction: row;
+  align-items: right;
+  width: 1400px;
+  margin-top: 30px;
+  position: relative;
+}
+.consult-gavel-area .gavel-info {
+  font-family: 'SDSamliphopangche_Basic';
+  font-size: 18px;
+  width: 80px;
+  height: 50px;
+  display: inline-block;
+  text-align: center;
+  margin: 0px 5pxpx 0px 5px;
+  line-height: 23px;
+}
+.consult-gavel-area .input-gavel-num {
+  font-family: 'SDSamliphopangche_Basic';
+  font-size: 20px;
+  padding-left: 15px;
+  display: block;
+  height: 30px;
+  width: 60px;
+  margin: 0px 10px 0px 15px;
+  line-height: 40px;
+  outline: none;
+  border: none;
+  border-bottom: 1px solid #b9b9b9;
+  background-color: transparent;
+}
+.consult-gavel-area .input-gavel-num::placeholder {
+  color: #a9a9a9;
+}
+.consult-gavel-area .gavel-num {
+  font-family: 'SDSamliphopangche_Basic';
+  font-size: 20px;
+  display: inline-block;
+  height: 50px;
+  margin: 0px 10px 0px 15px;
+  line-height: 40px;
+}
+.consult-gavel-area .consult-adopt-btn {
+  font-family: 'SDSamliphopangche_Basic';
+  letter-spacing: 2.5px;
+  background: var(--deep-brown);
+  border: 2px solid #504639;
+  color: #ffffff;
+  line-height: 45px;
+  height: 35px;
+  width: 150px;
+  line-height: 20px;
+
+  position: absolute;
+  right: 70px;
+  bottom: 0;
+}
+
+.consult-gavel-area .consult-adopt-btn:hover {
+  background: var(--deep-brown);
+  border: 2px solid var(--deep-brown);
+  color: #ffffff;
+  line-height: 45px;
+}

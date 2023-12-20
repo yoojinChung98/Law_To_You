@@ -5,7 +5,7 @@ const Footer = () => {
     <div className='footer-body'>
       <footer className='footer-area'>
         <span className='footer-menu'>
-          너에게Law | 법이 궁금할 땐, 언제나 곁에 있는 너에게Law
+          내옆으Law | 법이 궁금할 땐, 언제나 곁에 있는 내옆으Law
         </span>
         <span className='footer-info'>
           개인정보 처리 방침 | 이용약관 | 운영정책

@@ -1,0 +1,99 @@
+.consult-a-box {
+  border: 3px solid #b9b9b9;
+  background-color: #d9d9d9;
+  border-radius: 10px;
+  width: 1330px;
+  padding: 5px 35px 15px 35px;
+  margin-top: 20px;
+}
+.consult-a-title-area {
+  display: flex;
+  flex-direction: row;
+  align-items: right;
+  width: 1400px;
+  margin-top: 20px;
+  position: relative;
+}
+.QAIcon {
+  width: 50px;
+  height: 50px;
+}
+.consult-a-title-area .consult-a-title-wrapper {
+  display: flex;
+
+  flex-direction: column;
+  margin-left: 10px;
+  margin-top: 18px;
+}
+.consult-a-title-area .consult-a-title-wrapper .laywer-name {
+  font-family: 'SDSamliphopangche_Basic';
+  font-size: 30px;
+}
+.consult-a-title-area .consult-a-regdate-wrapper .regdate {
+  font-family: 'SDSamliphopangche_Basic';
+  color: #b9b9b9;
+
+  position: absolute;
+  top: 10px;
+  right: 100px;
+}
+
+.consult-a-content-area {
+  width: 1280px;
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid #a9a9a9;
+  padding: 40px 30px 50px 30px;
+  font-size: 19px;
+  line-height: 26px;
+  resize: none;
+  outline: none;
+}
+
+.consult-gavel-area {
+  display: flex;
+  flex-direction: row;
+  align-items: right;
+  width: 1400px;
+  margin-top: 20px;
+  position: relative;
+}
+.consult-gavel-area .gavel-info {
+  font-family: 'SDSamliphopangche_Basic';
+  font-size: 18px;
+  width: 80px;
+  height: 50px;
+  display: inline-block;
+  text-align: center;
+  margin: 0px 10px 0px 5px;
+}
+.consult-gavel-area .gavel-num {
+  font-family: 'SDSamliphopangche_Basic';
+  font-size: 20px;
+  display: inline-block;
+  height: 50px;
+  margin: 0px 10px 0px 15px;
+  line-height: 40px;
+}
+.consult-gavel-area .consult-adopt-btn {
+  font-family: 'SDSamliphopangche_Basic';
+  letter-spacing: 2.5px;
+  background: var(--deep-brown);
+  border: 2px solid #504639;
+  color: #ffffff;
+  line-height: 45px;
+  height: 35px;
+  width: 150px;
+  line-height: 20px;
+
+  position: absolute;
+  right: 70px;
+  top: 6px;
+}
+
+.consult-gavel-area .consult-adopt-btn:hover {
+  background: var(--deep-brown);
+  border: 2px solid var(--deep-brown);
+  color: #ffffff;
+  line-height: 45px;
+}

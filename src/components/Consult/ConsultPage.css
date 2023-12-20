@@ -1,0 +1,10 @@
+.page {
+  position: relative; /* ConsultPage의 position을 설정합니다. */
+  width: 2000px;
+  margin: 0px auto;
+}
+.consult-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}

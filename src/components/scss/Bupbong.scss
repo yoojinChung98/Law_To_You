@@ -1,0 +1,161 @@
+.wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 875px;
+  height: 100%;
+  flex-direction: column;
+  margin: 100px auto;
+  font-family: Sandoll Samliphopangche;
+  font-style: normal;
+  font-weight: 550;
+  line-height: normal;
+  color: #000;
+
+  .title {
+    font-size: 30px;
+    letter-spacing: 3px;
+    margin-bottom: 80px;
+  }
+
+  .info {
+    height: 200px;
+    flex-shrink: 0;
+    text-align: left;
+    .label {
+      width: 140px !important;
+      margin-right: 50px !important;
+    }
+    .own-wrapper {
+      width: 875px;
+      height: 100px;
+
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      .own {
+        display: flex;
+        flex-direction: row;
+        font-size: 30px;
+        letter-spacing: 3px;
+        // margin: 0px 70px 0px 5px;
+      }
+      .own-count {
+        font-size: 25px;
+      }
+    }
+    .account-wrapper {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 100px;
+
+      .label {
+        margin-right: 80px !important;
+      }
+      .account-num {
+        font-size: 30px;
+        letter-spacing: 3px;
+      }
+      .account-select {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        .MuiInputBase-root {
+          width: 150px;
+          height: 60px !important;
+        }
+
+        .account-input {
+          width: 375px;
+          height: 56px !important;
+          flex-shrink: 0;
+
+          font-size: 20px;
+          font-family: Sandoll Samliphopangche;
+          font-style: normal;
+          font-weight: 550;
+          line-height: normal;
+          color: #000;
+        }
+      }
+      .input-btn {
+        width: 104px;
+        height: 60px;
+        flex-shrink: 0;
+        border-radius: 10px;
+        background: #aa9e8f;
+        color: #fff;
+        font-family: Sandoll Samliphopangche;
+        font-size: 25px;
+        font-style: normal;
+        font-weight: 550;
+        line-height: normal;
+      }
+    }
+  }
+  .box-wrapper {
+    width: 875px;
+    height: 303px;
+    flex-shrink: 0;
+    background: #ddd3c8;
+    display: flex;
+    padding-left: 30px;
+
+    .box {
+      width: 170px;
+      height: 170px;
+      flex-shrink: 0;
+      background: #aa9e8f;
+      border-radius: 10px;
+      margin: auto 0 auto 10px;
+
+      .num {
+        font-size: 25px;
+        padding: 50px 0 20px 0;
+      }
+      .price {
+        font-size: 30px;
+      }
+    }
+    .box-input {
+      display: flex;
+      flex-direction: column;
+      gap: 10px 0;
+      margin: auto;
+      .input {
+        width: 142px;
+        height: 30px;
+        flex-shrink: 0;
+        margin-right: 10px;
+        border: 1px solid #696969;
+        background: #fff;
+
+        font-size: 20px;
+        font-family: Sandoll Samliphopangche;
+        font-style: normal;
+        font-weight: 550;
+        line-height: normal;
+        color: #000;
+      }
+      .unit {
+        font-size: 25px;
+      }
+      .charge-btn {
+        width: 157px;
+        height: 40px;
+        flex-shrink: 0;
+        border-radius: 10px;
+        background: #3498db;
+
+        color: #fff;
+        font-family: Sandoll Samliphopangche;
+        font-size: 25px;
+        font-style: normal;
+        font-weight: 550;
+        line-height: normal;
+      }
+    }
+  }
+}
