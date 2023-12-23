@@ -1,7 +1,7 @@
-import cn from "classnames";
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import "./MainPage.css";
+import cn from 'classnames';
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
+import './MainPage.css';
 
 const MainPage = () => {
   const [targetDivId, setTargetDivId] = useState(null);
@@ -10,54 +10,75 @@ const MainPage = () => {
     setTargetDivId(e.target.parentNode.id);
   };
   const handleMouseLeave = () => {
-    setTargetDivId("");
+    setTargetDivId('');
   };
 
   return (
-    <div className="mainPageDiv">
-      <div className="logom-white-icon" />
+    <div className='mainPageDiv'>
+      <div className='logom-white-icon' />
 
       <div
-        id="mainSec1"
-        className={cn("secDefault1", {
-          hoveredSec1: targetDivId === "mainSec1",
+        id='mainSec1'
+        className={cn('secDefault1', {
+          hoveredSec1: targetDivId === 'mainSec1',
         })}
       >
-        <span onMouseEnter={handleMouseHover} onMouseLeave={handleMouseLeave}>
+        <Link
+          to='/faq'
+          className='insteadOfSpan'
+          onMouseEnter={handleMouseHover}
+          onMouseLeave={handleMouseLeave}
+        >
+          백문백답
+        </Link>
+      </div>
+
+      <div
+        id='mainSec2'
+        className={cn('secDefault2', {
+          hoveredSec2: targetDivId === 'mainSec2',
+        })}
+      >
+        <Link
+          to='/counsel'
+          className='insteadOfSpan'
+          onMouseEnter={handleMouseHover}
+          onMouseLeave={handleMouseLeave}
+        >
           온라인상담
-        </span>
+        </Link>
       </div>
 
       <div
-        id="mainSec2"
-        className={cn("secDefault2", {
-          hoveredSec2: targetDivId === "mainSec2",
+        id='mainSec3'
+        className={cn('secDefault3', {
+          hoveredSec3: targetDivId === 'mainSec3',
         })}
       >
-        <span onMouseEnter={handleMouseHover} onMouseLeave={handleMouseLeave}>
+        <Link
+          to='/free'
+          className='insteadOfSpan'
+          onMouseEnter={handleMouseHover}
+          onMouseLeave={handleMouseLeave}
+        >
           고민나누기
-        </span>
+        </Link>
       </div>
-
-      <div
-        id="mainSec3"
-        className={cn("secDefault3", {
-          hoveredSec3: targetDivId === "mainSec3",
-        })}
-      >
-        <span onMouseEnter={handleMouseHover} onMouseLeave={handleMouseLeave}>
-          마이페이지
-        </span>
-      </div>
-      <div className="mainJoinLogin">
+      <div className='mainJoinLogin'>
         {/* <span className="mainJoinBtn">회원가입</span> */}
         {/* <div className="mainBtnBar" /> */}
         {/* <span className="mainLoginBtn">로그인</span> */}
-        <Link to="/join" className="mainJoinBtn">
+        <Link
+          to='/join'
+          className='mainJoinBtn'
+        >
           회원가입
         </Link>
-        <div className="mainBtnBar" />
-        <Link to="/login" className="mainLoginBtn">
+        <div className='mainBtnBar' />
+        <Link
+          to='/login'
+          className='mainLoginBtn'
+        >
           로그인
         </Link>
       </div>

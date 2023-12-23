@@ -3,10 +3,10 @@
   flex-direction: column;
 }
 .faq-major {
-  display: inline-bolock;
+  display: inline-block;
   margin: 30px 0px 20px 0px;
   font-family: 'SDSamliphopangche_Basic';
-  font-size: 45px;
+  font-size: 50px;
 }
 .faq-minor-wrapper {
   display: flex;

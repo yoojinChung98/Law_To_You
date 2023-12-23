@@ -80,11 +80,13 @@
 
   position: relative;
   display: flex;
-  justify-items: center;
+  flex-direction: column;
+  padding: 0px 60px;
+  justify-items: left;
   align-items: center;
 }
 .faq-detail-area .faq-detail-content {
-  margin: 35px 70px;
+  margin: 35px 0px;
   width: 100%;
   white-space: pre-wrap; /* 텍스트의 공백과 줄 바꿈 유지 설정 */
   white-space: pre-line;
