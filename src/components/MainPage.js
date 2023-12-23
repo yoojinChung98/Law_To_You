@@ -1,6 +1,6 @@
 import cn from "classnames";
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import "./MainPage.css";
 
 const MainPage = () => {
@@ -13,6 +13,8 @@ const MainPage = () => {
     setTargetDivId("");
   };
 
+  const mode = useLocation().state?.mode; //
+
   return (
     <div className="mainPageDiv">
       <div className="logom-white-icon" />
@@ -23,9 +25,14 @@ const MainPage = () => {
           hoveredSec1: targetDivId === "mainSec1",
         })}
       >
-        <span onMouseEnter={handleMouseHover} onMouseLeave={handleMouseLeave}>
-          온라인상담
-        </span>
+        <Link
+          to="/faq"
+          className="insteadOfSpan"
+          onMouseEnter={handleMouseHover}
+          onMouseLeave={handleMouseLeave}
+        >
+          백문백답
+        </Link>
       </div>
 
       <div
@@ -34,9 +41,15 @@ const MainPage = () => {
           hoveredSec2: targetDivId === "mainSec2",
         })}
       >
-        <span onMouseEnter={handleMouseHover} onMouseLeave={handleMouseLeave}>
-          고민나누기
-        </span>
+        <Link
+          to="/counsel"
+          state={mode}
+          className="insteadOfSpan"
+          onMouseEnter={handleMouseHover}
+          onMouseLeave={handleMouseLeave}
+        >
+          온라인상담
+        </Link>
       </div>
 
       <div
@@ -45,9 +58,14 @@ const MainPage = () => {
           hoveredSec3: targetDivId === "mainSec3",
         })}
       >
-        <span onMouseEnter={handleMouseHover} onMouseLeave={handleMouseLeave}>
-          마이페이지
-        </span>
+        <Link
+          to="/free"
+          className="insteadOfSpan"
+          onMouseEnter={handleMouseHover}
+          onMouseLeave={handleMouseLeave}
+        >
+          고민나누기
+        </Link>
       </div>
       <div className="mainJoinLogin">
         {/* <span className="mainJoinBtn">회원가입</span> */}
