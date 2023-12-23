@@ -6,9 +6,7 @@ const Category = ({ categoryList, clickedIdx, cateClick, categorySize }) => {
       <li
         key={index}
         className={
-          index === categorySize - clickedIdx
-            ? 'category-list cate-selected'
-            : 'category-list'
+          index === clickedIdx ? 'category-list cate-selected' : 'category-list'
         }
         onClick={() => {
           cateClick(index);

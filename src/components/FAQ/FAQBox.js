@@ -7,7 +7,6 @@ const FAQBox = ({ contentList, currentPage }) => {
   // FAQContent 내부에서 클릭여부 상태값으로 관리할 예정
 
   const renderFAQContent = () => {
-    console.log(currentPage);
     return contentList.map((content, index) => (
       <FAQContent
         content={content}

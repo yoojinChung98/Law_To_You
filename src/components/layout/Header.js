@@ -7,10 +7,6 @@ const Header = () => {
     // Please sync "회원정보조회(사용자)" to the project
   }, []);
 
-  const onLogoSMintImageClick = useCallback(() => {
-    // Please sync "메인페이지" to the project
-  }, []);
-
   const navigate = useNavigate();
 
   return (
