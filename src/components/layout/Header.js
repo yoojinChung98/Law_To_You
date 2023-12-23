@@ -1,14 +1,13 @@
 import { useCallback } from 'react';
 import './Header.css';
+import { Navigate, useNavigate } from 'react-router-dom';
 
 const Header = () => {
   const onHBtnDivClick = useCallback(() => {
     // Please sync "회원정보조회(사용자)" to the project
   }, []);
 
-  const onLogoSMintImageClick = useCallback(() => {
-    // Please sync "메인페이지" to the project
-  }, []);
+  const navigate = useNavigate();
 
   return (
     <div className='header-area'>
@@ -20,7 +19,9 @@ const Header = () => {
         <div className='htab'>
           <div
             className='hbtndiv'
-            onClick={onHBtnDivClick}
+            onClick={() => {
+              navigate('/faq/');
+            }}
           >
             백문백답
           </div>
@@ -29,7 +30,9 @@ const Header = () => {
         <div className='htab'>
           <div
             className='hbtndiv'
-            onClick={onHBtnDivClick}
+            onClick={() => {
+              navigate('/counsel/');
+            }}
           >
             온라인상담
           </div>
@@ -37,13 +40,17 @@ const Header = () => {
 
         <div
           className='logos-mint-icon'
-          onClick={onLogoSMintImageClick}
+          onClick={() => {
+            navigate('/');
+          }}
         />
 
         <div className='htab'>
           <div
             className='hbtndiv'
-            onClick={onHBtnDivClick}
+            onClick={() => {
+              navigate('/free/');
+            }}
           >
             만남의광장
           </div>

@@ -5,12 +5,13 @@ import BoardFree from "../components/Board/BoardFree";
 import BoardFreeReply from "../components/Board/BoardFreeReply";
 import BoardFreeWrite from "../components/Board/BoardFreeWrite";
 import Bupbong from "../components/Bupbong/Bupbong";
+import FAQPage from "../components/FAQ/FAQPage";
 import JoinMain from "../components/Join/JoinMain";
 import LoginMain from "../components/Login/LoginMain";
 import MainPage from "../components/MainPage";
+import "../index.css";
 import commUtil from "../util/commUtil";
 import MainLayout from "./MainLayout";
-
 const RouterIndex = () => {
   const isLogin = commUtil.isNotEmpty(localStorage.getItem("accessToken"));
 
@@ -39,6 +40,7 @@ const RouterIndex = () => {
         <Route path="/freewrite/" element={<BoardFreeWrite />}></Route>
         <Route path="/freereply/" element={<BoardFreeReply />}></Route>
         <Route path="/bupbong/" element={<Bupbong />}></Route>
+        <Route path="/faq/" element={<FAQPage />}></Route>
       </Route>
     </Routes>
   );

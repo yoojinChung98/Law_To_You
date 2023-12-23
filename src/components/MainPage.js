@@ -1,6 +1,6 @@
 import cn from "classnames";
-import React, { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import React, { useLocation, useState } from "react";
+import { Link } from "react-router-dom";
 import "./MainPage.css";
 
 const MainPage = () => {
@@ -13,7 +13,7 @@ const MainPage = () => {
     setTargetDivId("");
   };
 
-  const mode = useLocation().state?.mode; //
+  const mode = useLocation().state?.mode;
 
   return (
     <div className="mainPageDiv">
@@ -43,7 +43,7 @@ const MainPage = () => {
       >
         <Link
           to="/counsel"
-          state={mode}
+          state={{ mode }}
           className="insteadOfSpan"
           onMouseEnter={handleMouseHover}
           onMouseLeave={handleMouseLeave}
