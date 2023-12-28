@@ -1,9 +1,14 @@
 import { Icon } from "@iconify/react";
+import { Button } from "@mui/material";
 import React from "react";
+import { useLocation } from "react-router-dom";
 import "../scss/Board.scss";
 import BoardForm from "./BoardForm";
 
 const BoardCounsel = () => {
+  const location = useLocation();
+  console.log(location);
+  const mode = location.state;
   return (
     <>
       <div className="board">
@@ -26,6 +31,13 @@ const BoardCounsel = () => {
         </div>
       </div>
       <BoardForm />
+      {mode === "user" && (
+        <div>
+          <Button className="input-button" variant="contained">
+            글 작성하기
+          </Button>
+        </div>
+      )}
     </>
   );
 };

@@ -20,11 +20,11 @@ let backEndHostName = 'http://13.125.203.225'; // 백엔드 서버 호스트 이
 // }
 
 export const API_BASE_URL = backEndHostName + '/api';
-export const USER = '/api/user';
-export const LAWYER = '/api/lawyer';
-export const MYPAGE = '/api/mypage';
-export const FBoard = '/api/freeboard';
-export const COUNSEL = '/api/counsel';
-export const REPLY = '/api/reply';
-export const ANSWER = '/api/answer';
-export const FAQ = '/api/faq';
+// export const USER = "/api/user";
+// export const LAWYER = "/api/lawyer";
+// export const MYPAGE = "/api/mypage";
+// export const FBoard = "/api/freeboard";
+// export const COUNSEL = "/api/counsel";
+// export const REPLY = "/api/reply";
+// export const ANSWER = "/api/answer";
+// export const FAQ = "/api/faq";

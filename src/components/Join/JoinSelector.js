@@ -4,7 +4,7 @@ const JoinSelector = ({ setMode }) => {
       <span
         className="login-client-entrance"
         onClick={() => {
-          setMode("client");
+          setMode("user");
         }}
       >
         의뢰인으로 회원가입

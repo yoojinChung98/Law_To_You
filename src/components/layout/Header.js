@@ -1,7 +1,7 @@
 import { useCallback } from 'react';
-import './Header.css';
-import { Navigate, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+import './Header.css';
 
 const Header = () => {
   const loggedUser = useSelector((state) => state.user);
