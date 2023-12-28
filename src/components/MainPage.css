@@ -87,12 +87,14 @@ body {
   width: 3000px;
   color: white;
 }
-.mainPageDiv span {
+.mainPageDiv .insteadOfSpan {
   display: block;
   width: 100%;
   margin-bottom: 40px;
+  text-decoration: none;
+  color: white;
 }
-.mainPageDiv span:hover {
+.mainPageDiv .insteadOfSpan:hover {
   cursor: pointer;
 }
 .mainPageDiv .mainJoinLogin {

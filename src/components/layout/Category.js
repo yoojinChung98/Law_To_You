@@ -1,13 +1,16 @@
 import './Category.css';
 
-const Category = ({ categoryList, clickedIDX }) => {
+const Category = ({ categoryList, clickedIdx, cateClick, categorySize }) => {
   const renderCategoryList = () => {
     return categoryList.map((category, index) => (
       <li
         key={index}
         className={
-          index === clickedIDX ? 'category-list cate-selected' : 'category-list'
+          index === clickedIdx ? 'category-list cate-selected' : 'category-list'
         }
+        onClick={() => {
+          cateClick(index);
+        }}
       >
         {category}
       </li>
