@@ -172,6 +172,7 @@
   height: 41.5px;
   font-size: 18px;
   font-family: 'SDSamliphopangcheTTFBasic.ttf';
+  color: #707070;
 }
 
 .groupinputplaceholder::placeholder {
@@ -352,7 +353,7 @@
   font-size: var(--font-size-mini);
   color: var(--color-gray);
   font-family: var(--font-abeezee);
-  transform: translate(42%, -0.1%);
+  transform: translate(42%, -3.3%);
   z-index: 20;
   position: relative;
 }
@@ -363,7 +364,7 @@
   align-items: center;
 }
 
-.OOTDWrite-input-file {
+.OOTDWrite-input-file2 {
   margin-top: 10px;
   padding: 6px 15px;
   background-color: #929292; /* Adjust the color to your preference */
@@ -375,13 +376,14 @@
   align-items: center;
   width: 130px;
   height: 50px;
-  transform: translate(1150px, 730px);
+  transform: translate(1160px, 730px);
   justify-content: center;
   font-family: 'SDSamliphopangcheTTFBasic.ttf';
+  font-size: 20px;
 }
 
 .image-preview-container {
-  display: flex;
+  display: flexnn;
   flex-wrap: wrap;
   justify-content: center;
 }

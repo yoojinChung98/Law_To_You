@@ -1,16 +1,54 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './LawyerModify.css';
 import './global.css';
-import Header from '../layout/Header';
-import Footer from '../layout/Footer';
-import CategoryFAQ from './CategoryFAQ';
+import Category from '../layout/Category';
 
 const LawyerModify = () => {
+  const categories = [
+    '회원정보',
+    '내가 쓴 글',
+    '온라인 상담 내역',
+    '법봉 충전',
+    '로그아웃', // 얘가 idx 0 을 갖게 될 것.
+  ];
+
+  let categorySize = categories.length - 1;
+
+  const [clickedCateIdx, setClickedCateIdx] = useState(4);
+
+  const cateClick = (idx) => {
+    // 상단 카테고리의 개수가 18개이기 때문에 17- 로 걍 썼음.
+    setClickedCateIdx(4 - idx);
+    //console.log(idx); // 여기서 idx 값은 카테고리 가장 상단부터 0 할당됨.
+  };
+
+  // 비밀번호 중복 확인
+
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+
+  const handleSubmit = (e) => {
+    e.preventDefault(); // 폼 제출 시 페이지 리로드 방지
+
+    if (password !== confirmPassword) {
+      alert('비밀번호가 일치하지 않습니다.');
+    } else {
+      // 비밀번호 변경 로직을 여기에 작성하세요.
+      alert('비밀번호가 성공적으로 변경되었습니다.');
+    }
+  };
+
   return (
     <>
-      <Header />
       <div className='userCategory'>
-        <CategoryFAQ />
+        {
+          <Category
+            categoryList={categories}
+            clickedIdx={clickedCateIdx}
+            cateClick={cateClick}
+            categorySize={categorySize}
+          />
+        }
       </div>
       <div className='lawyermodify1'>
         {/* <Category /> */}
@@ -50,19 +88,31 @@ const LawyerModify = () => {
           disabled
         />
 
-        <input
-          className='inputnewpassword2'
-          type='text'
-        />
+        <form onSubmit={handleSubmit}>
+          <input
+            className='inputnewpassword2'
+            type='password'
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
 
-        <input
-          className='inputnewpasswordCheck2'
-          type='text'
-        />
+          <input
+            className='inputnewpasswordCheck2'
+            type='password'
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+          />
+
+          <button
+            type='submit'
+            className='btnchange3 '
+          >
+            변경
+          </button>
+        </form>
 
         <button className='btnleave2'>회원탈퇴</button>
 
-        <button className='btnchange3'>변경</button>
         <input
           className='inputid2'
           type='text'
@@ -84,8 +134,6 @@ const LawyerModify = () => {
           disabled
         />
       </div>
-
-      <Footer />
     </>
   );
 };

@@ -1,8 +1,6 @@
 import React from 'react';
 import './DeepWrite.css';
-// import './FileSave.css';
-import Header from '../layout/Header';
-import Footer from '../layout/Footer';
+
 import { useState } from 'react';
 import { GrGallery } from 'react-icons/gr';
 
@@ -12,6 +10,8 @@ const DeepWrite = () => {
   const [isContextInputClicked, setIsContextInputClicked] = useState(false);
 
   const [myImage, setMyImage] = useState([]);
+  // 선택된 이미지 상태 추가
+  const [selectedImage, setSelectedImage] = useState(null);
 
   const addImage = (e) => {
     const nowSelectImageList = e.target.files;
@@ -22,9 +22,16 @@ const DeepWrite = () => {
     }
     setMyImage(nowImageURLList);
   };
+
+  // 이미지 삭제 함수 추가
+  const removeImage = (index) => {
+    const newImageList = [...myImage];
+    newImageList.splice(index, 1);
+    setMyImage(newImageList);
+  };
+
   return (
     <>
-      <Header />
       <div className='deepwrite3'>
         <div className='menu3'>
           <div className='menudisign3' />
@@ -103,7 +110,7 @@ const DeepWrite = () => {
         <div>
           <label
             htmlFor='input-file'
-            className='OOTDWrite-input-file'
+            className='OOTDWrite-input-file3'
           >
             <GrGallery />
             첨부파일 등록
@@ -118,20 +125,39 @@ const DeepWrite = () => {
           </label>
 
           {myImage.map((imageUrl, index) => (
-            <img
+            <div
               key={index}
-              src={imageUrl}
-              alt={`Image-${index}`}
               style={{
-                maxWidth: '100px',
-                maxHeight: '100px',
-                transform: 'translate(-350px, 650px)',
+                position: 'relative',
+                display: 'inline-block',
+                margin: '10px',
+                transform: 'translate(-200px, 645px)',
               }}
-            />
+            >
+              <img
+                src={imageUrl}
+                alt={`Image-${index}`}
+                style={{
+                  maxWidth: '95px',
+                  maxHeight: '95px',
+                }}
+              />
+              <button
+                className='ImageDelete'
+                onClick={() => removeImage(index)}
+                style={{
+                  backgroundColor: 'var(--light-brown)',
+                  border: 'none',
+                  color: 'white',
+                  textAlign: 'center',
+                }}
+              >
+                x
+              </button>
+            </div>
           ))}
         </div>
       </div>
-      <Footer />
     </>
   );
 };

@@ -10,6 +10,10 @@ import LoginMain from '../components/Login/LoginMain';
 import MainPage from '../components/MainPage';
 import commUtil from '../util/commUtil';
 import FAQPage from '../components/FAQ/FAQPage';
+import UserModify from '../components/modify/UserModify';
+import LawyerModify from '../components/modify/LawyerModify';
+import OnlineWrite from '../components/write/OnlineWrite';
+import DeepWrite from '../components/write/DeepWrite';
 import '../index.css';
 
 const RouterIndex = () => {
@@ -69,6 +73,22 @@ const RouterIndex = () => {
       <Route
         path='/faq/'
         element={<FAQPage />}
+      ></Route>
+      <Route
+        path='/mypage/'
+        element={<UserModify />}
+      ></Route>
+      <Route
+        path='/mypage/lawyer/'
+        element={<LawyerModify />}
+      ></Route>
+      <Route
+        path='/counsel/register/'
+        element={<OnlineWrite />}
+      ></Route>
+      <Route
+        path='/counsel/detail/'
+        element={<DeepWrite />}
       ></Route>
     </Routes>
   );

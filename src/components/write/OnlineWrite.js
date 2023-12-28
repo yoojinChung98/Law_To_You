@@ -1,16 +1,20 @@
 import React from 'react';
 import './OnlineWrite.css';
-import Header from '../layout/Header';
-import Footer from '../layout/Footer';
 import { useState } from 'react';
 import { GrGallery } from 'react-icons/gr';
+import { remove } from 'resolve-url-loader/lib/file-protocol';
+import { useNavigate } from 'react-router-dom';
 
 const OnlineWrite = () => {
   const [isTitleInputClicked, setIsTitleInputClicked] = useState(false);
   const [isGroupInputClicked, setIsGroupInputClicked] = useState(false);
   const [isContextInputClicked, setIsContextInputClicked] = useState(false);
 
+  const navigate = useNavigate();
+
   const [myImage, setMyImage] = useState([]);
+  // 선택된 이미지 상태 추가
+  const [selectedImage, setSelectedImage] = useState(null);
 
   const addImage = (e) => {
     const nowSelectImageList = e.target.files;
@@ -21,9 +25,16 @@ const OnlineWrite = () => {
     }
     setMyImage(nowImageURLList);
   };
+
+  // 이미지 삭제 함수 추가
+  const removeImage = (index) => {
+    const newImageList = [...myImage];
+    newImageList.splice(index, 1);
+    setMyImage(newImageList);
+  };
+
   return (
     <>
-      <Header />
       <div className='onlinewrite'>
         <div className='menu'>
           <div className='menudisign' />
@@ -66,7 +77,7 @@ const OnlineWrite = () => {
           ></input>
         </div>
         <div className='groupinput'>
-          <input
+          <select
             className='groupinputplaceholder'
             onFocus={() => {
               setIsGroupInputClicked(true);
@@ -74,8 +85,32 @@ const OnlineWrite = () => {
             onBlur={() => {
               setIsGroupInputClicked(false);
             }}
-            placeholder={isGroupInputClicked === true ? '' : '  중분류/대분류'}
-          ></input>
+          >
+            <option
+              value=''
+              disabled
+              selected
+            >
+              {isGroupInputClicked === true ? '' : '대분류'}
+            </option>
+            <option value='가정법률'>가정법률</option>
+            <option value='교통/운전'>교통/운전</option>
+            <option value='국가 및 지자체'>국가 및 지자체</option>
+            <option value='국방/보훈'>국방/보훈</option>
+            <option value='근로/노동'>근로/노동</option>
+            <option value='금융/금전'>금융/금전</option>
+            <option value='무역/출입국'>무역/출입국</option>
+            <option value='문화/여가생활'>문화/여가생활</option>
+            <option value='민형사/소송'>민형사/소송</option>
+            <option value='복지'>복지</option>
+            <option value='사업'>사업</option>
+            <option value='사회안전/범죄'>사회안전/범죄</option>
+            <option value='소비자'>소비자</option>
+            <option value='아동청소년/교육'>아동청소년/교육</option>
+            <option value='정보통신/기술'>정보통신/기술</option>
+            <option value='창업'>창업</option>
+            <option value='환경/에너지'>환경/에너지</option>
+          </select>
         </div>
         <div className='answerbtn'>
           <button
@@ -83,7 +118,14 @@ const OnlineWrite = () => {
             autoFocus={true}
             id='reg_button'
           />
-          <button className='answerlinkbutton'>법률 백문백답 보러가기</button>
+          <button
+            className='answerlinkbutton'
+            onClick={() => {
+              navigate('/faq');
+            }}
+          >
+            법률 백문백답 보러가기
+          </button>
         </div>
         <button className='registerbtn'>등록하기</button>
         <div className='main'>
@@ -106,18 +148,28 @@ const OnlineWrite = () => {
 
           <div className='informationline' />
         </div>
-        <button className='registerbtn'>
+        <button
+          className='registerbtn'
+          onClick={() => {
+            navigate('/counsel');
+          }}
+        >
           <div className='registerbtntext'>등록하기</div>
         </button>
 
-        <button className='cancelbtn'>
+        <button
+          className='cancelbtn'
+          onClick={() => {
+            navigate('/counsel');
+          }}
+        >
           <div className='cancelbtntext'>취소하기</div>
         </button>
 
         <div>
           <label
             htmlFor='input-file'
-            className='OOTDWrite-input-file'
+            className='OOTDWrite-input-file2'
           >
             <GrGallery />
             첨부파일 등록
@@ -132,20 +184,39 @@ const OnlineWrite = () => {
           </label>
 
           {myImage.map((imageUrl, index) => (
-            <img
+            <div
               key={index}
-              src={imageUrl}
-              alt={`Image-${index}`}
               style={{
-                maxWidth: '100px',
-                maxHeight: '100px',
-                transform: 'translate(-350px, 650px)',
+                position: 'relative',
+                display: 'inline-block',
+                margin: '10px',
+                transform: 'translate(-200px, 645px)',
               }}
-            />
+            >
+              <img
+                src={imageUrl}
+                alt={`Image-${index}`}
+                style={{
+                  maxWidth: '95px',
+                  maxHeight: '95px',
+                }}
+              />
+              <button
+                className='ImageDelete'
+                onClick={() => removeImage(index)}
+                style={{
+                  backgroundColor: 'var(--light-brown)',
+                  border: 'none',
+                  color: 'white',
+                  textAlign: 'center',
+                }}
+              >
+                x
+              </button>
+            </div>
           ))}
         </div>
       </div>
-      <Footer />
     </>
   );
 };
