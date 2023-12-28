@@ -12,7 +12,7 @@ const BoardFree = () => {
     <>
       <div className="board">
         <div className="board-header">
-          <span>자유게시판</span>
+          <span>고민나누기</span>
           <div>
             자유게시판 설명 내용 작성하기! 사용자가 올린 온라인 상담 문의글에
             간략하게 답변을 달 수 있습니다.답변이 채택된다면 사용자에게 더욱
@@ -26,6 +26,9 @@ const BoardFree = () => {
             className="search-button"
             icon="majesticons:search-line"
             color="#675d50"
+            onClick={() => {
+              navigate("/");
+            }}
           />
         </div>
       </div>

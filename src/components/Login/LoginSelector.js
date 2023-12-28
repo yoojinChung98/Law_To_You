@@ -4,7 +4,7 @@ const LoginSelector = ({ setMode }) => {
       <span
         className="login-client-entrance"
         onClick={() => {
-          setMode("client");
+          setMode("user");
         }}
       >
         의뢰인 로그인
