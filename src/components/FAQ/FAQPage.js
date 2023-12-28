@@ -43,9 +43,9 @@ const FAQ = () => {
   const [contentList, setContentList] = useState([]);
   // 페이징버튼 개수
   const [pBtnCnt, setPBtnCnt] = useState();
-
   // 클릭 현재 페이지 번호
   const [currentPage, setCurrentPage] = useState(1);
+  const [midSecCnt, setMidSecCnt] = useState(1);
 
   const cateClick = (idx) => {
     // 여기의 idx 는 렌더링된 카테고리의 최하단부터 0임.
@@ -59,7 +59,6 @@ const FAQ = () => {
   };
 
   const pageChangeMidIdx0 = async (page) => {
-    console.log('pageChangeMidIdx0 함수 내부: ');
     let largeSection = encodeURIComponent(
       categories[clickedCateIdx].substring(0, 2)
     );
@@ -69,10 +68,10 @@ const FAQ = () => {
       console.log(json);
       let ms = json.middleSection;
       let lsbls = json.listSearchedByLargeSec;
-      // let pageNm = json.요청행개수담은변수명;
+      let pageNm = json.middleSectionCnt;
       setMidSecList(ms);
       setContentList(lsbls);
-      // await btnCntCalc(pageNm); // 행 개수에 맞춰 btn개수를 계산해줄 함수 호출
+      btnCntCalc(pageNm); // 행 개수에 맞춰 btn개수를 계산해줄 함수 호출
     } else if (res.status === 400) {
       alert('요청 중 badRequest() 에러 발생', res.json().message);
     } else {
@@ -82,7 +81,7 @@ const FAQ = () => {
 
   // 대분류 클릭 시, 중분류 리스트를 fetch api로 요청/응답 받고 중리스트(midSecList)를 셋(재렌더링됨)함.
   const getMidSecContent = async (idx) => {
-    let largeSection = categories[idx].substring(0, 2);
+    let largeSection = encodeURIComponent(categories[idx].substring(0, 2));
     const res = await fetch(
       `${BASE_URL}/faq/${largeSection}?page=${currentPage}`
     );
@@ -91,10 +90,10 @@ const FAQ = () => {
       console.log(json);
       let ms = json.middleSection;
       let lsbls = json.listSearchedByLargeSec;
-      // let pageNm = json.요청행개수담은변수명;
+      let pageNm = json.middleSectionCnt;
       setMidSecList(ms);
       setContentList(lsbls);
-      /// await btnCntCalc(pageNm); // 행 개수에 맞춰 btn개수를 계산해줄 함수 호출
+      btnCntCalc(pageNm); // 행 개수에 맞춰 btn개수를 계산해줄 함수 호출
     } else if (res.status === 400) {
       alert('요청 중 badRequest() 에러 발생', res.json().message);
     } else {
@@ -121,10 +120,12 @@ const FAQ = () => {
       `${BASE_URL}/faq/${largeSection}/${middleSection}?page=${page}`
     );
     if (res.status === 200) {
-      // 이 부분 data 로 받지 말고 이제 이름으로 받아야 함.
-      // log(res.json())으로 먼저 어떤 이름으로 값들이 들어오는지 까봐야 할 듯?
-      res.json().then((data) => setContentList(data));
-      // await btnCntCalc(pageNm); // 행 개수에 맞춰 btn개수를 계산해줄 함수 호출
+      const json = await res.json();
+      let faqDtoList = json.faqMiddleSecAndSubjectDTOList;
+      let pageNm = json.middleSectionCnt;
+
+      setContentList(faqDtoList);
+      btnCntCalc(pageNm); // 행 개수에 맞춰 btn개수를 계산해줄 함수 호출
     } else if (res.status === 400) {
       alert('요청 중 badRequest() 에러 발생', res.json().message);
     } else {
@@ -165,12 +166,12 @@ const FAQ = () => {
       `${BASE_URL}/faq/${largeSection}/${middleSection}?page=${page}`
     );
     if (res.status === 200) {
-      // 이 부분 data 로 받지 말고 이제 이름으로 받아야 함.
-      // log(res.json())으로 먼저 어떤 이름으로 값들이 들어오는지 까봐야 할 듯?
-      let json = res.json();
-      console.log(json);
-      json.then((data) => setContentList(data));
-      // await btnCntCalc(pageNm); // 행 개수에 맞춰 btn개수를 계산해줄 함수 호출
+      const json = await res.json();
+      let faqDtoList = json.faqMiddleSecAndSubjectDTOList;
+      let pageNm = json.middleSectionCnt;
+
+      setContentList(faqDtoList);
+      btnCntCalc(pageNm); // 행 개수에 맞춰 btn개수를 계산해줄 함수 호출
     } else if (res.status === 400) {
       alert('요청 중 badRequest() 에러 발생', res.json().message);
     } else {
@@ -195,12 +196,11 @@ const FAQ = () => {
 
   const btnCntCalc = (pageNm) => {
     // 총 개수 / 한 페이지에 띄울 컨텐츠 개수  + 1 => 버튼의 개수
-    setPBtnCnt(pageNm / 10 + 1);
+    setPBtnCnt(Math.floor(pageNm / 10) + 1);
   };
 
   useEffect(() => {
     //처음 들어올 때, 0번째 카테고리로 요청 한 번 보내서 값을 가져오긴 해야할 듯?
-    // cateClick(0);
     getMidSecContent(clickedCateIdx);
   }, []); // 중분류 변경 시도 추가
 

@@ -69,6 +69,7 @@ const MyConsultList = ({ currentPage, setPBtnCnt }) => {
   // 유저의 리스트를 렌더링하는 함수
   const listRenderUser = () => {
     let sliceIdx = 10 * (currentPage - 1);
+    // 여기 만약 contentList 가 모든 리스트가 아닌 페이징처리한 리스트가 오는거라면 slice는 필요 없음.
     return contentList.slice(sliceIdx, sliceIdx + 10).map((content, index) => {
       return (
         <tr key={content.consultNum}>

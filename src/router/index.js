@@ -101,10 +101,6 @@ const RouterIndex = () => {
         element={<Bupbong />}
       ></Route>
       <Route
-        path='/faq/'
-        element={<FAQPage />}
-      ></Route>
-      <Route
         path='/mypage/'
         element={<UserModify />}
       ></Route>
