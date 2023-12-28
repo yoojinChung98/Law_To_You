@@ -1,34 +1,32 @@
-import React, { useEffect, useState } from 'react';
-import FAQBox from './FAQBox';
-import './FAQPage.css';
-import Header from '../layout/Header';
-import Footer from '../layout/Footer';
-import Category from '../layout/Category';
-import { Pagination } from '@mui/material';
-import { API_BASE_URL } from '../../config/host-config';
+import { Pagination } from "@mui/material";
+import React, { useEffect, useState } from "react";
+import { API_BASE_URL } from "../../config/host-config";
+import Category from "../layout/Category";
+import FAQBox from "./FAQBox";
+import "./FAQPage.css";
 
 const FAQ = () => {
   const BASE_URL = API_BASE_URL;
 
   const categories = [
-    '가정법률',
-    '교통/운전',
-    '국가 및 지자체',
-    '국방/보훈',
-    '근로/노동',
-    '금융/금전',
-    '무역/출입국',
-    '문화/여가생활',
-    '민형사/소송',
-    '복지',
-    '부동산/임대차',
-    '사업',
-    '사회안전/범죄',
-    '소비자',
-    '아동청소년/교육',
-    '정보통신/기술',
-    '창업',
-    '환경/에너지', // 얘가 idx 0 을 갖게 될 것.
+    "가정법률",
+    "교통/운전",
+    "국가 및 지자체",
+    "국방/보훈",
+    "근로/노동",
+    "금융/금전",
+    "무역/출입국",
+    "문화/여가생활",
+    "민형사/소송",
+    "복지",
+    "부동산/임대차",
+    "사업",
+    "사회안전/범죄",
+    "소비자",
+    "아동청소년/교육",
+    "정보통신/기술",
+    "창업",
+    "환경/에너지", // 얘가 idx 0 을 갖게 될 것.
   ];
 
   let categorySize = categories.length - 1;
@@ -70,9 +68,9 @@ const FAQ = () => {
       setMidSecList(ms);
       setContentList(lsbls);
     } else if (res.status === 400) {
-      alert('요청 중 badRequest() 에러 발생', res.json().message);
+      alert("요청 중 badRequest() 에러 발생", res.json().message);
     } else {
-      alert('400 제외 에러 발생');
+      alert("400 제외 에러 발생");
     }
   };
 
@@ -90,9 +88,9 @@ const FAQ = () => {
       setMidSecList(ms);
       setContentList(lsbls);
     } else if (res.status === 400) {
-      alert('요청 중 badRequest() 에러 발생', res.json().message);
+      alert("요청 중 badRequest() 에러 발생", res.json().message);
     } else {
-      alert('400 제외 에러 발생');
+      alert("400 제외 에러 발생");
     }
   };
 
@@ -109,16 +107,16 @@ const FAQ = () => {
     );
     let middleSection = encodeURIComponent(midSecList[idx - 1]);
     let page = currentPage;
-    console.log('4. 요청 보내기 전, page: ', page);
+    console.log("4. 요청 보내기 전, page: ", page);
     const res = await fetch(
       `${BASE_URL}/faq/${largeSection}/${middleSection}?page=${page}`
     );
     if (res.status === 200) {
       res.json().then((data) => setContentList(data));
     } else if (res.status === 400) {
-      alert('요청 중 badRequest() 에러 발생', res.json().message);
+      alert("요청 중 badRequest() 에러 발생", res.json().message);
     } else {
-      alert('400 제외 에러 발생');
+      alert("400 제외 에러 발생");
     }
   };
 
@@ -130,8 +128,8 @@ const FAQ = () => {
         key={index + 1}
         className={
           index + 1 === clickedMidSecIdx
-            ? 'faq-minor faq-minor-selected'
-            : 'faq-minor'
+            ? "faq-minor faq-minor-selected"
+            : "faq-minor"
         }
         onClick={() => {
           setClickedMidSecIdx(index + 1);
@@ -148,7 +146,7 @@ const FAQ = () => {
       categories[clickedCateIdx].substring(0, 2)
     );
     let middleSection = encodeURIComponent(midSecList[idx - 1]);
-    console.log('요청보내기직전 page 값: ', page);
+    console.log("요청보내기직전 page 값: ", page);
     const res = await fetch(
       `${BASE_URL}/faq/${largeSection}/${middleSection}?page=${page}`
     );
@@ -157,9 +155,9 @@ const FAQ = () => {
       console.log(json);
       json.then((data) => setContentList(data));
     } else if (res.status === 400) {
-      alert('요청 중 badRequest() 에러 발생', res.json().message);
+      alert("요청 중 badRequest() 에러 발생", res.json().message);
     } else {
-      alert('400 제외 에러 발생');
+      alert("400 제외 에러 발생");
     }
   };
 
@@ -168,7 +166,7 @@ const FAQ = () => {
   // 페이지 버튼이 눌릴 때 반응하는 함수 (현재 페이지 값을 바꾸고 해당 중분류의 컨텐트 값을 다시 받아옴)
   const onPageChange = (e, page) => {
     setCurrentPage(page);
-    console.log('onPageChange 함수내부, page = ', page);
+    console.log("onPageChange 함수내부, page = ", page);
     clickedMidSecIdx === 0
       ? pageChangeMidIdx0(page)
       : pageChange(clickedMidSecIdx, page);
@@ -182,25 +180,23 @@ const FAQ = () => {
 
   return (
     <>
-      <Header />
-
       {/** 헤더푸터 제외 가운데정렬로 맞출 클래스 지정을 위해 div 태그로 감쌈 */}
-      <div className='page'>
+      <div className="page">
         <Category
           categoryList={categories}
           clickedIdx={clickedCateIdx}
           cateClick={cateClick}
           categorySize={categorySize}
         />
-        <div className='faq-wrapper'>
-          <h1 className='faq-major'>대분류</h1>
-          <div className='faq-minor-wrapper'>
+        <div className="faq-wrapper">
+          <h1 className="faq-major">대분류</h1>
+          <div className="faq-minor-wrapper">
             <span
               key={0}
               className={
                 0 === clickedMidSecIdx
-                  ? 'faq-minor faq-minor-selected'
-                  : 'faq-minor'
+                  ? "faq-minor faq-minor-selected"
+                  : "faq-minor"
               }
               onClick={() => {
                 setClickedMidSecIdx(0);
@@ -212,25 +208,20 @@ const FAQ = () => {
             {midSecList && renderMidSecList()}
           </div>
           {contentList && (
-            <FAQBox
-              contentList={contentList}
-              currentPage={currentPage}
-            />
+            <FAQBox contentList={contentList} currentPage={currentPage} />
           )}
 
-          <div className='bottom pagination'>
+          <div className="bottom pagination">
             <Pagination
               count={10}
               page={currentPage}
               onChange={onPageChange}
-              variant='outlined'
-              shape='rounded'
+              variant="outlined"
+              shape="rounded"
             />
           </div>
         </div>
       </div>
-
-      <Footer />
     </>
   );
 };

@@ -5,13 +5,14 @@ import BoardFree from "../components/Board/BoardFree";
 import BoardFreeReply from "../components/Board/BoardFreeReply";
 import BoardFreeWrite from "../components/Board/BoardFreeWrite";
 import Bupbong from "../components/Bupbong/Bupbong";
+import ConsultPage from "../components/Consult/ConsultPage";
 import FAQPage from "../components/FAQ/FAQPage";
 import JoinMain from "../components/Join/JoinMain";
 import LoginMain from "../components/Login/LoginMain";
+import MainLayout from "../components/MainLayout";
 import MainPage from "../components/MainPage";
 import "../index.css";
 import commUtil from "../util/commUtil";
-import MainLayout from "./MainLayout";
 const RouterIndex = () => {
   const isLogin = commUtil.isNotEmpty(localStorage.getItem("accessToken"));
 
@@ -20,7 +21,7 @@ const RouterIndex = () => {
 
   useEffect(() => {
     if (!isLogin) {
-      navigate("/login");
+      navigate("/login"); //// ntwjd
     } else {
       if (location.pathname === "/login") {
         navigate("/");
@@ -40,6 +41,7 @@ const RouterIndex = () => {
         <Route path="/freewrite/" element={<BoardFreeWrite />}></Route>
         <Route path="/freereply/" element={<BoardFreeReply />}></Route>
         <Route path="/bupbong/" element={<Bupbong />}></Route>
+        <Route path="/consult/" element={<ConsultPage />}></Route>
         <Route path="/faq/" element={<FAQPage />}></Route>
       </Route>
     </Routes>
