@@ -1,8 +1,9 @@
 .footer-body {
-  position: absolute;
+  position: relative;
+  bottom: -150px;
   width: 100%;
   background-color: var(--light-brown);
-  height: 100%;
+  height: 50%;
   /* bottom: -100%; */
 }
 .footer-body .footer-area {
@@ -34,7 +35,7 @@
 }
 .footer-menu {
   margin-top: 20px;
-  margin-bottom: 20px;
+  margin-bottom: 0px;
 }
 .footer-info {
   margin: 4px 0px;

@@ -41,7 +41,8 @@ const FAQ = () => {
   const [clickedMidSecIdx, setClickedMidSecIdx] = useState(0);
   // faqBox에 들어갈 실제 백문백답의 내용 리스트
   const [contentList, setContentList] = useState([]);
-  // 페이지번호 개수
+  // 페이징버튼 개수
+  const [pBtnCnt, setPBtnCnt] = useState();
 
   // 클릭 현재 페이지 번호
   const [currentPage, setCurrentPage] = useState(1);
@@ -58,17 +59,20 @@ const FAQ = () => {
   };
 
   const pageChangeMidIdx0 = async (page) => {
+    console.log('pageChangeMidIdx0 함수 내부: ');
     let largeSection = encodeURIComponent(
       categories[clickedCateIdx].substring(0, 2)
     );
-    const res = await fetch(`${BASE_URL}/faq/${largeSection}?pno=${page}`);
+    const res = await fetch(`${BASE_URL}/faq/${largeSection}?page=${page}`);
     if (res.status === 200) {
       const json = await res.json();
       console.log(json);
       let ms = json.middleSection;
       let lsbls = json.listSearchedByLargeSec;
+      // let pageNm = json.요청행개수담은변수명;
       setMidSecList(ms);
       setContentList(lsbls);
+      // await btnCntCalc(pageNm); // 행 개수에 맞춰 btn개수를 계산해줄 함수 호출
     } else if (res.status === 400) {
       alert('요청 중 badRequest() 에러 발생', res.json().message);
     } else {
@@ -80,15 +84,17 @@ const FAQ = () => {
   const getMidSecContent = async (idx) => {
     let largeSection = categories[idx].substring(0, 2);
     const res = await fetch(
-      `${BASE_URL}/faq/${largeSection}?pno=${currentPage}`
+      `${BASE_URL}/faq/${largeSection}?page=${currentPage}`
     );
     if (res.status === 200) {
       const json = await res.json();
       console.log(json);
       let ms = json.middleSection;
       let lsbls = json.listSearchedByLargeSec;
+      // let pageNm = json.요청행개수담은변수명;
       setMidSecList(ms);
       setContentList(lsbls);
+      /// await btnCntCalc(pageNm); // 행 개수에 맞춰 btn개수를 계산해줄 함수 호출
     } else if (res.status === 400) {
       alert('요청 중 badRequest() 에러 발생', res.json().message);
     } else {
@@ -98,7 +104,8 @@ const FAQ = () => {
 
   // 중분류 클릭 시, 클릭된 중분류에 해당하는 컨텐트 내용만 받아오는 함수
   const getContentByMidSec = async (idx) => {
-    setCurrentPage(1);
+    // setCurrentPage(1);
+    await onPageChange(0, 0);
     if (idx === 0) {
       getMidSecContent(clickedCateIdx);
       return;
@@ -114,7 +121,10 @@ const FAQ = () => {
       `${BASE_URL}/faq/${largeSection}/${middleSection}?page=${page}`
     );
     if (res.status === 200) {
+      // 이 부분 data 로 받지 말고 이제 이름으로 받아야 함.
+      // log(res.json())으로 먼저 어떤 이름으로 값들이 들어오는지 까봐야 할 듯?
       res.json().then((data) => setContentList(data));
+      // await btnCntCalc(pageNm); // 행 개수에 맞춰 btn개수를 계산해줄 함수 호출
     } else if (res.status === 400) {
       alert('요청 중 badRequest() 에러 발생', res.json().message);
     } else {
@@ -143,7 +153,9 @@ const FAQ = () => {
     ));
   };
 
-  const pageChange = async (idx, page) => {
+  const pageChangeGetMidCon = async (idx, page) => {
+    console.log('pageChangeGetMidCon 함수 내부');
+    await onPageChange(0, 0);
     let largeSection = encodeURIComponent(
       categories[clickedCateIdx].substring(0, 2)
     );
@@ -153,9 +165,12 @@ const FAQ = () => {
       `${BASE_URL}/faq/${largeSection}/${middleSection}?page=${page}`
     );
     if (res.status === 200) {
+      // 이 부분 data 로 받지 말고 이제 이름으로 받아야 함.
+      // log(res.json())으로 먼저 어떤 이름으로 값들이 들어오는지 까봐야 할 듯?
       let json = res.json();
       console.log(json);
       json.then((data) => setContentList(data));
+      // await btnCntCalc(pageNm); // 행 개수에 맞춰 btn개수를 계산해줄 함수 호출
     } else if (res.status === 400) {
       alert('요청 중 badRequest() 에러 발생', res.json().message);
     } else {
@@ -167,11 +182,20 @@ const FAQ = () => {
 
   // 페이지 버튼이 눌릴 때 반응하는 함수 (현재 페이지 값을 바꾸고 해당 중분류의 컨텐트 값을 다시 받아옴)
   const onPageChange = (e, page) => {
+    if (page === 0) {
+      setCurrentPage(page + 1);
+      return;
+    }
     setCurrentPage(page);
     console.log('onPageChange 함수내부, page = ', page);
     clickedMidSecIdx === 0
       ? pageChangeMidIdx0(page)
-      : pageChange(clickedMidSecIdx, page);
+      : pageChangeGetMidCon(clickedMidSecIdx, page);
+  };
+
+  const btnCntCalc = (pageNm) => {
+    // 총 개수 / 한 페이지에 띄울 컨텐츠 개수  + 1 => 버튼의 개수
+    setPBtnCnt(pageNm / 10 + 1);
   };
 
   useEffect(() => {
@@ -220,7 +244,7 @@ const FAQ = () => {
 
           <div className='bottom pagination'>
             <Pagination
-              count={10}
+              count={pBtnCnt}
               page={currentPage}
               onChange={onPageChange}
               variant='outlined'

@@ -5,8 +5,11 @@ import ConsultQBox from './ConsultQBox';
 import './DeepPage.css';
 import DeepABox from './DeepABox';
 import DeepABoxWrite from './DeepABoxWrite';
+import { useParams } from 'react-router-dom';
 
 const DeepPage = () => {
+  // 깊은 페이지로 들어올 때 해당하는 consultNum 을 파라미터로 함께 보냄
+  let consultNum = useParams();
   return (
     <>
       <Header />

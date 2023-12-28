@@ -1,13 +1,17 @@
-import React, { Suspense } from "react";
-import "./App.css";
-import RouterIndex from "./router";
+import React, { Suspense } from 'react';
+import './App.css';
+import RouterIndex from './router';
+import { Provider } from 'react-redux';
+import { store } from './store/index';
 
 function App() {
   return (
-    <div className="App">
-      <Suspense fallback={<></>}>
-        <RouterIndex />
-      </Suspense>
+    <div className='App'>
+      <Provider store={store}>
+        <Suspense fallback={<></>}>
+          <RouterIndex />
+        </Suspense>
+      </Provider>
     </div>
   );
 }

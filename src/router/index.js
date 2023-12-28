@@ -10,7 +10,11 @@ import LoginMain from '../components/Login/LoginMain';
 import MainPage from '../components/MainPage';
 import commUtil from '../util/commUtil';
 import FAQPage from '../components/FAQ/FAQPage';
+import ConsultPage from '../components/Consult/ConsultPage';
+import DeepPage from '../components/Consult/DeepPage';
 import '../index.css';
+import MyConsultListPage from '../components/MyConsultList/MyConsultListPage';
+import MyPostListPage from '../components/MyPostList/MyPostListPage';
 
 const RouterIndex = () => {
   const isLogin = commUtil.isNotEmpty(localStorage.getItem('accessToken'));
@@ -47,9 +51,23 @@ const RouterIndex = () => {
         element={<></>}
       ></Route>
       <Route
+        path='/faq/'
+        element={<FAQPage />}
+      ></Route>
+      <Route
         path='/counsel/'
         element={<BoardCounsel />}
       ></Route>
+      <Route
+        path='/counsel/detail/:consultNum'
+        element={<ConsultPage />}
+      ></Route>
+      {/* 
+        일반상담 클릭 시, user 권한은 상담등록페이지로 이동
+        <Route
+          path='/counselwirte/'
+          element={}
+        ></Route> */}
       <Route
         path='/free/'
         element={<BoardFree />}
@@ -59,16 +77,24 @@ const RouterIndex = () => {
         element={<BoardFreeWrite />}
       ></Route>
       <Route
+        path='/myfree/'
+        element={<MyPostListPage />}
+      ></Route>
+      <Route
+        path='/mycounsel/'
+        element={<MyConsultListPage />}
+      ></Route>
+      <Route
+        path='/deep/:consultNum'
+        element={<DeepPage />}
+      ></Route>
+      <Route
         path='/freereply/'
         element={<BoardFreeReply />}
       ></Route>
       <Route
         path='/bupbong/'
         element={<Bupbong />}
-      ></Route>
-      <Route
-        path='/faq/'
-        element={<FAQPage />}
       ></Route>
     </Routes>
   );

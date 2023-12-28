@@ -1,4 +1,3 @@
-import React from 'react';
 import Header from '../layout/Header';
 import Footer from '../layout/Footer';
 import Category from '../layout/Category';
@@ -15,6 +14,7 @@ const MyPostListPage = () => {
     '법봉 충전',
     '로그아웃',
   ];
+
   // 카테고리에서 pressed 처리될 리스트의 idx 값.(수정불필요)
   const clickedIdx = 1;
   return (

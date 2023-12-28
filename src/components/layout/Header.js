@@ -1,8 +1,10 @@
 import { useCallback } from 'react';
 import './Header.css';
 import { Navigate, useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 const Header = () => {
+  const loggedUser = useSelector((state) => state.user);
   const onHBtnDivClick = useCallback(() => {
     // Please sync "회원정보조회(사용자)" to the project
   }, []);
@@ -16,6 +18,13 @@ const Header = () => {
         id='header'
         attriName='attriValue'
       >
+        <div
+          className='logos-mint-icon'
+          onClick={() => {
+            navigate('/');
+          }}
+        />
+
         <div className='htab'>
           <div
             className='hbtndiv'
@@ -31,19 +40,14 @@ const Header = () => {
           <div
             className='hbtndiv'
             onClick={() => {
-              navigate('/counsel/');
+              loggedUser.mode === 'lawyer'
+                ? navigate('/counsel/')
+                : navigate('/counselwirte/');
             }}
           >
             온라인상담
           </div>
         </div>
-
-        <div
-          className='logos-mint-icon'
-          onClick={() => {
-            navigate('/');
-          }}
-        />
 
         <div className='htab'>
           <div

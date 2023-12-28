@@ -1,5 +1,6 @@
 import React from 'react';
 import './MyPostForm.css';
+import { API_BASE_URL } from '../../config/host-config';
 
 const MyPostForm = () => {
   return (

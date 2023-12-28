@@ -1,7 +1,8 @@
 // 브라우저에서 현재 클라이언트의 호스트 이름 얻어오기
 const clientHostName = window.location.hostname;
 
-let backEndHostName = 'http://43.202.101.34'; // 백엔드 서버 호스트 이름
+// let backEndHostName = 'http://43.202.164.96'; // 백엔드 서버 호스트 이름
+let backEndHostName = 'http://13.125.203.225'; // 백엔드 서버 호스트 이름
 
 // if (clientHostName === 'localhost') {
 //   console.log('clientHostName는 : ', clientHostName);
