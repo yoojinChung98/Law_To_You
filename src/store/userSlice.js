@@ -1,16 +1,16 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit';
 
 // state의 초기값 (유저 정보)
 const initialState = {
-  id: "",
-  name: "",
-  nickname: "",
-  mode: "",
+  id: '',
+  name: '',
+  nickname: '',
+  mode: '',
 };
 
 // 유저 Slice 생성
 export const userSlice = createSlice({
-  name: "user",
+  name: 'user',
   initialState,
   reducers: {
     setUser: (state, action) => {

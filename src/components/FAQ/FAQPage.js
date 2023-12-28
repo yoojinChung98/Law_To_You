@@ -1,32 +1,32 @@
-import { Pagination } from "@mui/material";
-import React, { useEffect, useState } from "react";
-import { API_BASE_URL } from "../../config/host-config";
-import Category from "../layout/Category";
-import FAQBox from "./FAQBox";
-import "./FAQPage.css";
+import { Pagination } from '@mui/material';
+import React, { useEffect, useState } from 'react';
+import { API_BASE_URL } from '../../config/host-config';
+import Category from '../layout/Category';
+import FAQBox from './FAQBox';
+import './FAQPage.css';
 
 const FAQ = () => {
   const BASE_URL = API_BASE_URL;
 
   const categories = [
-    "가정법률",
-    "교통/운전",
-    "국가 및 지자체",
-    "국방/보훈",
-    "근로/노동",
-    "금융/금전",
-    "무역/출입국",
-    "문화/여가생활",
-    "민형사/소송",
-    "복지",
-    "부동산/임대차",
-    "사업",
-    "사회안전/범죄",
-    "소비자",
-    "아동청소년/교육",
-    "정보통신/기술",
-    "창업",
-    "환경/에너지", // 얘가 idx 0 을 갖게 될 것.
+    '가정법률',
+    '교통/운전',
+    '국가 및 지자체',
+    '국방/보훈',
+    '근로/노동',
+    '금융/금전',
+    '무역/출입국',
+    '문화/여가생활',
+    '민형사/소송',
+    '복지',
+    '부동산/임대차',
+    '사업',
+    '사회안전/범죄',
+    '소비자',
+    '아동청소년/교육',
+    '정보통신/기술',
+    '창업',
+    '환경/에너지', // 얘가 idx 0 을 갖게 될 것.
   ];
 
   let categorySize = categories.length - 1;
@@ -39,10 +39,11 @@ const FAQ = () => {
   const [clickedMidSecIdx, setClickedMidSecIdx] = useState(0);
   // faqBox에 들어갈 실제 백문백답의 내용 리스트
   const [contentList, setContentList] = useState([]);
-  // 페이지번호 개수
-
+  // 페이징버튼 개수
+  const [pBtnCnt, setPBtnCnt] = useState();
   // 클릭 현재 페이지 번호
   const [currentPage, setCurrentPage] = useState(1);
+  const [midSecCnt, setMidSecCnt] = useState(1);
 
   const cateClick = (idx) => {
     // 여기의 idx 는 렌더링된 카테고리의 최하단부터 0임.
@@ -59,44 +60,48 @@ const FAQ = () => {
     let largeSection = encodeURIComponent(
       categories[clickedCateIdx].substring(0, 2)
     );
-    const res = await fetch(`${BASE_URL}/faq/${largeSection}?pno=${page}`);
+    const res = await fetch(`${BASE_URL}/faq/${largeSection}?page=${page}`);
     if (res.status === 200) {
       const json = await res.json();
       console.log(json);
       let ms = json.middleSection;
       let lsbls = json.listSearchedByLargeSec;
+      let pageNm = json.middleSectionCnt;
       setMidSecList(ms);
       setContentList(lsbls);
+      btnCntCalc(pageNm); // 행 개수에 맞춰 btn개수를 계산해줄 함수 호출
     } else if (res.status === 400) {
-      alert("요청 중 badRequest() 에러 발생", res.json().message);
+      alert('요청 중 badRequest() 에러 발생', res.json().message);
     } else {
-      alert("400 제외 에러 발생");
+      alert('400 제외 에러 발생');
     }
   };
 
   // 대분류 클릭 시, 중분류 리스트를 fetch api로 요청/응답 받고 중리스트(midSecList)를 셋(재렌더링됨)함.
   const getMidSecContent = async (idx) => {
-    let largeSection = categories[idx].substring(0, 2);
+    let largeSection = encodeURIComponent(categories[idx].substring(0, 2));
     const res = await fetch(
-      `${BASE_URL}/faq/${largeSection}?pno=${currentPage}`
+      `${BASE_URL}/faq/${largeSection}?page=${currentPage}`
     );
     if (res.status === 200) {
       const json = await res.json();
       console.log(json);
       let ms = json.middleSection;
       let lsbls = json.listSearchedByLargeSec;
+      let pageNm = json.middleSectionCnt;
       setMidSecList(ms);
       setContentList(lsbls);
+      btnCntCalc(pageNm); // 행 개수에 맞춰 btn개수를 계산해줄 함수 호출
     } else if (res.status === 400) {
-      alert("요청 중 badRequest() 에러 발생", res.json().message);
+      alert('요청 중 badRequest() 에러 발생', res.json().message);
     } else {
-      alert("400 제외 에러 발생");
+      alert('400 제외 에러 발생');
     }
   };
 
   // 중분류 클릭 시, 클릭된 중분류에 해당하는 컨텐트 내용만 받아오는 함수
   const getContentByMidSec = async (idx) => {
-    setCurrentPage(1);
+    await onPageChange(0, 0);
     if (idx === 0) {
       getMidSecContent(clickedCateIdx);
       return;
@@ -107,16 +112,20 @@ const FAQ = () => {
     );
     let middleSection = encodeURIComponent(midSecList[idx - 1]);
     let page = currentPage;
-    console.log("4. 요청 보내기 전, page: ", page);
     const res = await fetch(
       `${BASE_URL}/faq/${largeSection}/${middleSection}?page=${page}`
     );
     if (res.status === 200) {
-      res.json().then((data) => setContentList(data));
+      const json = await res.json();
+      let faqDtoList = json.faqMiddleSecAndSubjectDTOList;
+      let pageNm = json.middleSectionCnt;
+
+      setContentList(faqDtoList);
+      btnCntCalc(pageNm); // 행 개수에 맞춰 btn개수를 계산해줄 함수 호출
     } else if (res.status === 400) {
-      alert("요청 중 badRequest() 에러 발생", res.json().message);
+      alert('요청 중 badRequest() 에러 발생', res.json().message);
     } else {
-      alert("400 제외 에러 발생");
+      alert('400 제외 에러 발생');
     }
   };
 
@@ -128,8 +137,8 @@ const FAQ = () => {
         key={index + 1}
         className={
           index + 1 === clickedMidSecIdx
-            ? "faq-minor faq-minor-selected"
-            : "faq-minor"
+            ? 'faq-minor faq-minor-selected'
+            : 'faq-minor'
         }
         onClick={() => {
           setClickedMidSecIdx(index + 1);
@@ -141,23 +150,28 @@ const FAQ = () => {
     ));
   };
 
-  const pageChange = async (idx, page) => {
+  const pageChangeGetMidCon = async (idx, page) => {
+    console.log('pageChangeGetMidCon 함수 내부');
+    await onPageChange(0, 0);
     let largeSection = encodeURIComponent(
       categories[clickedCateIdx].substring(0, 2)
     );
     let middleSection = encodeURIComponent(midSecList[idx - 1]);
-    console.log("요청보내기직전 page 값: ", page);
+    console.log('요청보내기직전 page 값: ', page);
     const res = await fetch(
       `${BASE_URL}/faq/${largeSection}/${middleSection}?page=${page}`
     );
     if (res.status === 200) {
-      let json = res.json();
-      console.log(json);
-      json.then((data) => setContentList(data));
+      const json = await res.json();
+      let faqDtoList = json.faqMiddleSecAndSubjectDTOList;
+      let pageNm = json.middleSectionCnt;
+
+      setContentList(faqDtoList);
+      btnCntCalc(pageNm); // 행 개수에 맞춰 btn개수를 계산해줄 함수 호출
     } else if (res.status === 400) {
-      alert("요청 중 badRequest() 에러 발생", res.json().message);
+      alert('요청 중 badRequest() 에러 발생', res.json().message);
     } else {
-      alert("400 제외 에러 발생");
+      alert('400 제외 에러 발생');
     }
   };
 
@@ -165,38 +179,46 @@ const FAQ = () => {
 
   // 페이지 버튼이 눌릴 때 반응하는 함수 (현재 페이지 값을 바꾸고 해당 중분류의 컨텐트 값을 다시 받아옴)
   const onPageChange = (e, page) => {
+    if (page === 0) {
+      setCurrentPage(page + 1);
+      return;
+    }
     setCurrentPage(page);
-    console.log("onPageChange 함수내부, page = ", page);
+    console.log('onPageChange 함수내부, page = ', page);
     clickedMidSecIdx === 0
       ? pageChangeMidIdx0(page)
-      : pageChange(clickedMidSecIdx, page);
+      : pageChangeGetMidCon(clickedMidSecIdx, page);
+  };
+
+  const btnCntCalc = (pageNm) => {
+    // 총 개수 / 한 페이지에 띄울 컨텐츠 개수  + 1 => 버튼의 개수
+    setPBtnCnt(Math.floor(pageNm / 10) + 1);
   };
 
   useEffect(() => {
     //처음 들어올 때, 0번째 카테고리로 요청 한 번 보내서 값을 가져오긴 해야할 듯?
-    // cateClick(0);
     getMidSecContent(clickedCateIdx);
   }, []); // 중분류 변경 시도 추가
 
   return (
     <>
       {/** 헤더푸터 제외 가운데정렬로 맞출 클래스 지정을 위해 div 태그로 감쌈 */}
-      <div className="page">
+      <div className='page'>
         <Category
           categoryList={categories}
           clickedIdx={clickedCateIdx}
           cateClick={cateClick}
           categorySize={categorySize}
         />
-        <div className="faq-wrapper">
-          <h1 className="faq-major">대분류</h1>
-          <div className="faq-minor-wrapper">
+        <div className='faq-wrapper'>
+          <h1 className='faq-major'>대분류</h1>
+          <div className='faq-minor-wrapper'>
             <span
               key={0}
               className={
                 0 === clickedMidSecIdx
-                  ? "faq-minor faq-minor-selected"
-                  : "faq-minor"
+                  ? 'faq-minor faq-minor-selected'
+                  : 'faq-minor'
               }
               onClick={() => {
                 setClickedMidSecIdx(0);
@@ -208,16 +230,19 @@ const FAQ = () => {
             {midSecList && renderMidSecList()}
           </div>
           {contentList && (
-            <FAQBox contentList={contentList} currentPage={currentPage} />
+            <FAQBox
+              contentList={contentList}
+              currentPage={currentPage}
+            />
           )}
 
-          <div className="bottom pagination">
+          <div className='bottom pagination'>
             <Pagination
-              count={10}
+              count={pBtnCnt}
               page={currentPage}
               onChange={onPageChange}
-              variant="outlined"
-              shape="rounded"
+              variant='outlined'
+              shape='rounded'
             />
           </div>
         </div>
