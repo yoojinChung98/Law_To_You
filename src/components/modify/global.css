@@ -1,0 +1,28 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Sandoll+Samliphopangche:wght@400&display=swap');
+
+body {
+  margin: 0;
+  line-height: normal;
+}
+:root {
+  /* fonts */
+  --font-inter: Inter;
+  --font-sandoll-samliphopangche: 'Sandoll Samliphopangche';
+
+  /* font sizes */
+  --font-size-lg: 18px;
+  --font-size-6xl: 25px;
+  --font-size-11xl: 30px;
+  --font-size-xl: 20px;
+
+  /* Colors */
+  --deepbrown: #675d50;
+  --color-gray: #939393;
+  --color-black: #000;
+  --color-white: #fff;
+  --color-darkgray-100: #969696;
+
+  /* Border radiuses */
+  --br-3xs: 10px;
+}
