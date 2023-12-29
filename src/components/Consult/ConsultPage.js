@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import './ConsultPage.css';
 import Header from '../layout/Header';
 import Footer from '../layout/Footer';
@@ -8,72 +8,147 @@ import { ConsultABoxWrite } from './ConsultABoxWrite';
 import { Provider, useSelector, useDispatch } from 'react-redux';
 import { setUser } from '../../store/userSlice';
 import { useNavigate, useParams } from 'react-router-dom';
+import { API_BASE_URL } from '../../config/host-config';
 
 const ConsultPage = () => {
+  const BASE_URL = API_BASE_URL;
   const navigate = useNavigate();
   const loggedUser = useSelector((state) => state.user);
-
   // 요청 경로에 묻어있는 param 값을 함께 받아옴 (변수명 수정 금지. 수정 시 Route 함께 수정)
   let consultNum = useParams();
 
-  // 온라인 상담 문의 글 받아오기
-  const getQCounsel = () => {};
+  // 의뢰인 질문에 필요한 값이 모두 들어있는 객체 상태값.
+  const [qContent, setQContent] = useState({});
+  // 답변리스트가 담기는 객체 상태값
+  const [aContentList, setAContentList] = useState([]);
+  // 변호사가 답변을 작성한 적이 있는지 구분하는 상태값
+  const [wrote, setWrote] = useState(false);
+  // 글을 작성한 의뢰인인지를 기억하는 상태값
+  const [isWriterUser, setIsrWriterUser] = useState(false);
 
-  // useEffect(() => {
-  //   // 로그인이 되지 않은 경우 login 유도
-  //   if (!loggedUser.id) {
-  //     alert('로그인이 필요한 서비스입니다.');
-  //     navigate('/login');
-  //     return;
-  //   }
-  //   if()
+  const chkUserMode = () => {
+    // 의뢰인의 질문 데이터 할당
+    getQCounsel();
+    // 변호사들의 답변들 데이터 할당
+    getAnss();
+    return loggedUser.mode === 'user' ? userMode() : lawyerMode();
+  };
 
-  //   if(loggedUser.mode === 'user') {
+  const renderABox = () => {
+    return aContentList.map((ansCont) => {
+      <ConsultABox
+        ansCont={ansCont}
+        isWriterUser={isWriterUser}
+        consultNum={consultNum}
+      />;
+    });
+  };
 
-  //   }
+  // 온라인 상담 문의 글 받아와서 상테값에 세팅하는 함수
+  const getQCounsel = async () => {
+    let res = await fetch(
+      `${BASE_URL}/counsel/content?consultNum=${consultNum}`,
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: 'Bearer ' + localStorage.getItem('accessToken'),
+        },
+      }
+    );
 
-  // }, []);
+    // 응답 상태가 에러일 시 메인페이지로 이동 (counsel 로 보내면 권한에 따라 글쓰기로 보내지므로.)
+    if (res.status != 200) {
+      alert('이 글의 진입 권한이 없습니다.');
+      navigate('/');
+    }
 
-  // 더미 데이터 입력을 위한 임시 코드
-  // const dispatch = useDispatch();
-  // useEffect(() => {
-  //   // setUser 액션을 통해 user 상태를 변경합니다.
-  //   dispatch(
-  //     setUser({
-  //       id: 'newId', // 새로운 ID 값
-  //       name: 'New Name', // 새로운 이름 값
-  //       nickname: 'New Nickname', // 새로운 닉네임 값
-  //       mode: 'New Mode', // 새로운 모드 값
-  //     })
-  //   );
-  // }, [dispatch]);
+    // 응답상태가 200 인 경우 조건에 따라 입밴 / 응답값 상태변수에 할당
+    // 이거 res 여러번 까서 문제되려나?ㅜㅜ
+    const data = await res.json();
+    //의뢰인이라면 아이디가 같은 경우에만 본 페이지 열람이 가능함
+    if (loggedUser.mode === 'user') {
+      if (data.writer != loggedUser.id) {
+        alert('다른 사람이 작성한 온라인 상담은 열람할 수 없습니다.');
+        navigate('/');
+      }
+      setIsrWriterUser(true);
+      console.log(
+        'res.json().then(data)에서 data를 setQContent할건데 그 값은? ',
+        data
+      );
+      setQContent(data);
+    } else {
+      // 변호사라면 언제든지 열람가능
+      setQContent(data);
+    }
+  };
 
-  // 들어오자마자 패치요청 날려날려~
+  // 답변 목록을 받아오고 상태변수에 할당하는 함수
+  const getAnss = async () => {
+    let res = await fetch(`${BASE_URL}/answer?consultNum=${consultNum}&`, {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + localStorage.getItem('accessToken'),
+      },
+    });
 
-  // console.log(LoggedUser);
-  // console.log('LoggedUser.id 값: ', LoggedUser.id);
-  // console.log('LoggedUser.name 값: ', LoggedUser.name);
-  // console.log('LoggedUser.nickname의 값: ', LoggedUser.nickname);
-  // console.log('LoggedUser.mode의 값: ', LoggedUser.mode);
+    // 응답 상태가 에러일 시 메인페이지로 이동 (counsel 로 보내면 권한에 따라 글쓰기로 보내지므로.)
+    if (res.status != 200) {
+      alert('이 글의 진입 권한이 없습니다.');
+      navigate('/');
+    }
 
-  // if (LoggedUser.id ===   LoggedUser.mode === 'CLIENT', )
+    const data = await res.json();
 
-  // useEffect(() => {}, []);
+    //답변이 하나도 달리지 않은 경우, 함수 종료
+    if (data == null) return;
+
+    // 응답상태가 200 인 경우 답변리스트 상태변수에 응답값 할당
+    setAContentList(data);
+
+    // 현재 로그인한 변호사의 계정으로 작성된 답변이 있다면 작성컴포넌트를 띄우지 않도록
+    // 그걸 체크할 상태플래그(wrote)를 세팅하는 과정.
+    let flg = data.filter((answer) => answer.writer === loggedUser.id);
+    !!flg ? setWrote(true) : setWrote(false);
+  };
+
+  // 유저의 경우 할당이 끝난 값들을 가지고 어떻게 컴포넌트를 배열할지 로직
+  const userMode = () => {
+    return (
+      <>
+        <ConsultQBox
+          qContent={qContent}
+          aContentList={aContentList}
+        />
+        {/* <ConsultABox aContentList={aContentList} isWriterUser={isWriterUser} consultNum={consultNum} /> */}
+      </>
+    );
+  };
+
+  // 변호사의 경우 할당이 끝난 값들을 가지고 어떻게 컴포넌트를 배열할지  로직//
+  const lawyerMode = () => {
+    return (
+      <>
+        <ConsultQBox
+          qContent={qContent}
+          aContentList={aContentList}
+        />
+        {loggedUser.mode === 'lawyer' && !wrote ? (
+          <ConsultABoxWrite consultNum={consultNum} />
+        ) : (
+          ''
+        )}
+        {/* <ConsultABox aContentList={aContentList} isWriterUser={isWriterUser} consultNum={consultNum} /> */}
+      </>
+    );
+  };
 
   return (
     <>
       <div className='page'>
         <div className='consult-wrapper'>
-          {/* 1. 작성자 '본인' 사용자 계정 : ConsultQBox (조건에따라 삭제btnO), consultABox(채택btnO)
-          2. 아직 답변을 달지 않은 변호사 : ConsultQBox(삭제btnX), consultABox, ConsultABoxWirte
-          3. 답변을 달았던 변호사 : ConsultQBox(삭제btnX), consultABox */}
-
-          {/*  ------------------- 사용자 질문 박스 -------------------------- */}
-          <ConsultQBox />
-          {/* ------------------- 등록된 변호사 답변 목록 -------------------------------------- */}
-          <ConsultABox />
-          {/* ------------------- 변호사 답변 쓰기 박스 --------------------------*/}
-          <ConsultABoxWrite />
+          {chkUserMode()}
+          {renderABox()}
         </div>
       </div>
     </>

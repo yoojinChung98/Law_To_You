@@ -43,7 +43,7 @@ const MyConsultList = ({ currentPage, setPBtnCnt }) => {
         : `${BASE_URL}/mypage/counsel/lawyer`;
     let res = await fetch(url, {
       headers: {
-        'Content-Type': 'application.json',
+        'Content-Type': 'application/json',
         Authorization: 'Bearer ' + localStorage.getItem('accessToken'),
       },
     });
@@ -64,6 +64,75 @@ const MyConsultList = ({ currentPage, setPBtnCnt }) => {
     }
 
     loggedUser.mode === 'user' ? listRenderUser() : listRenderLawyer();
+  };
+
+  // 유저: 깊은 상담 하러가기 버튼을 눌렀을 때, 작성/상세 페이지 어디로 보낼지 결정하는 함수
+  const chkToDeepU = async (cNm) => {
+    let res = await fetch(
+      `${BASE_URL}/mypage/counsel/detail?consultNum=${cNm}`,
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: 'Bearer ' + localStorage.getItem('accessToken'),
+        },
+      }
+    );
+
+    let resJson = await res.json();
+    console.log('chkToDeepU의 resJson은: ', resJson);
+    if (resJson.status === 200) {
+      resJson.then((data) => {
+        data.ifUpdated
+          ? navigate(`/deep/${data.cNm}`)
+          : navigate('/counsel/deep/');
+      });
+    } else {
+      alert('다른 사람의 깊은 상담은 볼 수 없습니다.');
+    }
+  };
+
+  // 변호사: 깊은 상담 하러가기 버튼을 눌렀을 때, 거절/상세 페이지 중 어디로 보낼지 결정하는 함수
+  const chkToDeepL = async (cNm) => {
+    let res = await fetch(
+      `${BASE_URL}/mypage/counsel/detail?consultNum=${cNm}`,
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: 'Bearer ' + localStorage.getItem('accessToken'),
+        },
+      }
+    );
+
+    let resJson = await res.json();
+    console.log('chkToDeepU의 resJson은: ', resJson);
+    if (resJson.status === 200) {
+      resJson.then((data) => {
+        if (data.ifUpdated) {
+          navigate(`/deep/${data.cNm}`);
+        } else {
+          alert(
+            `아직 의뢰인이 깊은 상담을 등록하지 않았습니다.\n 깊은 상담이 등록될 때 까지 기다려주십시오.`
+          );
+        }
+      });
+    } else {
+      alert('채택되지 않은 깊은 상담은 볼 수 없습니다.');
+    }
+
+    // 응답 받은 리스트를 contentList 와 contentCnt(페이징처리용) 상태에 세팅
+
+    if (loggedUser.mode === 'user') {
+      resJson.then((data) => {
+        setContentList(data.consultingList);
+        setContentCnt(data.count);
+        setPBtnCnt(contentCnt / 10 + 1);
+      });
+    } else {
+      resJson.then((data) => {
+        setContentCnt(data.consultingList);
+        setContentCnt(data.count);
+      });
+    }
   };
 
   // 유저의 리스트를 렌더링하는 함수
@@ -110,7 +179,7 @@ const MyConsultList = ({ currentPage, setPBtnCnt }) => {
                 padding: '5px 1px',
                 backgroundColor: 'var(--deep-brown)',
               }}
-              onClick={navigate(`/deep/${content.consultNum}`)}
+              onClick={chkToDeepU(content.consultNum)}
             >
               깊은상담하러가기
             </Button>
@@ -170,7 +239,7 @@ const MyConsultList = ({ currentPage, setPBtnCnt }) => {
                 padding: '5px 1px',
                 backgroundColor: 'var(--deep-brown)',
               }}
-              onClick={navigate(`/deep/${content.consultNum}`)}
+              onClick={chkToDeepL(content.consultNum)}
             >
               깊은상담하러가기
             </Button>

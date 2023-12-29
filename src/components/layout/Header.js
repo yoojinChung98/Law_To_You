@@ -29,7 +29,7 @@ const Header = () => {
             className='hbtndiv'
             onClick={() => {
               loggedUser.mode === 'user'
-                ? navigate('/counsel/register/')
+                ? navigate('/counsel/write/')
                 : navigate('/counsel/');
             }}
           >

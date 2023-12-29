@@ -66,10 +66,10 @@ const MyConsultListPage = () => {
     //   : pageChangeGetMidCon(clickedMidSecIdx, page);
   };
 
-  const btnCntCalc = (pageNm) => {
-    // 총 개수 / 한 페이지에 띄울 컨텐츠 개수  + 1 => 버튼의 개수
-    setPBtnCnt(pageNm / 10 + 1);
-  };
+  // const btnCntCalc = (pageNm) => {
+  //   // 총 개수 / 한 페이지에 띄울 컨텐츠 개수  + 1 => 버튼의 개수
+  //   setPBtnCnt(pageNm / 10 + 1);
+  // };
   return (
     <>
       <div className='page-content-wrapper'>

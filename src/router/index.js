@@ -81,7 +81,7 @@ const RouterIndex = () => {
         ></Route>
 
         <Route
-          path='/consult/'
+          path='/counsel/detail/:consultNum'
           element={<ConsultPage />}
         ></Route>
         <Route
@@ -93,11 +93,11 @@ const RouterIndex = () => {
           element={<LawyerModify />}
         ></Route>
         <Route
-          path='/counsel/register/'
+          path='/counsel/write/'
           element={<OnlineWrite />}
         ></Route>
         <Route
-          path='/counsel/detail/'
+          path='/counsel/deep/'
           element={<DeepWrite />}
         ></Route>
       </Route>
@@ -108,14 +108,12 @@ const RouterIndex = () => {
           path='/myfree/'
           element={<MyPostListPage />}
         ></Route>
-
         <Route
           path='/mycounsel/'
           element={<MyConsultListPage />}
         ></Route>
-
         <Route
-          path='/deep/:consultNum'
+          path='/deep/:consultNum/'
           element={<DeepPage />}
         ></Route>
         <Route
