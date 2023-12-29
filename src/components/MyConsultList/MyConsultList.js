@@ -14,26 +14,10 @@ const MyConsultList = ({ currentPage, setPBtnCnt }) => {
   const [contentCnt, setContentCnt] = useState(1);
 
   const loggedUser = useSelector((state) => state.user);
-  //더미 데이터 입력을 위한 임시 코드
-  const dispatch = useDispatch();
-  useEffect(() => {
-    // setUser 액션을 통해 user 상태를 변경합니다.
-    dispatch(
-      setUser({
-        id: '변호사1', // 새로운 ID 값
-        name: '본명임', // 새로운 이름 값
-        nickname: '닉네임1', // 새로운 닉네임 값
-        mode: 'lawyer', // 새로운 모드 값
-        // lawyer user 반대
-      })
-    );
-    // 서순 문제로 임시로 여기에 박아놓음. 나중에 redux에서 진짜 로그인된 계정의 값을 가져올 때는 그냥 일반 useEffect에서 호출하면 될 듯.
-    getQCounselList();
-  }, [dispatch]);
 
-  // useEffect(() => {
-  //   getQCounselList();
-  // }, []);
+  useEffect(() => {
+    getQCounselList();
+  }, []);
 
   // 박스에 띄울 모든 리스트를 받아오기 위한 요청 (전체 리스트가 반환될 것.)
   const getQCounselList = async () => {
@@ -62,8 +46,6 @@ const MyConsultList = ({ currentPage, setPBtnCnt }) => {
         setContentCnt(data.count);
       });
     }
-
-    loggedUser.mode === 'user' ? listRenderUser() : listRenderLawyer();
   };
 
   // 유저: 깊은 상담 하러가기 버튼을 눌렀을 때, 작성/상세 페이지 어디로 보낼지 결정하는 함수
@@ -82,9 +64,7 @@ const MyConsultList = ({ currentPage, setPBtnCnt }) => {
     console.log('chkToDeepU의 resJson은: ', resJson);
     if (resJson.status === 200) {
       resJson.then((data) => {
-        data.ifUpdated
-          ? navigate(`/deep/${data.cNm}`)
-          : navigate('/counsel/deep/');
+        data.ifUpdated ? navigate(`/deep/${cNm}`) : navigate('/counsel/deep/');
       });
     } else {
       alert('다른 사람의 깊은 상담은 볼 수 없습니다.');
@@ -108,7 +88,7 @@ const MyConsultList = ({ currentPage, setPBtnCnt }) => {
     if (resJson.status === 200) {
       resJson.then((data) => {
         if (data.ifUpdated) {
-          navigate(`/deep/${data.cNm}`);
+          navigate(`/deep/${cNm}`);
         } else {
           alert(
             `아직 의뢰인이 깊은 상담을 등록하지 않았습니다.\n 깊은 상담이 등록될 때 까지 기다려주십시오.`
@@ -117,21 +97,6 @@ const MyConsultList = ({ currentPage, setPBtnCnt }) => {
       });
     } else {
       alert('채택되지 않은 깊은 상담은 볼 수 없습니다.');
-    }
-
-    // 응답 받은 리스트를 contentList 와 contentCnt(페이징처리용) 상태에 세팅
-
-    if (loggedUser.mode === 'user') {
-      resJson.then((data) => {
-        setContentList(data.consultingList);
-        setContentCnt(data.count);
-        setPBtnCnt(contentCnt / 10 + 1);
-      });
-    } else {
-      resJson.then((data) => {
-        setContentCnt(data.consultingList);
-        setContentCnt(data.count);
-      });
     }
   };
 
@@ -249,8 +214,24 @@ const MyConsultList = ({ currentPage, setPBtnCnt }) => {
     });
   };
 
-  const deleteCounsel = () => {
-    console.log('user 삭제버튼 클릭 시 해당하는 글 삭제요청 들어가야함.');
+  const deleteCounsel = async (cNm) => {
+    let res = await fetch(`${BASE_URL}/mypage/counsel`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + localStorage.getItem('accessToken'),
+      },
+      body: JSON.stringify({
+        consultNum: cNm,
+      }),
+    });
+
+    if (res.status === 200) {
+      alert('질문이 삭제되었습니다.');
+    } else {
+      // 에러코드 뭐오는지 모름.
+      alert('삭제할 수 없는 질문입니다.');
+    }
   };
 
   return (
