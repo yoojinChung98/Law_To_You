@@ -1,25 +1,46 @@
 import React, { useState } from 'react';
-import './LawyerModify.css';
-import './global.css';
+// import './LawyerModify.css';
+// import './global.css';
 import Category from '../layout/Category';
+import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 const LawyerModify = () => {
+  const navigate = useNavigate();
+  const loggedUser = useSelector((state) => state.user);
+
+  // 카테고리에 주입할 리스트 선언부.(수정불필요)
   const categories = [
     '회원정보',
     '내가 쓴 글',
     '온라인 상담 내역',
     '법봉 충전',
-    '로그아웃', // 얘가 idx 0 을 갖게 될 것.
+    '로그아웃',
   ];
 
-  let categorySize = categories.length - 1;
-
-  const [clickedCateIdx, setClickedCateIdx] = useState(4);
+  const [clickedCateIdx, setClickedCateIdx] = useState(0);
 
   const cateClick = (idx) => {
-    // 상단 카테고리의 개수가 18개이기 때문에 17- 로 걍 썼음.
-    setClickedCateIdx(4 - idx);
-    //console.log(idx); // 여기서 idx 값은 카테고리 가장 상단부터 0 할당됨.
+    setClickedCateIdx(idx);
+    switch (idx) {
+      case 0:
+        loggedUser.mode == 'user'
+          ? navigate('/mypage/user/')
+          : navigate('/mypage/lawyer/');
+        break;
+      case 1:
+        navigate('/myfree/');
+        break;
+      case 2:
+        navigate('/mycounsel/');
+        break;
+      case 3:
+        navigate('/bupbong/');
+        break;
+      default:
+        // 여기는 로그아웃 부분. 로그아웃 로직이 연결되도록 해야함.
+        break;
+    }
   };
 
   // 비밀번호 중복 확인
@@ -46,7 +67,6 @@ const LawyerModify = () => {
             categoryList={categories}
             clickedIdx={clickedCateIdx}
             cateClick={cateClick}
-            categorySize={categorySize}
           />
         }
       </div>

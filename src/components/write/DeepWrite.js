@@ -1,5 +1,5 @@
 import React from 'react';
-import './DeepWrite.css';
+// import './DeepWrite.css';
 
 import { useState } from 'react';
 import { GrGallery } from 'react-icons/gr';

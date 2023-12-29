@@ -31,8 +31,13 @@ const ConsultQBox = () => {
           src={require('../../assets/img/Consultation_Q.png')}
         />
         <div className='consult-q-title-wrapper'>
-          <span className='id'>아이디가 들어가는 부분</span>
-          <span className='title'>질문글 제목이 들어가는 부분입니다.</span>
+          <span
+            className='cq-id'
+            style={{ textAlign: 'left' }}
+          >
+            아이디가 들어가는 부분
+          </span>
+          <span className='cq-title'>질문글 제목이 들어가는 부분입니다.</span>
         </div>
         <div className='consult-q-regdate-wrapper'>
           <span className='regdate'>2023-12-05</span>

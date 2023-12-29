@@ -44,7 +44,7 @@ const MyConsultList = ({ currentPage, setPBtnCnt }) => {
     let res = await fetch(url, {
       headers: {
         'Content-Type': 'application.json',
-        Authorization: 'Bearer ' + localStorage.getItem('ACCESS_TOKEN'),
+        Authorization: 'Bearer ' + localStorage.getItem('accessToken'),
       },
     });
 
@@ -186,7 +186,17 @@ const MyConsultList = ({ currentPage, setPBtnCnt }) => {
 
   return (
     <div className='board'>
-      <h1 className='title'>온라인 상담 내역</h1>
+      <span
+        className='bt-title'
+        style={{
+          width: '1400px',
+          textAlign: 'left',
+          textIndent: '20px',
+          paddingBottom: '30px',
+        }}
+      >
+        온라인 상담 내역
+      </span>
       <table className='board-table'>
         <thead className=''>
           <tr>

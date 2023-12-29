@@ -62,8 +62,6 @@ const ConsultPage = () => {
 
   return (
     <>
-      <Header />
-
       <div className='page'>
         <div className='consult-wrapper'>
           {/* 1. 작성자 '본인' 사용자 계정 : ConsultQBox (조건에따라 삭제btnO), consultABox(채택btnO)
@@ -78,8 +76,6 @@ const ConsultPage = () => {
           <ConsultABoxWrite />
         </div>
       </div>
-
-      <Footer />
     </>
   );
 };

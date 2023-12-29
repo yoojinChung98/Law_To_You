@@ -12,7 +12,6 @@ const DeepPage = () => {
   let consultNum = useParams();
   return (
     <>
-      <Header />
       <div className='page'>
         <div className='consult-wrapper'>
           {/* 1. 사용자계정 : ConsultQBox 에 삭제버튼 X
@@ -28,8 +27,6 @@ const DeepPage = () => {
           {/* <DeepABoxWrite /> */}
         </div>
       </div>
-
-      <Footer />
     </>
   );
 };
