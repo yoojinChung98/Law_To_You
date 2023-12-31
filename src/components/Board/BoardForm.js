@@ -1,37 +1,8 @@
-import React, { useEffect, useState } from "react";
-import { getFreeListApi } from "../../api/board/FreeBoardApi";
+import React from "react";
+import { Link } from "react-router-dom";
 import "../scss/Board.scss";
 
-function GetData() {
-  const [data, setData] = useState({});
-  let params = {
-    page: "3",
-  };
-
-  useEffect(() => {
-    getFreeListApi(params).then((res) => {
-      if (res.status === 200) {
-        setData(res.data);
-        console.log(res.data);
-      }
-    });
-  }, []);
-
-  const item = data?.freeboards?.map((item) => (
-    <tbody key={item.title + item.writer}>
-      <tr>
-        <td>34</td>
-        <td>{item.title}</td>
-        <td>{item.writer}</td>
-        <td>{item.regDate}</td>
-      </tr>
-    </tbody>
-  ));
-
-  return item;
-}
-const BoardForm = () => {
-  const item = GetData();
+const BoardForm = ({ data, type = "freeboard" }) => {
   return (
     <div className="board">
       <table className="board-table">
@@ -43,7 +14,30 @@ const BoardForm = () => {
             <th>작성일자</th>
           </tr>
         </thead>
-        {item}
+        <tbody>
+          {data.map((item, index) => {
+            const no = type === "freeboard" ? item.bno : item.consultNum;
+            return (
+              <tr key={no ?? index}>
+                <td>{no ?? index}</td>
+                <td>
+                  <Link
+                    to={
+                      type === "freeboard"
+                        ? "/freereply?bno=" + no
+                        : "/freereply?consultNum=" + no
+                    }
+                  >
+                    {item.title}
+                  </Link>
+                </td>
+                <td>{item.title}</td>
+                <td>{item.writer}</td>
+                <td>{item.regDate}</td>
+              </tr>
+            );
+          })}
+        </tbody>
       </table>
     </div>
   );

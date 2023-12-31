@@ -1,12 +1,35 @@
 import { Icon } from "@iconify/react";
 import { Button } from "@mui/material";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { getFreeListApi } from "../../api/board/FreeBoardApi";
 import "../scss/Board.scss";
 import BoardForm from "./BoardForm";
 
 const BoardFree = () => {
   const navigate = useNavigate();
+
+  const [data, setData] = useState({
+    count: 0,
+    pageInfo: {},
+    freeboards: [],
+  });
+
+  let params = {
+    page: 1,
+  };
+
+  useEffect(() => {
+    getFreeListApi(params)
+      .then((res) => {
+        if (typeof res === "object") {
+          data.setData(res);
+        }
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  }, []);
 
   return (
     <>
@@ -32,7 +55,7 @@ const BoardFree = () => {
           />
         </div>
       </div>
-      <BoardForm />
+      <BoardForm data={data.freeboards} type="freeboard" />
       <div className="button-wrapper">
         <Button
           className="board-write-btn"
