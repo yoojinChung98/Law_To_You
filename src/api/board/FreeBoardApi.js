@@ -26,4 +26,6 @@ export const getFreeDetailApi = (params) => {
 };
 
 // 자유게시판 글 삭제
-export const deleteFreeDeleteApi = () => {};
+export const deleteFreeDeleteApi = (params) => {
+  return axios.delete("/freeboard/delete", { params }).then((res) => res.data);
+};
