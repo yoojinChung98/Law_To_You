@@ -11,6 +11,12 @@ import JoinMain from "../components/Join/JoinMain";
 import LoginMain from "../components/Login/LoginMain";
 import MainLayout from "../components/MainLayout";
 import MainPage from "../components/MainPage";
+import LawyerModify from "../components/modify/LawyerModify";
+import UserModify from "../components/modify/UserModify";
+import DeepWrite from "../components/write/DeepWrite";
+
+import CounselDeepWrite from "../components/Board/CounselDeepWrite";
+import CounselWrite from "../components/Board/CounselWrite";
 import "../index.css";
 import commUtil from "../util/commUtil";
 const RouterIndex = () => {
@@ -21,10 +27,8 @@ const RouterIndex = () => {
 
   useEffect(() => {
     if (!isLogin) {
-      navigate("/login"); //// ntwjd
-    } else {
-      if (location.pathname === "/login") {
-        navigate("/");
+      if (location.pathname !== "/login" && location.pathname !== "/faq") {
+        navigate("/"); //// ntwjd
       }
     }
   }, []);
@@ -43,6 +47,14 @@ const RouterIndex = () => {
         <Route path="/bupbong/" element={<Bupbong />}></Route>
         <Route path="/consult/" element={<ConsultPage />}></Route>
         <Route path="/faq/" element={<FAQPage />}></Route>
+        <Route path="/mypage/" element={<UserModify />}></Route>
+        <Route path="/mypage/lawyer/" element={<LawyerModify />}></Route>
+        <Route path="/counsel/write/" element={<CounselWrite />}></Route>
+        <Route
+          path="/counsel/deepwrite/"
+          element={<CounselDeepWrite />}
+        ></Route>
+        <Route path="/counsel/detail/" element={<DeepWrite />}></Route>
       </Route>
     </Routes>
   );

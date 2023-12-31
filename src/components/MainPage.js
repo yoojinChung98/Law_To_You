@@ -1,10 +1,14 @@
 import cn from "classnames";
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import { getLogoutApi } from "../api/login/LoginApi";
 import { useAppSelector } from "../store";
+import commUtil from "../util/commUtil";
 import "./MainPage.css";
 
 const MainPage = () => {
+  const isLogin = commUtil.isNotEmpty(localStorage.getItem("accessToken"));
+
   const [targetDivId, setTargetDivId] = useState(null);
 
   const handleMouseHover = (e) => {
@@ -15,7 +19,16 @@ const MainPage = () => {
   };
 
   const mode = useAppSelector((state) => state.user.mode);
-  console.log(mode);
+
+  const logoutBtnOnclick = () => {
+    getLogoutApi().then((res) => {
+      if (typeof res === "string") {
+        console.log(res);
+        alert("logout");
+        localStorage.removeItem("accessToken");
+      }
+    });
+  };
 
   return (
     <div className="mainPageDiv">
@@ -70,16 +83,21 @@ const MainPage = () => {
         </Link>
       </div>
       <div className="mainJoinLogin">
-        {/* <span className="mainJoinBtn">회원가입</span> */}
-        {/* <div className="mainBtnBar" /> */}
-        {/* <span className="mainLoginBtn">로그인</span> */}
         <Link to="/join" className="mainJoinBtn">
           회원가입
         </Link>
+        {}
         <div className="mainBtnBar" />
-        <Link to="/login" className="mainLoginBtn">
-          로그인
-        </Link>
+
+        {!isLogin ? (
+          <Link to="/login" className="mainLoginBtn">
+            로그인
+          </Link>
+        ) : (
+          <Link className="mainLoginBtn" onClick={logoutBtnOnclick}>
+            로그아웃
+          </Link>
+        )}
       </div>
     </div>
   );
