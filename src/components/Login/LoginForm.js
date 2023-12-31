@@ -6,15 +6,14 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { getLoginApi } from "../../api/login/LoginApi";
+import { getLoginApi, getLogoutApi } from "../../api/login/LoginApi";
 import { KAKAO_AUTH_URL } from "../../config/kakao-config";
 import { useAppDispatch } from "../../store";
 import { setUser } from "../../store/userSlice";
-
 import commUtil from "../../util/commUtil";
 import "../scss/Login.scss";
 
-const LoginForm = ({ mode }) => {
+const LoginForm = ({ mode, setMode }) => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
@@ -35,48 +34,44 @@ const LoginForm = ({ mode }) => {
   };
 
   const loginBtnOnClick = () => {
-    getLoginApi(loginForm).then((res) => {
-      if (res.status === "200") {
-        // 로그인 성공
-        localStorage.setItem("accessToken", res.data.accessToken);
-        const userInfo = { id: res.data.id, mode: res.data.authority };
+    getLoginApi(loginForm)
+      .then((res) => {
+        if (typeof res === "object") {
+          // 로그인 성공
+          localStorage.setItem("accessToken", res.accessToken);
+          const userInfo = { id: res.id, mode: res.authority };
+          console.log(mode);
+          dispatch(setUser(userInfo));
 
-        dispatch(setUser(userInfo));
+          navigate("/");
+        } else {
+          alert(res);
+          // 로그인 실패
+          setOpen(true);
+        }
+      })
+      .catch((e) => {
+        alert(e);
+      });
 
-        navigate("/");
-      } else {
-        // 로그인 실패
-        setOpen(true);
+    //   const userInfo = { id: "jisu", mode: "user" };
+    //   localStorage.setItem("accessToken", "res.accessToken");
+    //   dispatch(setUser(userInfo));
+    //   navigate("/");
+  };
+
+  const logoutBtnOnclick = () => {
+    getLogoutApi(localStorage.getItem("accessToken")).then((res) => {
+      if (typeof res === "string") {
+        console.log(res);
+        alert("logout");
       }
     });
+  };
 
-    // login api 사용해야 함
-    // if (
-    //   loginForm.id === "jisu" &&
-    //   loginForm.password === "1111" &&
-    //   mode === "user"
-    // ) {
-    //   localStorage.setItem("accessToken", true);
-    //   const userInfo = { id: "jisu", nickname: null, mode };
-
-    //   dispatch(setUser(userInfo));
-    //   // dispatch(setMode("user"));
-    //   console.log(mode);
-    //   navigate("/");
-    // } else if (
-    //   loginForm.id === "js" &&
-    //   loginForm.password === "1111" &&
-    //   mode === "lawyer"
-    // ) {
-    //   localStorage.setItem("accessToken", true);
-    //   const userInfo = { id: "js", nickname: "jisu", mode };
-    //   dispatch(setUser(userInfo));
-    //   // dispatch(setMode("lawyer"));
-    //   navigate("/");
-    // } else {
-    //   // login 실패 로직
-    //   setOpen(true);
-    // }
+  const goBack = () => {
+    setMode(null);
+    navigate("/login");
   };
 
   const [open, setOpen] = React.useState(false);
@@ -133,12 +128,12 @@ const LoginForm = ({ mode }) => {
           >
             로그인
           </Button>
-          <Button className="login-button" variant="contained">
+          <Button className="login-button" variant="contained" onClick={goBack}>
             뒤로가기
           </Button>
           {mode === "user" && (
             <div className="login-btn-apis">
-              <a href={KAKAO_AUTH_URL} target="_blank">
+              <a href={KAKAO_AUTH_URL}>
                 <img
                   alt="kakaobtn"
                   src={require("../../assets/img/kakao_login_medium_narrow.png")}
@@ -156,6 +151,9 @@ const LoginForm = ({ mode }) => {
             {/* <Link to={"/join?mode=" + mode}>회원가입</Link> */}
             {/* <Link to={`/join?mode=${mode}`}>회원가입</Link> */}
             <button onClick={handleJoinSelector}>회원가입</button>
+          </div>
+          <div className="navigate-join">
+            <button onClick={logoutBtnOnclick}>로그아웃</button>
           </div>
         </div>
 
