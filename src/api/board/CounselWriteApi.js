@@ -12,5 +12,5 @@ export const putDeepRegistApi = (params) => {
 
 // 온라인 상담 목록 가져오기(변호사)
 export const getCounselListApi = (params) => {
-  return axios.get("/counsel/register", { params }).then((res) => res.data);
+  return axios.get("/counsel", { params }).then((res) => res.data);
 };

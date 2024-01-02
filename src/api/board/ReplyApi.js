@@ -7,7 +7,7 @@ export const getReplyListApi = (params) => {
 
 // 댓글 등록
 export const postReplyApi = (params) => {
-  return axios.post("/reply", params).then((res) => res.data);
+  return axios.post("/reply/register", params).then((res) => res.data);
 };
 
 // 댓글 삭제
