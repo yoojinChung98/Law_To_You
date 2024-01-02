@@ -13,7 +13,6 @@ import MainLayout from "../components/MainLayout";
 import MainPage from "../components/MainPage";
 import LawyerModify from "../components/modify/LawyerModify";
 import UserModify from "../components/modify/UserModify";
-import DeepWrite from "../components/write/DeepWrite";
 
 import CounselDeepWrite from "../components/Board/CounselDeepWrite";
 import CounselWrite from "../components/Board/CounselWrite";
@@ -54,7 +53,6 @@ const RouterIndex = () => {
           path="/counsel/deepwrite/"
           element={<CounselDeepWrite />}
         ></Route>
-        <Route path="/counsel/detail/" element={<DeepWrite />}></Route>
       </Route>
     </Routes>
   );
