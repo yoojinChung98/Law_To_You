@@ -49,7 +49,7 @@ const ConsultABox = ({ ansCont, isWriterUser, consultNum }) => {
     }
   };
 
-  // 답변이 있는 경우 답변카드 렌더링
+  // 답변이 있는 경우 답변채택카드 렌더링
   const renderAns = () => {
     const adoptBtn = isWriterUser ? (
       <Button

@@ -14,8 +14,10 @@ const ConsultPage = () => {
   const BASE_URL = API_BASE_URL;
   const navigate = useNavigate();
   const loggedUser = useSelector((state) => state.user);
+
   // 요청 경로에 묻어있는 param 값을 함께 받아옴 (변수명 수정 금지. 수정 시 Route 함께 수정)
-  let consultNum = useParams();
+  let { consultNum } = useParams();
+  consultNum = parseInt(consultNum, 10);
 
   // 의뢰인 질문에 필요한 값이 모두 들어있는 객체 상태값.
   const [qContent, setQContent] = useState({});
@@ -36,11 +38,13 @@ const ConsultPage = () => {
 
   const renderABox = () => {
     return aContentList.map((ansCont) => {
-      <ConsultABox
-        ansCont={ansCont}
-        isWriterUser={isWriterUser}
-        consultNum={consultNum}
-      />;
+      return (
+        <ConsultABox
+          ansCont={ansCont}
+          isWriterUser={isWriterUser}
+          consultNum={consultNum}
+        />
+      );
     });
   };
 
@@ -65,6 +69,7 @@ const ConsultPage = () => {
     // 응답상태가 200 인 경우 조건에 따라 입밴 / 응답값 상태변수에 할당
     // 이거 res 여러번 까서 문제되려나?ㅜㅜ
     const data = await res.json();
+    console.log(data);
     //의뢰인이라면 아이디가 같은 경우에만 본 페이지 열람이 가능함
     if (loggedUser.mode === 'user') {
       if (data.writer != loggedUser.id) {
@@ -85,12 +90,16 @@ const ConsultPage = () => {
 
   // 답변 목록을 받아오고 상태변수에 할당하는 함수
   const getAnss = async () => {
-    let res = await fetch(`${BASE_URL}/answer?consultNum=${consultNum}&`, {
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: 'Bearer ' + localStorage.getItem('accessToken'),
-      },
-    });
+    console.log('getAnss 함수 동작');
+    let res = await fetch(
+      `${BASE_URL}/answer?consultNum=${consultNum}$page=1&size=10`,
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: 'Bearer ' + localStorage.getItem('accessToken'),
+        },
+      }
+    );
 
     // 응답 상태가 에러일 시 메인페이지로 이동 (counsel 로 보내면 권한에 따라 글쓰기로 보내지므로.)
     if (res.status != 200) {
@@ -99,6 +108,7 @@ const ConsultPage = () => {
     }
 
     const data = await res.json();
+    console.log(data);
 
     //답변이 하나도 달리지 않은 경우, 함수 종료
     if (data == null) return;
@@ -120,6 +130,7 @@ const ConsultPage = () => {
           qContent={qContent}
           aContentList={aContentList}
         />
+        {/* 유저의 경우 변호사가 답변을 달지 않았다면 하단의 컴포넌트는 span 만 뜰 것.  */}
         {/* <ConsultABox aContentList={aContentList} isWriterUser={isWriterUser} consultNum={consultNum} /> */}
       </>
     );

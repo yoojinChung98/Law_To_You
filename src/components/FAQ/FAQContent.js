@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import './FAQContent.css';
+import { useEffect } from 'react';
 
 const FAQContent = ({ content, rownum, currentPage }) => {
   const [flag, setFlag] = useState(false);
@@ -8,9 +9,12 @@ const FAQContent = ({ content, rownum, currentPage }) => {
     setFlag(!flag);
   };
 
+  useEffect(() => {
+    setFlag(false);
+  }, [content]);
+
   return (
     <>
-      {/* 클릭되어있느지 여부에 따라 faq-title-area 배경색 #EDE9E3로 변경 */}
       <div className={`faq-title-area ${flag ? 'select' : 'unselect'}`}>
         <span className='faq-title-no'>
           {rownum + 1 + 10 * (currentPage - 1)}

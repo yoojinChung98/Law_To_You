@@ -1,94 +1,77 @@
-import { Box, Modal, Pagination, Typography, Backdrop } from '@mui/material';
-import React, { useState } from 'react';
+import {
+  Box,
+  Modal,
+  Pagination,
+  Typography,
+  Backdrop,
+  TableBody,
+  Button,
+} from '@mui/material';
+import React, { useEffect, useState } from 'react';
+import { useAppSelector } from '../../store';
 
-const JoinList = () => {
-  // 변호사 회원가입요청리스트 저장한 변수 (dto객체 배열로 저장될 예정)
-  const [lawyerList, setLawyerList] = useState([
-    {
-      lawyerId: 'abc1234',
-      name: '홍길동',
-      lawyerNum: 1234,
-      attachedFile: 'url',
-      approval: false,
-    },
-    {
-      lawyerId: 'abc1234',
-      name: '홍길동',
-      lawyerNum: 1234,
-      attachedFile: 'url',
-      approval: true,
-    },
-    {
-      lawyerId: 'abc1234',
-      name: '홍길동',
-      lawyerNum: 1234,
-      attachedFile: 'url',
-      approval: false,
-    },
-    {
-      lawyerId: 'abc123444',
-      name: '홍길동44',
-      lawyerNum: 123444,
-      attachedFile: 'url',
-      approval: true,
-    },
-    {
-      lawyerId: 'abc1234',
-      name: '홍길동',
-      lawyerNum: 1234,
-      attachedFile: 'url',
-      approval: false,
-    },
-    {
-      lawyerId: 'abc1234',
-      name: '홍길동',
-      lawyerNum: 1234,
-      attachedFile: 'url',
-      approval: true,
-    },
-    {
-      lawyerId: 'abc1234',
-      name: '홍길동',
-      lawyerNum: 1234,
-      attachedFile: 'url',
-      approval: false,
-    },
-    {
-      lawyerId: 'abc1234',
-      name: '홍길동',
-      lawyerNum: 1234,
-      attachedFile: 'url',
-      approval: false,
-    },
-    {
-      lawyerId: 'abc1234',
-      name: '홍길동',
-      lawyerNum: 1234,
-      attachedFile: 'url',
-      approval: true,
-    },
-    {
-      lawyerId: 'abc1234',
-      name: '홍길동',
-      lawyerNum: 1234,
-      attachedFile: 'url',
-      approval: false,
-    },
-    {
-      lawyerId: 'abc1234',
-      name: '홍길동',
-      lawyerNum: 1234,
-      attachedFile: 'url',
-      approval: true,
-    },
-    {
-      lawyerId: 'abc1234',
-      name: '홍길동',
-      lawyerNum: 1234,
-      attachedFile: 'url',
-      approval: false,
-    },
-  ]);
+const JoinList = ({ setPBtnCnt, currentPage, onPageChange }) => {
+  const URL = 'http://43.201.40.179';
+
+  const [lawyerList, setLawyerList] = useState([]); // 변호사 회원가입 요청리스트 저장변수
+  const [lawyerURL, setLawyerURL] = useState([]); // 변호사 회원가입 URL 리스트 저장
+  const [lawyerIdClick, setlawyerIdClick] = useState([]); // 변호사 승인시 변호사Id 저장
+
+  // 변호사 리스트
+  const lawyerListPage = async () => {
+    await fetch(`${URL}/api/master/history?authority=master`, {
+      headers: {
+        'content-type': 'application/json',
+      },
+    })
+      .then((res) => res.json())
+      .then((body) => {
+        console.log(body.lawyerListResponseDTOS);
+        setLawyerList(body.lawyerListResponseDTOS);
+        setPBtnCnt(Math.floor(body.count / 10) + 1);
+      });
+  };
+
+  // 변호사 등록번호 클릭시 이미지 띄우기
+  const lawyerIdOnClick = async (e) => {
+    const lawyerId = e.currentTarget.getAttribute('id');
+    console.log(lawyerId);
+    await fetch(`${URL}/api/master/history/img?lawyerId=${lawyerId}`, {
+      headers: {
+        'content-type': 'application/json',
+      },
+    }).then((res) =>
+      res.text().then((body) => {
+        setLawyerURL(body);
+        setlawyerIdClick(lawyerId);
+      })
+    );
+  };
+
+  const approvalOnChange = async (e) => {
+    await fetch(
+      `${URL}/api/master/history?authority=master&lawyerId=${lawyerIdClick}`,
+      {
+        method: 'PUT',
+        headers: {
+          'content-type': 'application/json',
+        },
+      }
+    ).then((res) =>
+      res.text().then((body) => {
+        alert(body);
+        window.location.reload();
+      })
+    );
+  };
+
+  useEffect(() => {
+    lawyerListPage();
+  }, []);
+
+  const modalImg = () => {
+    return lawyerURL;
+  };
 
   // 모달창 제어 변수들
   const [modalOpen, setModalOpen] = React.useState(false);
@@ -101,7 +84,7 @@ const JoinList = () => {
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
-    width: 400,
+    width: 'auto',
     bgcolor: '#ffffff',
     border: '2px solid #000',
     boxShadow: 24,
@@ -127,69 +110,86 @@ const JoinList = () => {
             <th>허가상태</th>
           </tr>
         </thead>
-        {lawyerList.map((lawyer, index) => (
-          <tbody>
-            <tr key={index}>
-              <td
-                style={{
-                  width: '100px',
-                  textAlign: 'center',
-                  marginLeft: '10px',
-                }}
-              >
-                {lawyer.lawyerId}
-              </td>
-              <td style={{ width: '80px', textAlign: 'center' }}>
-                {lawyer.name}
-              </td>
-              <td style={{ width: '150px', textAlign: 'center' }}>
-                <span
-                  style={{ textDecoration: 'none', color: 'inherit' }}
-                  onClick={handleModalOpen}
-                >
-                  {lawyer.lawyerNum}
-                </span>
-                <Modal
-                  open={modalOpen}
-                  onClose={handleModalClose}
-                  aria-labelledby='modal-modal-title'
-                  aria-describedby='modal-modal-description'
+        {lawyerList
+          .slice((currentPage - 1) * 10, currentPage * 10)
+          .map((lawyer, index) => (
+            <tbody>
+              <tr key={lawyer.lawyerId}>
+                <td
                   style={{
-                    backgroundColor: 'rgb(250,250,250,0.5)',
+                    width: '100px',
+                    textAlign: 'center',
+                    marginLeft: '10px',
                   }}
                 >
-                  <Box sx={modalStyle}>
-                    <Typography
-                      id='modal-modal-title'
-                      variant='h6'
-                      component='h2'
-                    >
-                      변호사 등록증
-                    </Typography>
-                    <Typography
-                      id='modal-modal-description'
-                      sx={{ mt: 2 }}
-                    >
-                      여기엔 변호사 등록증 사진이 들어와야 함
-                    </Typography>
-                  </Box>
-                </Modal>
-              </td>
-
-              <td style={{ width: '150px', textAlign: 'center' }}>
-                <span
-                  style={
-                    lawyer.approval
-                      ? { color: '#004E95' }
-                      : { color: '#EC0808' }
-                  }
+                  {lawyer.lawyerId}
+                </td>
+                <td style={{ width: '80px', textAlign: 'center' }}>
+                  {lawyer.name}
+                </td>
+                <td
+                  style={{ width: '150px', textAlign: 'center' }}
+                  id={lawyer.lawyerId}
+                  onClick={lawyerIdOnClick}
                 >
-                  {lawyer.approval ? '승인' : '미승인'}
-                </span>
-              </td>
-            </tr>
-          </tbody>
-        ))}
+                  <span
+                    style={{ textDecoration: 'none', color: 'inherit' }}
+                    onClick={handleModalOpen}
+                  >
+                    {lawyer.lawyerNum}
+                  </span>
+                  <Modal
+                    open={modalOpen}
+                    onClose={handleModalClose}
+                    aria-labelledby='modal-modal-title'
+                    aria-describedby='modal-modal-description'
+                    style={{
+                      backgroundColor: 'rgb(250,250,250,0.5)',
+                    }}
+                  >
+                    <Box sx={modalStyle}>
+                      <Typography
+                        id='modal-modal-description'
+                        sx={{ mt: 3 }}
+                        style={{
+                          position: 'relative',
+                        }}
+                      >
+                        <img
+                          src={modalImg()}
+                          alt='lawyerPaper'
+                        />
+                        <Button
+                          className='board-write-btn'
+                          variant='contained'
+                          style={{
+                            position: 'absolute',
+                            right: -20,
+                            bottom: -20,
+                          }}
+                          onClick={approvalOnChange}
+                        >
+                          승인하기
+                        </Button>
+                      </Typography>
+                    </Box>
+                  </Modal>
+                </td>
+
+                <td style={{ width: '150px', textAlign: 'center' }}>
+                  <span
+                    style={
+                      lawyer.approval
+                        ? { color: '#004E95' }
+                        : { color: '#EC0808' }
+                    }
+                  >
+                    {lawyer.approval ? '승인' : '미승인'}
+                  </span>
+                </td>
+              </tr>
+            </tbody>
+          ))}
       </table>
     </div>
   );

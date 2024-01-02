@@ -43,7 +43,6 @@ const FAQ = () => {
   const [pBtnCnt, setPBtnCnt] = useState();
   // 클릭 현재 페이지 번호
   const [currentPage, setCurrentPage] = useState(1);
-  const [midSecCnt, setMidSecCnt] = useState(1);
 
   const cateClick = (idx) => {
     // 여기의 idx 는 렌더링된 카테고리의 최하단부터 0임.
@@ -63,10 +62,10 @@ const FAQ = () => {
     const res = await fetch(`${BASE_URL}/faq/${largeSection}?page=${page}`);
     if (res.status === 200) {
       const json = await res.json();
-      console.log(json);
       let ms = json.middleSection;
       let lsbls = json.listSearchedByLargeSec;
-      let pageNm = json.middleSectionCnt;
+      let pageNm = json.largeCount;
+      setCurrentPage(page);
       setMidSecList(ms);
       setContentList(lsbls);
       btnCntCalc(pageNm); // 행 개수에 맞춰 btn개수를 계산해줄 함수 호출
@@ -88,7 +87,7 @@ const FAQ = () => {
       console.log(json);
       let ms = json.middleSection;
       let lsbls = json.listSearchedByLargeSec;
-      let pageNm = json.middleSectionCnt;
+      let pageNm = json.largeCount;
       setMidSecList(ms);
       setContentList(lsbls);
       btnCntCalc(pageNm); // 행 개수에 맞춰 btn개수를 계산해줄 함수 호출
@@ -111,14 +110,14 @@ const FAQ = () => {
       categories[clickedCateIdx].substring(0, 2)
     );
     let middleSection = encodeURIComponent(midSecList[idx - 1]);
-    let page = currentPage;
+    let page = 1;
     const res = await fetch(
       `${BASE_URL}/faq/${largeSection}/${middleSection}?page=${page}`
     );
     if (res.status === 200) {
       const json = await res.json();
       let faqDtoList = json.faqMiddleSecAndSubjectDTOList;
-      let pageNm = json.middleSectionCnt;
+      let pageNm = json.count;
 
       setContentList(faqDtoList);
       btnCntCalc(pageNm); // 행 개수에 맞춰 btn개수를 계산해줄 함수 호출
@@ -151,21 +150,19 @@ const FAQ = () => {
   };
 
   const pageChangeGetMidCon = async (idx, page) => {
-    console.log('pageChangeGetMidCon 함수 내부');
     await onPageChange(0, 0);
     let largeSection = encodeURIComponent(
       categories[clickedCateIdx].substring(0, 2)
     );
     let middleSection = encodeURIComponent(midSecList[idx - 1]);
-    console.log('요청보내기직전 page 값: ', page);
     const res = await fetch(
       `${BASE_URL}/faq/${largeSection}/${middleSection}?page=${page}`
     );
     if (res.status === 200) {
       const json = await res.json();
       let faqDtoList = json.faqMiddleSecAndSubjectDTOList;
-      let pageNm = json.middleSectionCnt;
-
+      let pageNm = json.count;
+      setCurrentPage(page);
       setContentList(faqDtoList);
       btnCntCalc(pageNm); // 행 개수에 맞춰 btn개수를 계산해줄 함수 호출
     } else if (res.status === 400) {
@@ -184,15 +181,14 @@ const FAQ = () => {
       return;
     }
     setCurrentPage(page);
-    console.log('onPageChange 함수내부, page = ', page);
     clickedMidSecIdx === 0
       ? pageChangeMidIdx0(page)
       : pageChangeGetMidCon(clickedMidSecIdx, page);
   };
 
   const btnCntCalc = (pageNm) => {
-    // 총 개수 / 한 페이지에 띄울 컨텐츠 개수  + 1 => 버튼의 개수
-    setPBtnCnt(Math.floor(pageNm / 10) + 1);
+    // ((총 개수 - 1) / 한 페이지에 띄울 컨텐츠 개수 ) + 1 => 버튼의 개수
+    setPBtnCnt(Math.floor((pageNm - 1) / 10) + 1);
   };
 
   useEffect(() => {

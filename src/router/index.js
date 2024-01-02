@@ -18,6 +18,7 @@ import OnlineWrite from '../components/write/OnlineWrite';
 import MyPostListPage from '../components/MyPostList/MyPostListPage';
 import MyConsultListPage from '../components/MyConsultList/MyConsultListPage';
 import DeepPage from '../components/Consult/DeepPage';
+import JoinListPage from '../components/JoinList/JoinListPage';
 
 import '../index.css';
 import commUtil from '../util/commUtil';
@@ -121,6 +122,11 @@ const RouterIndex = () => {
           element={<Bupbong />}
         ></Route>
       </Route>
+
+      <Route
+        path='/joinlist/'
+        element={<JoinListPage />}
+      />
     </Routes>
   );
 };

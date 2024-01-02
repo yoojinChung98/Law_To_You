@@ -22,7 +22,7 @@ const theme = createTheme({
   },
 });
 
-const ConsultQBox = ({ qContent, aContentList }) => {
+const ConsultQBox = ({ qContent, aContentList, IsDeep }) => {
   const loggedUser = useSelector((state) => state.user);
   const [iUrlList, setIUrlList] = useState([]);
 
@@ -53,6 +53,7 @@ const ConsultQBox = ({ qContent, aContentList }) => {
   const bToImg = () => {
     let bList = qContent.routes;
     let iUrlList = [];
+    if (bList == null) return null;
     bList.map((byteArray) => {
       // 바이트 배열을 Blob 객체로 반환
       let blob = new Blob([byteArray], { type: 'image/jpeg' });
@@ -125,14 +126,16 @@ const ConsultQBox = ({ qContent, aContentList }) => {
             </Box>
           </Modal>
         </div>
-        {qContent.writer == loggedUser.id && !aContentList && (
-          <Button
-            className='consult-del-btn'
-            variant='outlined'
-          >
-            삭제하기
-          </Button>
-        )}
+        {qContent.writer == loggedUser.id &&
+          !aContentList &&
+          !IsDeep(
+            <Button
+              className='consult-del-btn'
+              variant='outlined'
+            >
+              삭제하기
+            </Button>
+          )}
       </div>
     </>
   );
