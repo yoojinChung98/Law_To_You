@@ -1,14 +1,37 @@
 import { Icon } from "@iconify/react";
 import { Button } from "@mui/material";
-import React from "react";
-import { useLocation } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { getCounselListApi } from "../../api/board/CounselWriteApi";
+import { useAppSelector } from "../../store";
 import "../scss/Board.scss";
 import BoardForm from "./BoardForm";
 
 const BoardCounsel = () => {
-  const location = useLocation();
-  console.log(location);
-  const mode = location.state;
+  const [data, setData] = useState({
+    count: "",
+    pageInfo: {},
+    consultingList: [],
+  });
+
+  let params = {
+    page: 1,
+    size: 10,
+  };
+
+  useEffect(() => {
+    getCounselListApi(params)
+      .then((res) => {
+        if (typeof res === "object") {
+          data.setData(res);
+        }
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  }, []);
+
+  const mode = useAppSelector((state) => state.user.mode);
+
   return (
     <>
       <div className="board">
@@ -30,7 +53,7 @@ const BoardCounsel = () => {
           />
         </div>
       </div>
-      <BoardForm />
+      <BoardForm data={data.consultingList} type="counsel" />
       {mode === "user" && (
         <div>
           <Button className="input-button" variant="contained">

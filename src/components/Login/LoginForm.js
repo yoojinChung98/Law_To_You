@@ -1,30 +1,29 @@
-import { Button, TextField } from '@mui/material';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { getLoginApi } from '../../api/login/LoginApi';
-import { KAKAO_AUTH_URL } from '../../config/kakao-config';
-import { useAppDispatch } from '../../store';
-import { setUser } from '../../store/userSlice';
+import { Button, TextField } from "@mui/material";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { getLoginApi, getLogoutApi } from "../../api/login/LoginApi";
+import { KAKAO_AUTH_URL } from "../../config/kakao-config";
+import { useAppDispatch } from "../../store";
+import { setUser } from "../../store/userSlice";
+import commUtil from "../../util/commUtil";
+import "../scss/Login.scss";
 
-import commUtil from '../../util/commUtil';
-import '../scss/Login.scss';
-
-const LoginForm = ({ mode }) => {
+const LoginForm = ({ mode, setMode }) => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
   const [loginForm, setLoginForm] = useState({
-    id: '',
-    password: '',
+    id: "",
+    password: "",
   });
 
-  const CLIENT_MODE = '의뢰인';
-  const LAWYER_MODE = '변호사';
+  const CLIENT_MODE = "의뢰인";
+  const LAWYER_MODE = "변호사";
 
   const idOnChangeEventHandler = (e) => {
     setLoginForm({ ...loginForm, id: e.target.value });
@@ -37,14 +36,15 @@ const LoginForm = ({ mode }) => {
   const loginBtnOnClick = () => {
     getLoginApi(loginForm)
       .then((res) => {
-        if (typeof res === 'object') {
+        if (typeof res === "object") {
           // 로그인 성공
-          localStorage.setItem('accessToken', res.accessToken);
-          const userInfo = { id: res.id, mode: res.authority };
+          localStorage.setItem("accessToken", res.accessToken);
+          const userInfo = { id: res.id, name: res.name, mode: res.authority };
           console.log(mode);
+          console.log(userInfo.name);
           dispatch(setUser(userInfo));
 
-          navigate('/');
+          navigate("/");
         } else {
           alert(res);
           // 로그인 실패
@@ -54,33 +54,25 @@ const LoginForm = ({ mode }) => {
       .catch((e) => {
         alert(e);
       });
-    // login api 사용해야 함
-    // if (
-    //   loginForm.id === "jisu" &&
-    //   loginForm.password === "1111" &&
-    //   mode === "user"
-    // ) {
-    //   localStorage.setItem("accessToken", true);
-    //   const userInfo = { id: "jisu", nickname: null, mode };
 
+    //   const userInfo = { id: "jisu", mode: "user" };
+    //   localStorage.setItem("accessToken", "res.accessToken");
     //   dispatch(setUser(userInfo));
-    //   // dispatch(setMode("user"));
-    //   console.log(mode);
     //   navigate("/");
-    // } else if (
-    //   loginForm.id === "js" &&
-    //   loginForm.password === "1111" &&
-    //   mode === "lawyer"
-    // ) {
-    //   localStorage.setItem("accessToken", true);
-    //   const userInfo = { id: "js", nickname: "jisu", mode };
-    //   dispatch(setUser(userInfo));
-    //   // dispatch(setMode("lawyer"));
-    //   navigate("/");
-    // } else {
-    //   // login 실패 로직
-    //   setOpen(true);
-    // }
+  };
+
+  const logoutBtnOnclick = () => {
+    getLogoutApi(localStorage.getItem("accessToken")).then((res) => {
+      if (typeof res === "string") {
+        console.log(res);
+        alert("logout");
+      }
+    });
+  };
+
+  const goBack = () => {
+    setMode(null);
+    navigate("/login");
   };
 
   const [open, setOpen] = React.useState(false);
@@ -94,41 +86,41 @@ const LoginForm = ({ mode }) => {
   };
 
   const handleJoinSelector = () => {
-    navigate('/join', { state: { mode: mode } });
+    navigate("/join", { state: { mode: mode } });
   };
 
   // const join = `/join/?mode=${user}`;
 
   return (
     <>
-      <div className='login-wrapper'>
-        <div className='login-header'>
-          {mode === 'user' ? CLIENT_MODE : LAWYER_MODE} 로그인
+      <div className="login-wrapper">
+        <div className="login-header">
+          {mode === "user" ? CLIENT_MODE : LAWYER_MODE} 로그인
         </div>
-        <div className='login-form'>
+        <div className="login-form">
           <div>
             <TextField
-              id='id'
-              label='아이디'
-              placeholder='아이디 입력'
-              variant='standard'
+              id="id"
+              label="아이디"
+              placeholder="아이디 입력"
+              variant="standard"
               onChange={idOnChangeEventHandler}
               fullWidth
             />
           </div>
           <div>
             <TextField
-              id='password'
-              label='비밀번호'
-              placeholder='비밀번호 입력'
-              variant='standard'
+              id="password"
+              label="비밀번호"
+              placeholder="비밀번호 입력"
+              variant="standard"
               onChange={passwordOnChangeEventHandler}
               fullWidth
             />
           </div>
           <Button
-            className='login-button'
-            variant='contained'
+            className="login-button"
+            variant="contained"
             disabled={
               commUtil.isEmpty(loginForm.id) ||
               commUtil.isEmpty(loginForm.password)
@@ -137,55 +129,49 @@ const LoginForm = ({ mode }) => {
           >
             로그인
           </Button>
-          <Button
-            className='login-button'
-            variant='contained'
-          >
+          <Button className="login-button" variant="contained" onClick={goBack}>
             뒤로가기
           </Button>
-          {mode === 'user' && (
-            <div className='login-btn-apis'>
-              <a
-                href={KAKAO_AUTH_URL}
-                target='_blank'
-              >
+          {mode === "user" && (
+            <div className="login-btn-apis">
+              <a href={KAKAO_AUTH_URL}>
                 <img
-                  alt='kakaobtn'
-                  src={require('../../assets/img/kakao_login_medium_narrow.png')}
+                  alt="kakaobtn"
+                  src={require("../../assets/img/kakao_login_medium_narrow.png")}
                 ></img>
               </a>
               <a>
                 <img
-                  alt='naverbtn'
-                  src={require('../../assets/img/login-btn-naver-green.png')}
+                  alt="naverbtn"
+                  src={require("../../assets/img/login-btn-naver-green.png")}
                 ></img>
               </a>
             </div>
           )}
-          <div className='navigate-join'>
+          <div className="navigate-join">
             {/* <Link to={"/join?mode=" + mode}>회원가입</Link> */}
             {/* <Link to={`/join?mode=${mode}`}>회원가입</Link> */}
             <button onClick={handleJoinSelector}>회원가입</button>
+          </div>
+          <div className="navigate-join">
+            <button onClick={logoutBtnOnclick}>로그아웃</button>
           </div>
         </div>
 
         <Dialog
           open={open}
           onClose={handleClose}
-          aria-labelledby='alert-dialog-title'
-          aria-describedby='alert-dialog-description'
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
         >
-          <DialogTitle id='alert-dialog-title'>로그인 실패</DialogTitle>
+          <DialogTitle id="alert-dialog-title">로그인 실패</DialogTitle>
           <DialogContent>
-            <DialogContentText id='alert-dialog-description'>
+            <DialogContentText id="alert-dialog-description">
               아이디 또는 비밀번호가 일치하지 않습니다.
             </DialogContentText>
           </DialogContent>
           <DialogActions>
-            <Button
-              onClick={handleClose}
-              autoFocus
-            >
+            <Button onClick={handleClose} autoFocus>
               확인
             </Button>
           </DialogActions>

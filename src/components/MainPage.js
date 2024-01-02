@@ -1,12 +1,18 @@
 import cn from 'classnames';
-import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { useAppSelector } from '../store';
+import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { getLogoutApi } from '../api/login/LoginApi';
+import { useAppDispatch, useAppSelector } from '../store';
+import { logout } from '../store/userSlice';
+import commUtil from '../util/commUtil';
 import './MainPage.css';
-import { useDispatch, useSelector } from 'react-redux';
-import { setUser } from '../store/userSlice';
 
 const MainPage = () => {
+  const isLogin = commUtil.isNotEmpty(localStorage.getItem('accessToken'));
+
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+
   const [targetDivId, setTargetDivId] = useState(null);
 
   const handleMouseHover = (e) => {
@@ -17,7 +23,18 @@ const MainPage = () => {
   };
 
   const mode = useAppSelector((state) => state.user.mode);
-  console.log(mode);
+
+  const logoutBtnOnclick = () => {
+    getLogoutApi().then((res) => {
+      if (typeof res === 'string') {
+        console.log(res);
+        localStorage.removeItem('accessToken');
+        dispatch(logout({}));
+        alert('logout');
+        navigate('/');
+      }
+    });
+  };
 
   return (
     <div className='mainPageDiv'>
@@ -46,7 +63,7 @@ const MainPage = () => {
         })}
       >
         <Link
-          to={mode === 'user' ? '/' : '/counsel'}
+          to={mode === 'user' ? '/counsel/write' : '/counsel'}
           state={{ mode: mode }}
           className='insteadOfSpan'
           onMouseEnter={handleMouseHover}
@@ -72,19 +89,33 @@ const MainPage = () => {
         </Link>
       </div>
       <div className='mainJoinLogin'>
+        {/* <span className="mainJoinBtn">회원가입</span> */}
+        {/* <div className="mainBtnBar" /> */}
+        {/* <span className="mainLoginBtn">로그인</span> */}
         <Link
           to='/join'
           className='mainJoinBtn'
         >
           회원가입
         </Link>
+        {}
         <div className='mainBtnBar' />
-        <Link
-          to='/login'
-          className='mainLoginBtn'
-        >
-          로그인
-        </Link>
+
+        {!isLogin ? (
+          <Link
+            to='/login'
+            className='mainLoginBtn'
+          >
+            로그인
+          </Link>
+        ) : (
+          <Link
+            className='mainLoginBtn'
+            onClick={logoutBtnOnclick}
+          >
+            로그아웃
+          </Link>
+        )}
       </div>
     </div>
   );

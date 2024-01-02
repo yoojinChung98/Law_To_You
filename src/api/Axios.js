@@ -23,4 +23,26 @@ instance.interceptors.request.use(
   }
 );
 
+instance.interceptors.response.use(
+  (res) => {
+    return res;
+  },
+  (error) => {
+    const { config } = error;
+    if (error?.code === "ECONNABORTED") {
+      console.error("Time Out");
+      return;
+    }
+
+    const erorrRes = error.response;
+    // if (erorrRes.status === 401) {
+    // if (typeof erorrRes === "object") {
+    // access token 만료 => 재발급 로직
+    // }
+    //else if() {} 다른 에러 코드에 대한 분기 기술
+    console.error(error);
+    return Promise.reject(error);
+  }
+);
+
 export default instance;
