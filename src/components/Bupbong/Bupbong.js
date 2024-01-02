@@ -1,42 +1,42 @@
-import { Button } from "@mui/material";
-import MenuItem from "@mui/material/MenuItem";
-import Select from "@mui/material/Select";
-import React, { useState } from "react";
-import { useAppSelector } from "../../store";
-import "../scss/Bupbong.scss";
+import { Button } from '@mui/material';
+import MenuItem from '@mui/material/MenuItem';
+import Select from '@mui/material/Select';
+import React, { useState } from 'react';
+import { useAppSelector } from '../../store';
+import '../scss/Bupbong.scss';
 
 const Bupbong = () => {
-  const [age, setAge] = useState("");
+  const [age, setAge] = useState('');
 
   const mode = useAppSelector((state) => state.user.mode);
   console.log(mode);
 
   return (
     <div>
-      <div className="wrapper">
-        <div className="title">
-          법봉 조회/{mode === "user" ? "충전" : "환급"}
+      <div className='wrapper'>
+        <div className='title'>
+          법봉 조회/{mode === 'user' ? '충전' : '환급'}
         </div>
 
-        <div className="info">
-          <div className="own-wrapper">
-            <span className="own label">
+        <div className='info'>
+          <div className='own-wrapper'>
+            <span className='own label'>
               <p>보유</p>
-              <img src="/img/bupbong.svg" />
+              <img src='/img/bupbong.svg' />
             </span>
-            <span className="own-count">80개</span>
+            <span className='own-count'>80개</span>
           </div>
-          {mode === "lawyer" && (
-            <div className="account-wrapper">
-              <span className="account-num label">계좌번호</span>
-              <div className="account-select">
+          {mode === 'lawyer' && (
+            <div className='account-wrapper'>
+              <span className='account-num label'>계좌번호</span>
+              <div className='account-select'>
                 <Select
                   value={age}
                   // onChange={handleChange}
                   displayEmpty
-                  inputProps={{ "aria-label": "Without label" }}
+                  inputProps={{ 'aria-label': 'Without label' }}
                 >
-                  <MenuItem value="">
+                  <MenuItem value=''>
                     <em>--선택--</em>
                   </MenuItem>
                   <MenuItem value={10}>국민은행</MenuItem>
@@ -44,41 +44,41 @@ const Bupbong = () => {
                   <MenuItem value={30}>하나은행</MenuItem>
                 </Select>
                 <input
-                  className="account-input"
-                  placeholder="계좌번호를 입력해주세요"
+                  className='account-input'
+                  placeholder='계좌번호를 입력해주세요'
                 ></input>
-                <Button className="input-btn">입력</Button>
+                <Button className='input-btn'>입력</Button>
               </div>
             </div>
           )}
         </div>
-        <div className="box-wrapper">
-          <div className="box">
-            <div className="num">10개</div>
-            <div className="price">10,000원</div>
+        <div className='box-wrapper'>
+          <div className='box'>
+            <div className='num'>10개</div>
+            <div className='price'>10,000원</div>
           </div>
-          <div className="box">
-            <div className="num">50개</div>
-            <div className="price">50,000원</div>
+          <div className='box'>
+            <div className='num'>50개</div>
+            <div className='price'>50,000원</div>
           </div>
-          <div className="box">
-            <div className="num">100개</div>
-            <div className="price">100,000원</div>
+          <div className='box'>
+            <div className='num'>100개</div>
+            <div className='price'>100,000원</div>
           </div>
-          <div className="box-input">
+          <div className='box-input'>
             <span>직접입력</span>
             <div>
-              <input className="input"></input>
-              <span className="unit">개</span>
+              <input className='input'></input>
+              <span className='unit'>개</span>
             </div>
             <div>
-              <input className="input"></input>
-              <span className="unit">원</span>
+              <input className='input'></input>
+              <span className='unit'>원</span>
             </div>
-            {mode === "user" ? (
-              <Button className="charge-btn">충전하기</Button>
+            {mode === 'user' ? (
+              <Button className='charge-btn'>충전하기</Button>
             ) : (
-              <Button className="charge-btn">환전하기</Button>
+              <Button className='charge-btn'>환전하기</Button>
             )}
           </div>
         </div>

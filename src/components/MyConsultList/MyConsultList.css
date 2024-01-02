@@ -1,9 +1,12 @@
 .board {
   margin-right: 80px;
 }
-.board .title {
+.board .bt-title {
+  display: block;
+  width: 1400px;
   font-family: 'SDSamliphopangche_Basic';
   font-size: 37px;
+  text-align: left;
 }
 .board-table {
   width: 1400px;

@@ -11,29 +11,36 @@ const MyConsultList = ({ currentPage, setPBtnCnt }) => {
   // 로그인한 사용자가 질문(user)/답변(lawyer)한 총 리스트
   const [contentList, setContentList] = useState([]);
   // 로그인한 사용자가 질문(user)/답변(lawyer)한 총 리스트 개수
-  const [contentCnt, setContentCnt] = useState(1);
+  const [contentCnt, setContentCnt] = useState(0);
+
+  // 더미 데이터 입력을 위한 임시 코드
+  const dispatch = useDispatch();
+
+  // 깊은 상담으로 가기 위해 필요한 상태값들
+  const [] = useState();
 
   const loggedUser = useSelector((state) => state.user);
-  //더미 데이터 입력을 위한 임시 코드
-  const dispatch = useDispatch();
+
   useEffect(() => {
     // setUser 액션을 통해 user 상태를 변경합니다.
     dispatch(
       setUser({
-        id: '변호사1', // 새로운 ID 값
-        name: '본명임', // 새로운 이름 값
-        nickname: '닉네임1', // 새로운 닉네임 값
-        mode: 'lawyer', // 새로운 모드 값
-        // lawyer user 반대
+        id: '', // 새로운 ID 값
+        name: '', // 새로운 이름 값
+        nickname: '', // 새로운 닉네임 값
+        mode: '', // 새로운 모드 값
       })
     );
-    // 서순 문제로 임시로 여기에 박아놓음. 나중에 redux에서 진짜 로그인된 계정의 값을 가져올 때는 그냥 일반 useEffect에서 호출하면 될 듯.
-    getQCounselList();
   }, [dispatch]);
 
-  // useEffect(() => {
-  //   getQCounselList();
-  // }, []);
+  useEffect(() => {
+    getQCounselList();
+  }, []);
+
+  // // 페이지 최초 접근 시 필요한 값들을 세팅하기 위한 통신
+  // const getDeepInfo = async () => {
+
+  // };
 
   // 박스에 띄울 모든 리스트를 받아오기 위한 요청 (전체 리스트가 반환될 것.)
   const getQCounselList = async () => {
@@ -43,33 +50,124 @@ const MyConsultList = ({ currentPage, setPBtnCnt }) => {
         : `${BASE_URL}/mypage/counsel/lawyer`;
     let res = await fetch(url, {
       headers: {
-        'Content-Type': 'application.json',
-        Authorization: 'Bearer ' + localStorage.getItem('ACCESS_TOKEN'),
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + localStorage.getItem('accessToken'),
       },
     });
 
     // 응답 받은 리스트를 contentList 와 contentCnt(페이징처리용) 상태에 세팅
+    // 이게 권한에 따라 다르게 세팅되어야할 이유가 있나? 같아도 될 것 같은데....
     let resJson = await res.json();
     if (loggedUser.mode === 'user') {
+      // resJson.then((data) => {
+      setContentList(resJson.consultingList);
+      setContentCnt(resJson.count);
+      setPBtnCnt(resJson.count / 10 + 1);
+      // });
+    } else {
+      // resJson.then((data) => {
+      setContentList(resJson.consultingList);
+      setContentCnt(resJson.count);
+      setPBtnCnt(resJson.count / 10 + 1); // 변호사는 왜 setPBtneCnt가 없었지?? 12-30 (수정): 일단 필요해보여서 다시 넣음
+      // });
+    }
+  };
+
+  // 유저: 깊은 상담 하러가기 버튼을 눌렀을 때, 작성/상세 페이지 어디로 보낼지 결정하는 함수
+  const chkToDeepU = async (cNm) => {
+    // 지금 이부분이 겹치는 호출을 부르는 부분임.
+    // 호출해서 받은 값을 여기서 세팅하자!!
+
+    let res = await fetch(
+      `${BASE_URL}/mypage/counsel/detail?consultNum=${cNm}`,
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: 'Bearer ' + localStorage.getItem('accessToken'),
+        },
+      }
+    );
+
+    let resJson = await res.json();
+    console.log('chkToDeepU의 resJson은: ', resJson);
+    if (resJson.status === 200) {
       resJson.then((data) => {
-        setContentList(data.consultingList);
-        setContentCnt(data.count);
-        setPBtnCnt(contentCnt / 10 + 1);
+        data.ifUpdated ? navigate(`/deep/${cNm}`) : navigate('/counsel/deep/');
       });
     } else {
-      resJson.then((data) => {
-        setContentCnt(data.consultingList);
-        setContentCnt(data.count);
-      });
+      // 여기서 응답 상태메세지를 담는 부분을 넣자.
+      switch (resJson.message) {
+        case 'authority-problem':
+          alert(
+            '선택하신 깊은 상담 내역 조회 권한이 없습니다. 다시 로그인 해주세요.'
+          );
+          // 마이페이지에서 자신이 등록하지 않은 온라인 상담을 보는 경우는 직접 url을 적어서 들어오는 경우이거나 로그아웃되어있거나 둘 중 하나이므로
+          navigate('/');
+          break;
+        case 'no-short-answers':
+          alert('아직 답변이 달리지 않아 깊은 상담이 불가능합니다.');
+          break;
+        case 'no-adopted-answer':
+          alert('일반 상담의 답변을 채택한 후 깊은 상담을 진행할 수 있습니다.');
+          navigate(`counsel/detail/:${cNm}}`);
+          break;
+        default:
+          alert('잘못된 접근 입니다.');
+          break;
+      }
     }
+  };
 
-    loggedUser.mode === 'user' ? listRenderUser() : listRenderLawyer();
+  // 변호사: 깊은 상담 하러가기 버튼을 눌렀을 때, 거절/상세 페이지 중 어디로 보낼지 결정하는 함수
+  const chkToDeepL = async (cNm) => {
+    let res = await fetch(
+      `${BASE_URL}/mypage/counsel/detail?consultNum=${cNm}`,
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: 'Bearer ' + localStorage.getItem('accessToken'),
+        },
+      }
+    );
+
+    let resJson = await res.json();
+    console.log('chkToDeepU의 resJson은: ', resJson);
+    if (resJson.status === 200) {
+      resJson.then((data) => {
+        if (data.ifUpdated) {
+          navigate(`/deep/${cNm}`);
+        } else {
+          alert(
+            `아직 의뢰인이 깊은 상담을 등록하지 않았습니다.\n 깊은 상담이 등록될 때 까지 기다려주십시오.`
+          );
+        }
+      });
+    } else {
+      // 여기서 응답 상태메세지를 담는 부분을 넣자.
+      switch (resJson.message) {
+        case 'authority-problem':
+          alert(
+            '선택하신 깊은 상담 내역 조회 권한이 없습니다. 다시 로그인 해주세요.'
+          );
+          // 마이페이지에서 자신이 등록하지 않은 온라인 상담을 보는 경우는 직접 url을 적어서 들어오는 경우이거나 로그아웃되어있거나 둘 중 하나이므로
+          navigate('/');
+          break;
+        case 'no-short-answers':
+        case 'no-adopted-answer':
+          alert(
+            '의뢰인이 일반 상담의 답변을 채택한 후 깊은 상담을 진행할 수 있습니다.'
+          );
+          break;
+        default:
+          alert('잘못된 접근 입니다.');
+          break;
+      }
+    }
   };
 
   // 유저의 리스트를 렌더링하는 함수
   const listRenderUser = () => {
     let sliceIdx = 10 * (currentPage - 1);
-    // 여기 만약 contentList 가 모든 리스트가 아닌 페이징처리한 리스트가 오는거라면 slice는 필요 없음.
     return contentList.slice(sliceIdx, sliceIdx + 10).map((content, index) => {
       return (
         <tr key={content.consultNum}>
@@ -110,7 +208,7 @@ const MyConsultList = ({ currentPage, setPBtnCnt }) => {
                 padding: '5px 1px',
                 backgroundColor: 'var(--deep-brown)',
               }}
-              onClick={navigate(`/deep/${content.consultNum}`)}
+              onClick={chkToDeepU(content.consultNum)}
             >
               깊은상담하러가기
             </Button>
@@ -162,31 +260,63 @@ const MyConsultList = ({ currentPage, setPBtnCnt }) => {
             )}
           </td>
           <td>
-            <Button
-              variant='contained'
-              style={{
-                width: '150px',
-                margin: '0px 7px',
-                padding: '5px 1px',
-                backgroundColor: 'var(--deep-brown)',
-              }}
-              onClick={navigate(`/deep/${content.consultNum}`)}
-            >
-              깊은상담하러가기
-            </Button>
+            {/*  채택되었다면 채택됨 div 를 보여주고, 채택되지 않았다면 빈칸. */}
+            {content.isAdopted ? (
+              <Button
+                variant='contained'
+                style={{
+                  width: '150px',
+                  margin: '0px 7px',
+                  padding: '5px 1px',
+                  backgroundColor: 'var(--deep-brown)',
+                }}
+                onClick={chkToDeepL(content.consultNum)}
+              >
+                깊은상담하러가기
+              </Button>
+            ) : (
+              ''
+            )}
           </td>
         </tr>
       );
     });
   };
 
-  const deleteCounsel = () => {
-    console.log('user 삭제버튼 클릭 시 해당하는 글 삭제요청 들어가야함.');
+  // 일반 상담을 삭제하는 로직
+  const deleteCounsel = async (cNm) => {
+    let res = await fetch(`${BASE_URL}/mypage/counsel`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + localStorage.getItem('accessToken'),
+      },
+      body: JSON.stringify({
+        consultNum: cNm,
+      }),
+    });
+
+    if (res.status === 200) {
+      alert('질문이 삭제되었습니다.');
+    } else {
+      // 에러코드 뭐오는지 모름.
+      alert('삭제할 수 없는 질문입니다.');
+    }
   };
 
   return (
     <div className='board'>
-      <h1 className='title'>온라인 상담 내역</h1>
+      <span
+        className='bt-title'
+        style={{
+          width: '1400px',
+          textAlign: 'left',
+          textIndent: '20px',
+          paddingBottom: '30px',
+        }}
+      >
+        온라인 상담 내역
+      </span>
       <table className='board-table'>
         <thead className=''>
           <tr>

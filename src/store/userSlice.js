@@ -16,6 +16,7 @@ export const userSlice = createSlice({
     setUser: (state, action) => {
       state.id = action.payload.id;
       state.name = action.payload.name;
+      // 여기 nickname 빼고 전부 name으로 받기로 한거죵? 밑에 한 줄 삭제할까용?
       state.nickname = action.payload.nickname;
       state.mode = action.payload.mode;
     },
