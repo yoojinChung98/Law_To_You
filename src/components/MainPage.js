@@ -19,22 +19,6 @@ const MainPage = () => {
   const mode = useAppSelector((state) => state.user.mode);
   console.log(mode);
 
-  const loggedUser = useSelector((state) => state.user);
-
-  // 더미 데이터 입력을 위한 임시 코드
-  const dispatch = useDispatch();
-  useEffect(() => {
-    // setUser 액션을 통해 user 상태를 변경합니다.
-    dispatch(
-      setUser({
-        id: 'law1234', // 새로운 ID 값
-        name: 'park', // 새로운 이름 값
-        nickname: 'park', // 새로운 닉네임 값
-        mode: 'lawyer', // 새로운 모드 값
-      })
-    );
-  }, []);
-
   return (
     <div className='mainPageDiv'>
       <div className='logom-white-icon' />
@@ -88,9 +72,6 @@ const MainPage = () => {
         </Link>
       </div>
       <div className='mainJoinLogin'>
-        {/* <span className="mainJoinBtn">회원가입</span> */}
-        {/* <div className="mainBtnBar" /> */}
-        {/* <span className="mainLoginBtn">로그인</span> */}
         <Link
           to='/join'
           className='mainJoinBtn'
