@@ -1,13 +1,17 @@
 import cn from "classnames";
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { getLogoutApi } from "../api/login/LoginApi";
-import { useAppSelector } from "../store";
+import { useAppDispatch, useAppSelector } from "../store";
+import { logout } from "../store/userSlice";
 import commUtil from "../util/commUtil";
 import "./MainPage.css";
 
 const MainPage = () => {
   const isLogin = commUtil.isNotEmpty(localStorage.getItem("accessToken"));
+
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   const [targetDivId, setTargetDivId] = useState(null);
 
@@ -24,8 +28,10 @@ const MainPage = () => {
     getLogoutApi().then((res) => {
       if (typeof res === "string") {
         console.log(res);
-        alert("logout");
         localStorage.removeItem("accessToken");
+        dispatch(logout({}));
+        alert("logout");
+        navigate("/");
       }
     });
   };
@@ -57,7 +63,7 @@ const MainPage = () => {
         })}
       >
         <Link
-          to={mode === "user" ? "/" : "/counsel"}
+          to={mode === "user" ? "/counsel/write" : "/counsel"}
           state={{ mode: mode }}
           className="insteadOfSpan"
           onMouseEnter={handleMouseHover}

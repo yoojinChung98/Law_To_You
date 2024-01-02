@@ -39,8 +39,9 @@ const LoginForm = ({ mode, setMode }) => {
         if (typeof res === "object") {
           // 로그인 성공
           localStorage.setItem("accessToken", res.accessToken);
-          const userInfo = { id: res.id, mode: res.authority };
+          const userInfo = { id: res.id, name: res.name, mode: res.authority };
           console.log(mode);
+          console.log(userInfo.name);
           dispatch(setUser(userInfo));
 
           navigate("/");

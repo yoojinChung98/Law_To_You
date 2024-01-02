@@ -30,16 +30,17 @@ instance.interceptors.response.use(
   (error) => {
     const { config } = error;
     if (error?.code === "ECONNABORTED") {
-      console.log("Time Out");
+      console.error("Time Out");
       return;
     }
 
     const erorrRes = error.response;
-    if (erorrRes.status === 401) {
-      // access token 만료 => 재발급 로직
-    }
+    // if (erorrRes.status === 401) {
+    // if (typeof erorrRes === "object") {
+    // access token 만료 => 재발급 로직
+    // }
     //else if() {} 다른 에러 코드에 대한 분기 기술
-    console.log(error);
+    console.error(error);
     return Promise.reject(error);
   }
 );
