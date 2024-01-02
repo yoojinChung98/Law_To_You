@@ -1,12 +1,86 @@
 import { Icon } from "@iconify/react";
 import { Button } from "@mui/material";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { getFreeListApi, getFreeSearchApi } from "../../api/board/FreeBoardApi";
 import "../scss/Board.scss";
 import BoardForm from "./BoardForm";
 
 const BoardFree = () => {
   const navigate = useNavigate();
+
+  const [data, setData] = useState({
+    count: 0,
+    pageInfo: {},
+    freeboards: [],
+  });
+
+  let params = {
+    page: 1,
+    size: 10,
+  };
+
+  useEffect(() => {
+    getFreeListApi(params)
+      .then((res) => {
+        if (typeof res === "object") {
+          setData(res);
+        }
+      })
+      .catch((e) => {
+        console.log(e);
+        setData({
+          count: 0,
+          pageInfo: {},
+          freeboards: [
+            {
+              bno: 1,
+              title: "제목1",
+              writer: "작성자1",
+              regDate: "2024.01.01",
+            },
+            {
+              bno: 2,
+              title: "제목2",
+              writer: "작성자2",
+              regDate: "2024.01.01",
+            },
+            {
+              bno: 3,
+              title: "제목3",
+              writer: "작성자3",
+              regDate: "2024.01.01",
+            },
+            {
+              bno: 4,
+              title: "제목4",
+              writer: "작성자4",
+              regDate: "2024.01.01",
+            },
+          ],
+        });
+      });
+  }, []);
+
+  const [searchdata, setSearchData] = useState({
+    count: 0,
+    serarchdata: {},
+  });
+
+  const freeSearchBtn = () => {
+    let params = {
+      // {
+      //   search: search
+      //   type: writer, titleAndContent
+      //   }
+    };
+
+    getFreeSearchApi(params).then((res) => {
+      if (typeof res === "object") {
+        searchdata.setSearchData(res);
+      }
+    });
+  };
 
   return (
     <>
@@ -26,13 +100,11 @@ const BoardFree = () => {
             className="search-button"
             icon="majesticons:search-line"
             color="#675d50"
-            onClick={() => {
-              navigate("/");
-            }}
+            onClick={freeSearchBtn}
           />
         </div>
       </div>
-      <BoardForm />
+      <BoardForm data={data.freeboards} type="freeboard" />
       <div className="button-wrapper">
         <Button
           className="board-write-btn"

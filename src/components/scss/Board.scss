@@ -1,5 +1,5 @@
 .board {
-  font-family: 'SDSamliphopangche_Basic';
+  font-family: "SDSamliphopangche_Basic";
   display: flex;
   justify-content: center;
   align-items: center;
@@ -11,7 +11,7 @@
   // 게시판 상단 설명 헤더
   .board-header {
     text-align: left;
-    font-family: 'SDSamliphopangche_Basic';
+    font-family: "SDSamliphopangche_Basic";
     font-style: normal;
     font-weight: 550;
 
@@ -62,7 +62,7 @@
       height: 71px;
       border: 2px solid #d9d9d9;
       color: #000;
-      font-family: S 'SDSamliphopangche_Basic';
+      font-family: S "SDSamliphopangche_Basic";
       font-size: 27px;
       font-style: normal;
       font-weight: 600;
@@ -103,8 +103,16 @@
     color: #000;
     text-align: left;
 
+    .ql-toolbar {
+      padding-top: 0 !important;
+      padding-bottom: 0 !important;
+      display: flex;
+      height: 40px;
+      align-items: center;
+    }
+
     .detail-title {
-      font-family: 'SDSamliphopangche_Basic';
+      font-family: "SDSamliphopangche_Basic";
       font-size: 15px;
       font-weight: 550;
       letter-spacing: 1.5px;
@@ -128,14 +136,14 @@
 
     .reply-writer {
       color: #000;
-      font-family: 'SDSamliphopangche_Basic';
+      font-family: "SDSamliphopangche_Basic";
       font-size: 15px;
       font-style: normal;
       font-weight: 550;
       line-height: normal;
       text-align: left;
       letter-spacing: 1px;
-
+      height: 20px;
       width: calc(100vw / 2);
       margin-bottom: 5px;
     }
@@ -157,7 +165,7 @@
         flex-shrink: 0;
         border-radius: 5px;
         background: #aa9e8f;
-        font-family: 'SDSamliphopangche_Basic';
+        font-family: "SDSamliphopangche_Basic";
         color: #fff;
         margin-left: 10px;
       }
@@ -172,14 +180,15 @@
 
     .replies-writer {
       color: #000;
-      font-family: 'SDSamliphopangche_Basic';
+      font-family: "SDSamliphopangche_Basic";
       font-size: 15px;
       font-style: normal;
       font-weight: 550;
       line-height: normal;
       margin-bottom: 10px;
     }
-    .replies-content {
+    .replies-content,
+    .replies-date {
       color: #000;
       font-family: Inter;
       font-size: 20px;
@@ -200,7 +209,7 @@
 
   thead {
     color: #000;
-    font-family: 'SDSamliphopangche_Basic';
+    font-family: "SDSamliphopangche_Basic";
     font-size: 20px;
     height: 70px;
     border-bottom: 2px solid black;
@@ -213,6 +222,92 @@
     letter-spacing: 1.5px;
     height: 40px;
     border-bottom: 1px solid #d8cec2;
+  }
+}
+
+// CounselForm 컴포넌트
+.form-layout {
+  // width: 1257px;
+  width: calc(100vw / 1.15);
+  font-family: Sandoll Samliphopangche;
+  height: 551px;
+  flex-shrink: 0;
+  // margin-left: 120px;
+
+  div {
+    text-align: left;
+    margin-left: 80px;
+    input {
+      border: 1px solid black;
+      color: #000;
+      text-align: left;
+      border-radius: 5px;
+      font-size: 15px;
+    }
+
+    span {
+      font-size: 20px;
+      line-height: normal;
+      padding: 20px 40px;
+      margin-right: 10px;
+      background-color: #efecec;
+    }
+  }
+
+  .form-title {
+    span {
+      height: 45px;
+      flex-shrink: 0;
+    }
+    input {
+      width: 1072px;
+      height: 45px;
+      flex-shrink: 0;
+    }
+  }
+  .form-faq-category {
+    input {
+      width: 265px;
+      height: 45px;
+      flex-shrink: 0;
+    }
+    span {
+      height: 45px;
+      flex-shrink: 0;
+    }
+  }
+  .form-content {
+    height: 300px;
+    display: flex;
+    input {
+      width: 1072px;
+      height: 300px;
+      flex-shrink: 0;
+      white-space: pre-wrap;
+    }
+    span {
+      height: 300px;
+      flex-shrink: 0;
+      display: inline-block;
+    }
+  }
+  .form-attach {
+  }
+
+  .faq-browse {
+    width: 335px;
+    height: 50px;
+    flex-shrink: 0;
+    color: #fff;
+    text-align: center;
+    font-family: Sandoll Samliphopangche;
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 550;
+    line-height: normal;
+    letter-spacing: 3.6px;
+    border-radius: 10px;
+    background: #939393;
   }
 }
 
@@ -232,7 +327,7 @@
     background: var(--light-brown, #aa9e8f) !important;
     color: #fff;
     //   text-align: center;
-    font-family: 'SDSamliphopangche_Basic' !important;
+    font-family: "SDSamliphopangche_Basic" !important;
     font-size: 22px !important;
     font-style: normal;
     font-weight: 550;
@@ -247,7 +342,7 @@
     border-radius: 10px;
     background: #675d50;
     color: #fff;
-    font-family: 'SDSamliphopangche_Basic' !important;
+    font-family: "SDSamliphopangche_Basic" !important;
     font-size: 15px;
     font-style: normal;
     font-weight: 600;
@@ -261,7 +356,7 @@
     border-radius: 10px;
     background: #aa9e8f;
     color: #fff;
-    font-family: 'SDSamliphopangche_Basic' !important;
+    font-family: "SDSamliphopangche_Basic" !important;
     font-size: 15px;
     font-style: normal;
     font-weight: 600;
@@ -274,12 +369,35 @@
   .detail-modify-button {
     background: #aa9e8f;
     color: #fff;
-    font-family: 'SDSamliphopangche_Basic' !important;
+    font-family: "SDSamliphopangche_Basic" !important;
     margin-right: 5px;
   }
   .detail-delete-button {
     background: #675d50;
     color: #fff;
-    font-family: 'SDSamliphopangche_Basic' !important;
+    font-family: "SDSamliphopangche_Basic" !important;
+  }
+}
+
+.counsel-btn {
+  Button {
+    width: 180px;
+    height: 50px;
+    flex-shrink: 0;
+    border-radius: 10px;
+    color: #fff;
+    text-align: center;
+    font-family: Sandoll Samliphopangche;
+    font-size: 22px;
+    font-style: normal;
+    font-weight: 550;
+    line-height: normal;
+    letter-spacing: 4.4px;
+  }
+  .counsel-regist-btn {
+    background: #aa9e8f;
+  }
+  .counsel-cancel-btn {
+    background: #d8cec2;
   }
 }

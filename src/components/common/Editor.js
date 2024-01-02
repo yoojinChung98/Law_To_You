@@ -1,22 +1,22 @@
-import React, { useEffect, useRef, useState } from 'react';
-import ReactQuill, { Quill } from 'react-quill';
+import React, { useEffect, useRef, useState } from "react";
+import ReactQuill, { Quill } from "react-quill";
 
-import 'react-quill/dist/quill.bubble.css';
-import commUtil from '../../util/commUtil';
-import './quill.snow.css';
+import "react-quill/dist/quill.bubble.css";
+import commUtil from "../../util/commUtil";
+import "./quill.snow.css";
 
 // Quill.register("modules/blotFormatter", BlotFormatter);
 // Quill.register("modules/imageDropAndPaste", QuillImageDropAndPaste);
 
 const Editor = (props) => {
-  const { readOnly = false, data, height = '300px' } = props;
+  const { readOnly = false, data, height = "300px" } = props;
   const refEditor = useRef(null);
   const [isView, setIsView] = useState(false);
 
   const fileMaxSize = 10;
 
   //   const Font = Quill.import("formats/font");
-  const Size = Quill.import('formats/size');
+  const Size = Quill.import("formats/size");
 
   //   Font.whitelist = [
   //     "dotum",
@@ -25,7 +25,7 @@ const Editor = (props) => {
   //     "NanumGothic",
   //     "Sandoll Samliphopangche",
   //   ];
-  Size.whitelist = ['8', '9', '10', '11', '12', '14', '18', '24', '36'];
+  Size.whitelist = ["8", "9", "10", "11", "12", "14", "18", "24", "36"];
   Quill.register(Size, true);
   //   Quill.register(Font, true);
 
@@ -35,46 +35,46 @@ const Editor = (props) => {
         // [{ font: Font.whitelist }],
         [{ size: Size.whitelist }],
         [{ header: [1, 2, 3, 4, 5, 6, false] }, { align: [] }],
-        ['bold', 'italic', 'underline', 'strike'],
+        ["bold", "italic", "underline", "strike"],
         // ["blockquote"],
         [
-          { list: 'ordered' },
-          { list: 'bullet' },
-          { indent: '-1' },
-          { indent: '+1' },
+          { list: "ordered" },
+          { list: "bullet" },
+          { indent: "-1" },
+          { indent: "+1" },
         ],
         // ["link", "image", "video"],
         [{ align: [] }, { color: [] }, { background: [] }],
-        ['clean'],
+        ["clean"],
       ],
     },
   };
 
   const formats = [
     // "font",
-    'size',
-    'header',
-    'bold',
-    'italic',
-    'underline',
-    'strike',
+    "size",
+    "header",
+    "bold",
+    "italic",
+    "underline",
+    "strike",
     // "blockquote",
-    'list',
-    'bullet',
-    'indent',
+    "list",
+    "bullet",
+    "indent",
     // "link",
     // "image",
     // "video",
-    'align',
-    'color',
-    'background',
+    "align",
+    "color",
+    "background",
   ];
 
   function imageDropHandler(imageDataUrl, type, file) {
     const quillObj = refEditor.current.getEditor();
 
     const range = quillObj.getSelection();
-    quillObj.editor.insertEmbed(range.index, 'image', imageDataUrl);
+    quillObj.editor.insertEmbed(range.index, "image", imageDataUrl);
 
     props.onChange(quillObj.root.innerHTML);
   }
@@ -108,10 +108,10 @@ const Editor = (props) => {
       {isView && (
         <ReactQuill
           ref={refEditor}
-          style={{ height: '400px' }}
-          theme={!readOnly ? 'snow' : 'bubble'}
+          style={{ height: "220px" }}
+          theme={!readOnly ? "snow" : "bubble"}
           modules={modules}
-          type={'html'}
+          type={"html"}
           formats={formats}
           value={data}
           onChange={(content, delta, source, editor) => {
