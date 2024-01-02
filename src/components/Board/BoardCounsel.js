@@ -14,7 +14,7 @@ const BoardCounsel = () => {
   });
 
   let params = {
-    page: 3,
+    page: 1,
     size: 10,
   };
 

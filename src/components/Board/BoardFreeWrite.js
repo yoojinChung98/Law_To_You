@@ -1,5 +1,6 @@
 import { Button } from "@mui/material";
-import React, { useState } from "react";
+import Input from "@mui/material/Input";
+import React, { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { postFreeWriteApi } from "../../api/board/FreeBoardApi";
 import Editor from "../common/Editor";
@@ -12,14 +13,21 @@ const BoardFreeWrite = () => {
   const [content, setContent] = useState("");
   const [title, setTitle] = useState("");
   const [attchedFile, setAttchedFile] = useState([]);
+  const afOnChangeEventHandler = (e) => {
+    setAttchedFile({ attachedFile: e.target.files[0] });
+  };
 
   const postBtnOnClick = () => {
-    let params = {
-      title,
-      content,
-      attchedFile,
+    let param = {
+      freeboards: {
+        title: title,
+        content: content,
+      },
     };
 
+    let params = new FormData();
+    params.append("attachedFile", attchedFile);
+    params.append("freeboards", param);
     postFreeWriteApi(params).then((res) => {
       console.log(res);
       if (res.status === 200) {
@@ -32,6 +40,10 @@ const BoardFreeWrite = () => {
   const onChangeTitle = (e) => {
     setTitle(e.target.value);
   };
+  // const afOnChangeEventHandler = (e) => {
+  //   setAttchedFile(e.target.files[0]);
+  // };
+  const fileInput = useRef(null);
 
   return (
     <div className="board">
@@ -56,6 +68,13 @@ const BoardFreeWrite = () => {
           onChange={setContent} // setter 넣기
           data={content} //getter 넣기
           editor={setEditor}
+        />
+        <Input
+          id="attachedFile"
+          ref={fileInput}
+          // accept="image/*"
+          onChange={afOnChangeEventHandler}
+          type="file"
         />
       </div>
       <div className="button-wrapper">
