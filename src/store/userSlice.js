@@ -1,21 +1,22 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit';
 
 // state의 초기값 (유저 정보)
 const initialState = {
-  id: "",
-  name: "",
-  nickname: "",
-  mode: "",
+  id: '',
+  name: '',
+  nickname: '',
+  mode: '',
 };
 
 // 유저 Slice 생성
 export const userSlice = createSlice({
-  name: "user",
+  name: 'user',
   initialState,
   reducers: {
     setUser: (state, action) => {
       state.id = action.payload.id;
       state.name = action.payload.name;
+      // 여기 nickname 빼고 전부 name으로 받기로 한거죵? 밑에 한 줄 삭제할까용?
       state.nickname = action.payload.nickname;
       state.mode = action.payload.mode;
       // state.mode = action.payload.authority;

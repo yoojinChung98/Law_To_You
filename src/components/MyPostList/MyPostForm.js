@@ -1,10 +1,21 @@
 import React from 'react';
 import './MyPostForm.css';
+import { API_BASE_URL } from '../../config/host-config';
 
 const MyPostForm = () => {
   return (
     <div className='board'>
-      <h1 className='title'>내가 쓴 글</h1>
+      <span
+        className='bt-title'
+        style={{
+          width: '1400px',
+          textAlign: 'left',
+          textIndent: '20px',
+          paddingBottom: '30px',
+        }}
+      >
+        내가 쓴 글
+      </span>
       <table className='board-table'>
         <thead className=''>
           <tr>

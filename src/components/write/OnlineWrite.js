@@ -1,5 +1,5 @@
 import React from 'react';
-import './OnlineWrite.css';
+// import './OnlineWrite.css';
 import { useState } from 'react';
 import { GrGallery } from 'react-icons/gr';
 import { remove } from 'resolve-url-loader/lib/file-protocol';
@@ -155,6 +155,7 @@ const OnlineWrite = () => {
           }}
         >
           <div className='registerbtntext'>등록하기</div>
+          {/* 글 등록 후에는 '마이페이지의 상담리스트로 보내주세요 (/mycounsel/)' */}
         </button>
 
         <button

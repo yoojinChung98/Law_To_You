@@ -1,33 +1,36 @@
-import { useCallback } from "react";
-import { useNavigate } from "react-router-dom";
-import "./Header.css";
+import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import './Header.css';
 
 const Header = () => {
-  const onHBtnDivClick = useCallback(() => {
-    // Please sync "회원정보조회(사용자)" to the project
-  }, []);
-
+  const loggedUser = useSelector((state) => state.user);
   const navigate = useNavigate();
 
   return (
-    <div className="header-area">
-      <header className="header" id="header" attriname="attriValue">
-        <div className="htab">
+    <div className='header-area'>
+      <header
+        className='header'
+        id='header'
+        attriName='attriValue'
+      >
+        <div className='htab'>
           <div
-            className="hbtndiv"
+            className='hbtndiv'
             onClick={() => {
-              navigate("/faq/");
+              navigate('/faq/');
             }}
           >
             백문백답
           </div>
         </div>
 
-        <div className="htab">
+        <div className='htab'>
           <div
-            className="hbtndiv"
+            className='hbtndiv'
             onClick={() => {
-              navigate("/counsel/");
+              loggedUser.mode === 'user'
+                ? navigate('/counsel/write/')
+                : navigate('/counsel/');
             }}
           >
             온라인상담
@@ -35,25 +38,32 @@ const Header = () => {
         </div>
 
         <div
-          className="logos-mint-icon"
+          className='logos-mint-icon'
           onClick={() => {
-            navigate("/");
+            navigate('/');
           }}
         />
 
-        <div className="htab">
+        <div className='htab'>
           <div
-            className="hbtndiv"
+            className='hbtndiv'
             onClick={() => {
-              navigate("/free/");
+              navigate('/free/');
             }}
           >
             만남의광장
           </div>
         </div>
 
-        <div className="htab">
-          <div className="hbtndiv" onClick={onHBtnDivClick}>
+        <div className='htab'>
+          <div
+            className='hbtndiv'
+            onClick={() => {
+              loggedUser.mode === 'user'
+                ? navigate('/mypage/user/')
+                : navigate('/mypage/lawyer/');
+            }}
+          >
             마이페이지
           </div>
         </div>

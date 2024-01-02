@@ -17,12 +17,12 @@
   margin-left: 10px;
 }
 
-.consult-q-title-area .consult-q-title-wrapper .id {
+.consult-q-title-area .consult-q-title-wrapper .cq-id {
   font-family: 'Pretendard-Regular';
   font-size: 15px;
   margin-top: 2px;
 }
-.consult-q-title-area .consult-q-title-wrapper .title {
+.consult-q-title-area .consult-q-title-wrapper .cq-title {
   font-family: 'SDSamliphopangche_Basic';
   font-size: 25px;
   margin-top: 5px;
