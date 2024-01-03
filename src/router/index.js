@@ -99,6 +99,8 @@ import CounselDeepWrite from '../components/Board/CounselDeepWrite';
 import CounselWrite from '../components/Board/CounselWrite';
 import '../index.css';
 import commUtil from '../util/commUtil';
+import KakaoLoginHandler from '../components/Login/KakaoLoginHandler';
+import NaverLoginHandler from '../components/Login/NaverLoginHandler';
 const RouterIndex = () => {
   const isLogin = commUtil.isNotEmpty(localStorage.getItem('accessToken'));
 
@@ -132,6 +134,14 @@ const RouterIndex = () => {
         element={<></>}
       ></Route>
       <Route element={<MainLayout />}>
+        <Route
+          path='/naverLogin/redirect'
+          element={<NaverLoginHandler />}
+        />
+        <Route
+          path='/oauth/redirected/kakao'
+          element={<KakaoLoginHandler />}
+        />
         <Route
           path='/counsel/'
           element={<BoardCounsel />}
