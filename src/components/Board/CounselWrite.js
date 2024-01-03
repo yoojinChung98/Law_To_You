@@ -20,12 +20,12 @@ const CounselWrite = () => {
   };
   const selectionOnchangeEventHandler = (e) => {
     setData({ ...data, largeSection: e.target.value });
+    console.log(e.target.value);
   };
   const fileOnChangeEventHandler = (e) => {
     setData({ ...data, file: e.target.files[0] });
   };
   const counselregisthandler = () => {
-    console.log("clcl");
     let params = {
       title: data.title,
       content: data.content,
@@ -74,9 +74,10 @@ const CounselWrite = () => {
           ></input>
         </div>
         <div className="form-faq-category">
-          <span>분류</span>
+          <span className="categorize-index">분류</span>
           <select
             onChange={selectionOnchangeEventHandler}
+            className="faq-selection"
             // className='groupinputplaceholder'
             // onFocus={() => {
             //   setIsGroupInputClicked(true);
@@ -116,12 +117,12 @@ const CounselWrite = () => {
         </div>
         <div className="form-content">
           <span>내용</span>
-          <input
+          <textarea
             placeholder="상담 내용을 입력해주세요
 상담 내용 등록 시 법봉 1개가 차감되며 등록 이후 수정이 불가능한 점 유의해주세요.
 변호사 답변 채택 후, 깊은 상담을 이어갈 시 상담 내용은 1회 수정 가능합니다."
             onChange={contentOnchangeEventHandler}
-          ></input>
+          ></textarea>
         </div>
         <div className="form-attach">
           <span>첨부파일</span>

@@ -73,10 +73,10 @@ const CounselDeepWrite = () => {
         </div>
         <div className="form-content">
           <span>내용</span>
-          <input
+          <textarea
             placeholder="깊은 상담 내용을 입력해주세요."
             onChange={contentOnchangeEventHandler}
-          ></input>
+          ></textarea>
         </div>
         <div className="form-attach">
           <span>첨부파일</span>
