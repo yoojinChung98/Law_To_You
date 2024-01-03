@@ -1,159 +1,307 @@
-import React, { useState } from 'react';
-// import './LawyerModify.css';
-// import './global.css';
-import Category from '../layout/Category';
+import React, { useEffect, useState } from 'react';
+import './LawyerModify.scss';
+import { API_BASE_URL } from '../../config/host-config';
 import { useNavigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
 
 const LawyerModify = () => {
-  const navigate = useNavigate();
-  const loggedUser = useSelector((state) => state.user);
+  const redirection = useNavigate();
+  const BASE_URL = API_BASE_URL;
 
-  // 카테고리에 주입할 리스트 선언부.(수정불필요)
-  const categories = [
-    '회원정보',
-    '내가 쓴 글',
-    '온라인 상담 내역',
-    '법봉 충전',
-    '로그아웃',
-  ];
+  const [token, setToken] = useState(localStorage.getItem('accessToken'));
 
-  const [clickedCateIdx, setClickedCateIdx] = useState(0);
-
-  const cateClick = (idx) => {
-    setClickedCateIdx(idx);
-    switch (idx) {
-      case 0:
-        loggedUser.mode == 'user'
-          ? navigate('/mypage/user/')
-          : navigate('/mypage/lawyer/');
-        break;
-      case 1:
-        navigate('/myfree/');
-        break;
-      case 2:
-        navigate('/mycounsel/');
-        break;
-      case 3:
-        navigate('/bupbong/');
-        break;
-      default:
-        // 여기는 로그아웃 부분. 로그아웃 로직이 연결되도록 해야함.
-        break;
-    }
+  const requestHeader = {
+    'content-type': 'application/json',
+    Authorization: 'Bearer ' + token,
   };
 
-  // 비밀번호 중복 확인
+  const [isEventOccurred, setEventOccurred] = useState(false);
 
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
+  const [lawyerInfo, setLawyerInfo] = useState({
+    id: '',
+    name: '',
+    email: '',
+    approval: '',
+  });
 
-  const handleSubmit = (e) => {
-    e.preventDefault(); // 폼 제출 시 페이지 리로드 방지
+  // 상태변수로 회원 정보 수정 입력값 관리
+  const [userValue, setUserValue] = useState({
+    password: '',
+  });
 
-    if (password !== confirmPassword) {
-      alert('비밀번호가 일치하지 않습니다.');
+  // 검증 메세지 상태변수 관리
+  const [message, setMessage] = useState({
+    password: '',
+    pwCheck: '',
+  });
+
+  // 검증 완료 체크 상태변수 관리
+  const [correct, setCorrect] = useState({
+    password: false,
+    pwCheck: false,
+  });
+
+  // 검증된 데이터를 각각의 상태변수에 저장하는 함수
+  const saveInputState = ({ key, inputValue, flag, msg }) => {
+    // 입력값 세팅
+    inputValue !== 'check' &&
+      setUserValue((oldVal) => {
+        return { ...oldVal, [key]: inputValue };
+      });
+
+    // 메세지 세팅
+    setMessage((oldMsg) => {
+      return { ...oldMsg, [key]: msg };
+    });
+
+    // 입력값 검증 상태 세팅
+    setCorrect((oldCorrect) => {
+      return { ...oldCorrect, [key]: flag };
+    });
+  };
+
+  // 패스워드 입력창 체인지 이벤트 핸들러
+  const passwordHandler = (e) => {
+    document.getElementById('new-password-check').value = '';
+
+    setMessage({ ...message, pwCheck: '' });
+    setCorrect({ ...correct, pwCheck: false });
+
+    const inputValue = e.target.value;
+    const pwRegex =
+      /^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,20}$/;
+
+    let msg;
+    let flag = false;
+    if (!inputValue) {
+      msg = '비밀번호는 필수입니다.';
+    } else if (!pwRegex.test(inputValue)) {
+      msg = '8자 이상의 영문, 숫자, 특수문자를 포함해주세요.';
     } else {
-      // 비밀번호 변경 로직을 여기에 작성하세요.
-      alert('비밀번호가 성공적으로 변경되었습니다.');
+      msg = '사용 가능한 비밀번호 입니다.';
+      flag = true;
+    }
+
+    saveInputState({
+      key: 'password',
+      inputValue,
+      msg,
+      flag,
+    });
+  };
+
+  // 비밀번호 확인란 체인지 이벤트 핸들러
+  const pwCheckHandler = (e) => {
+    let msg;
+    let flag = false;
+
+    setEventOccurred(true);
+
+    if (!e.target.value) {
+      msg = '비밀번호 확인란은 필수입니다.';
+    } else if (userValue.password !== e.target.value) {
+      msg = '패스워드가 일치하지 않습니다.';
+    } else {
+      msg = '패스워드가 일치합니다.';
+      flag = true;
+    }
+
+    saveInputState({
+      key: 'pwCheck',
+      inputValue: 'check',
+      msg,
+      flag,
+    });
+  };
+
+  useEffect(() => {
+    fetch(`${BASE_URL}/mypage/lawyer`, {
+      method: 'GET',
+      headers: requestHeader,
+    })
+      .then((res) => {
+        if (res.status === 200) return res.json();
+        else if (res.status === 403) {
+          alert('로그인이 필요한 서비스입니다.');
+          window.location.reload();
+          return;
+        } else {
+          alert('관리자에게 문의하세요!');
+          redirection('/');
+        }
+        return;
+      })
+      .then((json) => {
+        if (json) setLawyerInfo(json);
+        console.log(json);
+      });
+  }, []);
+
+  // 모두 검증에 통과했는지 여부 검사
+  const isValid = () => {
+    for (const key in correct) {
+      const flag = correct[key];
+      if (!flag) return false;
+    }
+    return true;
+  };
+
+  // 회원 정보 수정 처리 서버 요청
+  const fetchUserModi = async () => {
+    const requestBody = {
+      id: `${lawyerInfo.id}`,
+      password: `${userValue.password}`,
+    };
+    const res = await fetch(`${BASE_URL}/mypage/update/lawyer`, {
+      method: 'PUT',
+      headers: requestHeader,
+      body: JSON.stringify(requestBody),
+    });
+
+    if (res.status === 200) {
+      alert('회원 정보가 수정되었습니다!');
+      window.location.reload();
+    } else {
+      alert('서버와의 통신이 원활하지 않습니다!');
     }
   };
 
+  // 수정 버튼 클릭 이벤트 핸들러
+  const modiButtonClickHandler = (e) => {
+    // e.preventDefault();
+
+    if (isEventOccurred) {
+      if (isValid()) {
+        fetchUserModi();
+      } else {
+        alert('입력란을 다시 확인해주세요!');
+      }
+    }
+    fetchUserModi();
+  };
+
+  // 회원 탈퇴 처리 함수
+  const withdrawUser = async () => {
+    const res = await fetch(`${BASE_URL}/mypage`, {
+      method: 'DELETE',
+      headers: requestHeader,
+    });
+
+    if (res.status === 200) {
+      alert('회원 탈퇴 처리되었습니다.');
+      redirection('/');
+    } else {
+      alert('서버와의 통신이 원활하지 않습니다!');
+      redirection('/');
+    }
+  };
   return (
     <>
-      <div className='userCategory'>
-        {
-          <Category
-            categoryList={categories}
-            clickedIdx={clickedCateIdx}
-            cateClick={cateClick}
-          />
-        }
-      </div>
-      <div className='lawyermodify1'>
-        {/* <Category /> */}
+      <section className='lawyer-modify-section'>
+        <div className='lawyerModify'>
+          <div class='titlebox'>회원 정보</div>
+          <form>
+            <table className='table'>
+              <tbody className='m-control'>
+                <tr>
+                  <td className='m-title name'>이름</td>
+                  <td>
+                    <input
+                      className='formBox inputBox name-input'
+                      disabled
+                      defaultValue={lawyerInfo.name}
+                    />
+                  </td>
+                </tr>
+                <tr>
+                  <td className='m-title password'>새 비밀번호</td>
+                  <td>
+                    <input
+                      className='formBox inputBox password-input'
+                      type='password'
+                      onChange={passwordHandler}
+                    />
+                    <span
+                      className='msg password'
+                      style={
+                        correct.password ? { color: 'green' } : { color: 'red' }
+                      }
+                    >
+                      {message.password}
+                    </span>
+                  </td>
+                </tr>
+                <tr>
+                  <td className='m-title pwCheck'>새 비밀번호 확인</td>
+                  <td>
+                    <input
+                      className='formBox inputBox pwCheck-input'
+                      type='password'
+                      id='new-password-check'
+                      onChange={pwCheckHandler}
+                    />
+                    <span
+                      className='msg pwCheck'
+                      style={
+                        correct.pwCheck ? { color: 'green' } : { color: 'red' }
+                      }
+                    >
+                      {message.pwCheck}
+                    </span>
+                  </td>
+                </tr>
+                <tr>
+                  <td className='m-title id'>ID</td>
+                  <td>
+                    <input
+                      className='formBox inputBox lawyerId-input'
+                      disabled
+                      defaultValue={lawyerInfo.id}
+                    />
+                  </td>
+                </tr>
 
-        <span className='maintext2'>
-          <span className='div18'>회원정보</span>
-        </span>
+                <tr>
+                  <td className='m-title email'>이메일</td>
+                  <td>
+                    <input
+                      className='formBox inputBox email-input'
+                      disabled
+                      defaultValue={lawyerInfo.email}
+                    />
+                  </td>
+                </tr>
+                <tr>
+                  <td className='m-title approval'>승인 상태</td>
+                  <td>
+                    <input
+                      className='formBox inputBox approval-input'
+                      disabled
+                      value={lawyerInfo.approval ? '승인' : '미승인'}
+                    />
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </form>
 
-        <span className='texts'>
-          <span className='text0'>이름</span>
-        </span>
-
-        <span className='texts1'>
-          <span className='text0'>ID</span>
-        </span>
-
-        <span className='texts2'>
-          <span className='text0'>새 비밀번호 </span>
-        </span>
-
-        <span className='texts3'>
-          <span className='text0'>새 비밀번호 확인</span>
-        </span>
-
-        <span className='texts4'>
-          <span className='text0'>이메일</span>
-        </span>
-
-        <span className='texts5'>
-          <span className='text0'>회원 상태 승인</span>
-        </span>
-
-        <input
-          className='inputme'
-          type='text'
-          value='미승인'
-          disabled
-        />
-
-        <form onSubmit={handleSubmit}>
-          <input
-            className='inputnewpassword2'
-            type='password'
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-
-          <input
-            className='inputnewpasswordCheck2'
-            type='password'
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
-          />
-
-          <button
-            type='submit'
-            className='btnchange3 '
-          >
-            변경
-          </button>
-        </form>
-
-        <button className='btnleave2'>회원탈퇴</button>
-
-        <input
-          className='inputid2'
-          type='text'
-          value='sindyjj1'
-          disabled
-        />
-
-        <input
-          className='inputname1'
-          type='text'
-          value='원정욱'
-          disabled
-        />
-
-        <input
-          className='email2'
-          type='text'
-          value='sindyjj1@naver.com'
-          disabled
-        />
-      </div>
+          <div className='m-control-foot'>
+            <button
+              className='btn modify'
+              id='modifyBtn'
+              onClick={modiButtonClickHandler}
+            >
+              수정
+            </button>
+            <button
+              className='btn withdrawal'
+              id='withdrawal'
+              onClick={withdrawUser}
+            >
+              회원탈퇴
+            </button>
+          </div>
+        </div>
+      </section>
     </>
   );
 };

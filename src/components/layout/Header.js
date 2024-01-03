@@ -51,7 +51,7 @@ const Header = () => {
               navigate('/free/');
             }}
           >
-            만남의광장
+            고민나누기
           </div>
         </div>
 
