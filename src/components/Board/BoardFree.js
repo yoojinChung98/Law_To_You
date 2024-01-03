@@ -28,16 +28,18 @@ const BoardFree = () => {
     freeboards: [],
   });
 
-  let params = {
-    page: 1,
-    size: 10,
-  };
-
   useEffect(() => {
+    let params = {
+      page: currentPage,
+      size: 10,
+    };
+
     getFreeListApi(params)
       .then((res) => {
         if (typeof res === 'object') {
           setData(res);
+          console.log(res);
+          console.log(res.count);
           setPBtnCnt(Math.floor(res.count / 10) + 1);
         }
       })
@@ -61,7 +63,7 @@ const BoardFree = () => {
           ],
         });
       });
-  }, []);
+  }, [currentPage]);
 
   const handleChange = (event) => {
     setSelect(event.target.value);
@@ -73,6 +75,10 @@ const BoardFree = () => {
   };
 
   const freeSearchBtn = async () => {
+    if (!searchVal.trim()) {
+      alert('검색어를 입력해주세요.');
+      return;
+    }
     let params = {
       search: searchVal,
       type: select,
@@ -81,11 +87,11 @@ const BoardFree = () => {
     getFreeSearchApi(params).then((res) => {
       if (typeof res === 'object') {
         setData({ ...data, freeboards: res.freeboardDetailResponseDTOS });
+        console.log(res.count);
         setPBtnCnt(Math.floor(res.count / 10) + 1);
       }
     });
   };
-
   return (
     <>
       <div className='board'>
@@ -100,6 +106,11 @@ const BoardFree = () => {
         </div>
         <Select
           value={select}
+          style={{
+            left: '380px',
+            top: '68px',
+            height: '33px',
+          }}
           onChange={handleChange}
           displayEmpty
           inputProps={{ 'aria-label': 'Without label' }}
@@ -127,7 +138,7 @@ const BoardFree = () => {
         data={data.freeboards}
         type='freeboard'
       />
-      <div className='pageing boardFree'>
+      <div className='bottom pagination'>
         <Pagination
           count={pBtnCnt}
           page={currentPage}

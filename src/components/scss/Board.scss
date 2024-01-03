@@ -244,7 +244,7 @@
   }
 }
 
-// CounselForm 컴포넌트
+// 상담작성 폼
 .form-layout {
   // width: 1257px;
   width: calc(100vw / 1.15);
@@ -269,7 +269,7 @@
       line-height: normal;
       padding: 20px 40px;
       margin-right: 10px;
-      background-color: #efecec;
+      // background-color: #efecec;
     }
   }
 
@@ -277,6 +277,7 @@
     span {
       height: 45px;
       flex-shrink: 0;
+      background-color: #efecec;
     }
     input {
       width: 1072px;
@@ -285,32 +286,45 @@
     }
   }
   .form-faq-category {
-    input {
-      width: 265px;
+    .categorize-index {
       height: 45px;
       flex-shrink: 0;
+      background-color: #efecec;
     }
-    span {
-      height: 45px;
-      flex-shrink: 0;
+    .faq-selection {
+      height: 50px;
+      border-radius: 5px;
+      width: 120px;
     }
   }
   .form-content {
-    height: 300px;
+    height: 320px;
     display: flex;
-    input {
+    textarea {
       width: 1072px;
-      height: 300px;
+      height: 250px;
       flex-shrink: 0;
       white-space: pre-wrap;
+      margin-top: 20px;
+      resize: none;
+      border-radius: 5px;
+      padding: 30px;
     }
     span {
       height: 300px;
       flex-shrink: 0;
       display: inline-block;
+      background-color: #efecec;
     }
   }
   .form-attach {
+    span {
+      height: 30px;
+      width: 32px;
+      flex-shrink: 0;
+      display: inline-block;
+      background-color: #efecec;
+    }
   }
 
   .faq-browse {
@@ -327,6 +341,11 @@
     letter-spacing: 3.6px;
     border-radius: 10px;
     background: #939393;
+    margin: 10px 0 -5px 20px;
+  }
+  .counsel-btn {
+    text-align: center;
+    margin-top: 30px;
   }
 }
 
