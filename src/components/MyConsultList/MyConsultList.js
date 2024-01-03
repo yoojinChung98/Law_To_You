@@ -155,6 +155,7 @@ const MyConsultList = ({ currentPage, setPBtnCnt }) => {
   const listRenderUser = () => {
     let sliceIdx = 10 * (currentPage - 1);
     return contentList.slice(sliceIdx, sliceIdx + 10).map((content, index) => {
+      console.log('content는 :', content);
       return (
         <tr key={content.consultNum}>
           <td style={{ width: '90px', textAlign: 'center' }}>
@@ -173,7 +174,7 @@ const MyConsultList = ({ currentPage, setPBtnCnt }) => {
           </td>
           <td>
             {/*  답변이 달렸다면 삭제할수 없고, 달리지 않은 경우엔 삭제가능. */}
-            {content.isAnswered ? (
+            {content.answered ? (
               ''
             ) : (
               <Button
@@ -309,7 +310,9 @@ const MyConsultList = ({ currentPage, setPBtnCnt }) => {
             <th>상담번호</th>
             <th>제목</th>
             <th>작성일자</th>
-            <th>{loggedUser.mode === 'user' ? '삭제' : '채택여부'}</th>
+            <th style={{ width: '60px', margin: '0px 7px' }}>
+              {loggedUser.mode === 'user' ? '삭제' : '채택여부'}
+            </th>
             <th>깊은상담</th>
           </tr>
         </thead>

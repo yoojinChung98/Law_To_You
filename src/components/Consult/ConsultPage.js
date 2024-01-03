@@ -132,24 +132,29 @@ const ConsultPage = () => {
     // 현재 로그인한 변호사의 계정으로 작성된 답변이 있다면 작성컴포넌트를 띄우지 않도록
     // 그걸 체크할 상태플래그(wrote)를 세팅하는 과정.
     let flg = false;
+    let existAdopted = false;
     dataA.map((answer) => {
       console.log('answer.writer의 값: ', answer.writer);
       console.log('loggedUser.name의 값: ', loggedUser.name);
       if (answer.writer === loggedUser.name) {
         flg = true;
       }
+      if (answer.adopt == 1) {
+        existAdopted = true;
+      }
     });
     console.log('flg의 값: ', flg);
+    console.log('existAdopted의 값: ', existAdopted);
 
     // console.log('fla의 값은: ', flg);
     // console.log('!!fla의 값은: ', !!flg);
 
     // !!flg ? setWrote(true) : setWrote(false);
 
-    render(dataQ, dataA, flg);
+    render(dataQ, dataA, flg, existAdopted);
   };
 
-  const render = (dataQ, dataA, flg) => {
+  const render = (dataQ, dataA, flg, existAdopted) => {
     console.log('---------render 함수 호출완료!--------');
     if (loggedUser.mode === 'user') {
       console.log('user 모드인 경우!');
@@ -166,7 +171,7 @@ const ConsultPage = () => {
             {/* <ConsultABox aContentList={aContentList} userIsWriter={userIsWriter} consultNum={consultNum} /> */}
           </>
         );
-        setRealAnswer(renderABox(dataA));
+        setRealAnswer(renderABox(dataQ, dataA, existAdopted));
       }
     } else if (loggedUser.mode === 'lawyer') {
       console.log('lawyer 모드인 경우!');
@@ -183,7 +188,7 @@ const ConsultPage = () => {
             {/* <ConsultABox aContentList={aContentList} userIsWriter={userIsWriter} consultNum={consultNum} /> */}
           </>
         );
-        setRealAnswer(renderABox(dataA));
+        setRealAnswer(renderABox(dataQ, dataA, existAdopted));
       }
     }
     console.log('---------render 함수 종료----------');
@@ -234,15 +239,16 @@ const ConsultPage = () => {
   //   });
   // };
 
-  const renderABox = (dataA) => {
+  const renderABox = (dataQ, dataA, existAdopted) => {
     console.log('renderABox 호출');
     console.log('aContetList 의 값: ', dataA);
     return dataA.map((ansCont) => {
       return (
         <ConsultABox
           ansCont={ansCont}
-          userIsWriter={userIsWriter}
+          userWriter={dataQ.writer}
           consultNum={consultNum}
+          existAdopted={existAdopted}
         />
       );
     });
