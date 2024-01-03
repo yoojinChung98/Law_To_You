@@ -7,7 +7,7 @@ import { useAppDispatch, useAppSelector } from '../store';
 import commUtil from '../util/commUtil';
 import './MainPage.css';
 import { API_BASE_URL } from '../config/host-config';
-import { getLogoutApi } from '../api/login/LoginApi';
+import { logout } from '../store/userSlice';
 
 const MainPage = () => {
   const isLogin = commUtil.isNotEmpty(localStorage.getItem('accessToken'));
@@ -26,21 +26,26 @@ const MainPage = () => {
 
   const mode = useAppSelector((state) => state.user.mode);
 
-  const logoutBtnOnclick = () => {
-    fetch(`${API_BASE_URL}/user/logout`, {
-      method: 'GET',
-      headers: {
-        Authorization: 'Bearer ' + localStorage.getItem('accessToken'),
-      },
-    }).then((res) => {
-      console.log(res);
+  const logoutBtnOnclick = async () => {
+    console.log('logoutApi 실행 전');
+    try {
+      const res = await fetch(`${API_BASE_URL}/user/logout`, {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+        },
+      });
+      console.log('logoutApi 실행', res);
       if (res.status === 200) {
-        console.log(res);
-        alert('logout');
         localStorage.clear();
-        window.location.href = '/';
+        dispatch(logout());
+        alert('로그아웃 되었습니다.');
+        navigate('/');
       }
-    });
+    } catch (error) {
+      console.error('로그아웃 에러:', error);
+      alert('로그아웃 실패');
+    }
   };
 
   return (

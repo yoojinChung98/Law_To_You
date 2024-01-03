@@ -1,4 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
+import React from 'react';
 
 // state의 초기값 (유저 정보)
 const initialState = {
@@ -23,10 +24,10 @@ export const userSlice = createSlice({
       // state.authority = action.payload.authority;
     },
     logout: (state, action) => {
-      state.id = "";
-      state.name = "";
-      state.nickname = "";
-      state.mode = "";
+      state.id = '';
+      state.name = '';
+      state.nickname = '';
+      state.mode = '';
     },
     setMode: (state, action) => {
       state.mode = action.payload;

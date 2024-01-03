@@ -8,12 +8,11 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getLoginApi } from '../../api/login/LoginApi';
 import { KAKAO_AUTH_URL } from '../../config/kakao-config';
+import { NAVER_AUTH_URL } from '../../config/naver-config';
 import { useAppDispatch } from '../../store';
 import { setUser } from '../../store/userSlice';
 import commUtil from '../../util/commUtil';
 import '../scss/Login.scss';
-import { API_BASE_URL } from '../../config/host-config';
-
 const LoginForm = ({ mode, setMode }) => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
@@ -136,7 +135,7 @@ const LoginForm = ({ mode, setMode }) => {
                   src={require('../../assets/img/kakao_login_medium_narrow.png')}
                 ></img>
               </a>
-              <a>
+              <a href={NAVER_AUTH_URL}>
                 <img
                   alt='naverbtn'
                   src={require('../../assets/img/login-btn-naver-green.png')}
