@@ -2,29 +2,15 @@ import React, { useState } from 'react';
 import './ConsultQBox.css';
 import { Box, Button, Modal, Typography } from '@mui/material';
 
-import { createTheme } from '@mui/material/styles';
 import { useSelector } from 'react-redux';
-
-const theme = createTheme({
-  palette: {
-    primary: {
-      main: '#FF5733',
-      // light: will be calculated from palette.primary.main,
-      // dark: will be calculated from palette.primary.main,
-      // contrastText: will be calculated to contrast with palette.primary.main
-    },
-    secondary: {
-      main: '#E0C2FF',
-      light: '#F5EBFF',
-      // dark: will be calculated from palette.secondary.main,
-      contrastText: '#47008F',
-    },
-  },
-});
+import { useNavigate } from 'react-router-dom';
+import { API_BASE_URL } from '../../config/host-config';
 
 const ConsultQBox = ({ qContent, aContentList, IsDeep }) => {
+  const navigate = useNavigate();
   const loggedUser = useSelector((state) => state.user);
-  const [iUrlList, setIUrlList] = useState([]);
+  const BASE_URL = API_BASE_URL;
+  // const [iUrlList, setIUrlList] = useState([]);
 
   // 모달창 제어 변수들
   const [modalOpen, setModalOpen] = React.useState(false);
@@ -38,7 +24,6 @@ const ConsultQBox = ({ qContent, aContentList, IsDeep }) => {
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
-    width: 400,
     bgcolor: '#ffffff',
     border: '2px solid #000',
     boxShadow: 24,
@@ -50,27 +35,70 @@ const ConsultQBox = ({ qContent, aContentList, IsDeep }) => {
     handleModalOpen();
   };
 
-  const bToImg = () => {
-    let bList = qContent.routes;
-    let iUrlList = [];
-    if (bList == null) return null;
-    bList.map((byteArray) => {
-      // 바이트 배열을 Blob 객체로 반환
-      let blob = new Blob([byteArray], { type: 'image/jpeg' });
-      // Blob 객체를 데이터 URL로 변환
-      let imageUrl = URL.createObjectURL(blob);
-      iUrlList.push(imageUrl);
-    });
-    setIUrlList(iUrlList);
+  // const bToImg = () => {
+  //   let bList = qContent.routes;
+  //   console.log('bList는 : ', bList);
+  //   let iUrlList = [];
+  //   if (bList == null) return null;
+  //   bList.map((byteArray) => {
+  //     // 바이트 배열을 Blob 객체로 반환
+  //     let blob = new Blob([byteArray], { type: 'image/jpeg' });
+  //     // Blob 객체를 데이터 URL로 변환
+  //     let imageUrl = URL.createObjectURL(blob);
+  //     iUrlList.push(imageUrl);
+  //     return byteArray;
+  //   });
+  //   // setIUrlList(iUrlList);
 
-    return iUrlList.map((iUrl, index) => (
+  //   return iUrlList.map((iUrl, index) => (
+  //     <img
+  //       className='previewImg'
+  //       alt='Img'
+  //       src={iUrl}
+  //       onClick={viewImg(index)}
+  //     />
+  //   ));
+  // };
+
+  const bToImg = () => {
+    console.log('qContent의 값은', qContent);
+    let bList = qContent.routes;
+    console.log('bList는 : ', bList);
+    // let iUrlList = [];
+    if (bList == null) return null;
+    // bList.map((byteArray) => {
+    //   // 바이트 배열을 Blob 객체로 반환
+    //   let blob = new Blob([byteArray], { type: 'image/jpeg' });
+    //   // Blob 객체를 데이터 URL로 변환
+    //   let imageUrl = URL.createObjectURL(blob);
+    //   iUrlList.push(imageUrl);
+    //   return byteArray;
+    // });
+    // setIUrlList(iUrlList);
+
+    return bList.map((bUrl, index) => (
       <img
         className='previewImg'
         alt='Img'
-        src={iUrl}
-        onClick={viewImg(index)}
+        src={bUrl}
+        onClick={() => viewImg(index)}
       />
     ));
+  };
+
+  const deleteQContent = async () => {
+    const res = fetch(
+      `${BASE_URL}/mypage/counsel?consultNum=${qContent.consultNum}`
+    );
+    if (res.ok) {
+      alert('질문이 삭제되었습니다.');
+      navigate('/mycounsel/');
+    } else {
+      const resText = await res.text();
+      console.log('resText는: ', resText);
+      alert(resText);
+      return;
+    }
   };
 
   return (
@@ -118,7 +146,7 @@ const ConsultQBox = ({ qContent, aContentList, IsDeep }) => {
                 {
                   <img
                     alt='img'
-                    src={iUrlList[clickedImgIdx]}
+                    src={qContent.routes[clickedImgIdx]}
                     style={{ width: 'auto', height: 'auto' }}
                   />
                 }
@@ -132,6 +160,7 @@ const ConsultQBox = ({ qContent, aContentList, IsDeep }) => {
             <Button
               className='consult-del-btn'
               variant='outlined'
+              onClick={() => deleteQContent()}
             >
               삭제하기
             </Button>

@@ -30,6 +30,7 @@
 .consult-q-title-area .consult-q-regdate-wrapper .regdate {
   font-family: 'SDSamliphopangche_Basic';
   color: #b9b9b9;
+  font-size: 15px;
   /* margin-left: 1000px; */
 
   position: absolute;
@@ -39,6 +40,8 @@
 
 .consult-q-content-area {
   width: 1350px;
+  text-align: left;
+  font-size: 18px;
   border-bottom: 2px solid #d9d9d9;
   padding: 40px 30px 50px 30px;
 }
