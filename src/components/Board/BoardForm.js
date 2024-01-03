@@ -2,7 +2,13 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import '../scss/Board.scss';
 
-const BoardForm = ({ data, type = 'freeboard' }) => {
+const BoardForm = ({
+  setPBtnCnt,
+  currentPage,
+  onPageChange,
+  data,
+  type = 'freeboard',
+}) => {
   return (
     <div className='board'>
       <table className='board-table'>
@@ -15,28 +21,30 @@ const BoardForm = ({ data, type = 'freeboard' }) => {
           </tr>
         </thead>
         <tbody>
-          {data.map((item, index) => {
-            const no = type === 'freeboard' ? item.bno : item.consultNum;
-            return (
-              <tr key={no ?? index}>
-                <td>{no ?? index}</td>
-                <td>
-                  <Link
-                    to={
-                      type === 'freeboard'
-                        ? '/freereply?bno=' + no
-                        : '/freereply?consultNum=' + no
-                    }
-                  >
-                    {item.title}
-                  </Link>
-                </td>
-                <td>{item.title}</td>
-                <td>{item.writer}</td>
-                <td>{item.regDate}</td>
-              </tr>
-            );
-          })}
+          {data
+            .slice((currentPage - 1) * 10, currentPage * 10)
+            .map((item, index) => {
+              const no = type === 'freeboard' ? item.bno : item.consultNum;
+              return (
+                <tr key={no ?? index}>
+                  <td>{no ?? index}</td>
+                  <td>
+                    <Link
+                      to={
+                        type === 'freeboard'
+                          ? '/freereply?bno=' + no
+                          : '/freereply?consultNum=' + no
+                      }
+                    >
+                      {item.title}
+                    </Link>
+                  </td>
+                  <td>{item.title}</td>
+                  <td>{item.writer}</td>
+                  <td>{item.regDate}</td>
+                </tr>
+              );
+            })}
         </tbody>
       </table>
     </div>
