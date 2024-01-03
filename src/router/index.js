@@ -23,6 +23,7 @@ import OnlineWrite from '../components/write/OnlineWrite';
 import MypageLayout from '../components/MypageLayout';
 import '../index.css';
 import commUtil from '../util/commUtil';
+import KakaoLoginHandler from '../components/Login/KakaoLoginHandler';
 const RouterIndex = () => {
   const isLogin = commUtil.isNotEmpty(localStorage.getItem('accessToken'));
 
@@ -57,6 +58,10 @@ const RouterIndex = () => {
         path='/*'
         element={<></>}
       ></Route>
+      <Route
+        path='/oauth/redirected/kakao'
+        element={<KakaoLoginHandler />}
+      />
 
       <Route element={<MainLayout />}>
         <Route
