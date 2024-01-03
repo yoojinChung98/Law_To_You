@@ -31,7 +31,6 @@ const MainPage = () => {
     try {
       const res = await fetch(`${API_BASE_URL}/user/logout`, {
         headers: {
-          'Content-Type': 'application/json',
           Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
         },
       });
