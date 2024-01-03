@@ -20,6 +20,7 @@ const JoinList = ({ setPBtnCnt, currentPage, onPageChange }) => {
   // 변호사 리스트
   const lawyerListPage = async () => {
     await fetch(`${URL}/api/master/history?authority=master`, {
+      // authority=master 로그인 되면 수정필여
       headers: {
         'content-type': 'application/json',
       },

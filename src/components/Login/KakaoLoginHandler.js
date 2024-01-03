@@ -28,7 +28,6 @@ const KakaoLoginHandler = () => {
         const userInfo = { id: data.id, name: data.name, mode: data.authority };
         dispatch(setUser(userInfo));
       }
-
       redirection('/');
     };
     kakaoLogin();
