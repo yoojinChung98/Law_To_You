@@ -9,7 +9,6 @@ import { useSelector } from 'react-redux';
 
 const MyConsultListPage = () => {
   const navigate = useNavigate();
-  const loggedUser = useSelector((state) => state.user);
 
   // 페이징버튼 개수
   const [pBtnCnt, setPBtnCnt] = useState();

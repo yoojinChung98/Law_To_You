@@ -4,7 +4,7 @@ import { Button } from '@mui/material';
 import { useSelector } from 'react-redux';
 import { API_BASE_URL } from '../../config/host-config';
 
-const ConsultABox = ({ ansCont, isWriterUser, consultNum }) => {
+const ConsultABox = ({ ansCont, userIsWriter, consultNum }) => {
   const BASE_URL = API_BASE_URL;
   // const navigate = useNavigate();
   const loggedUser = useSelector((state) => state.user);
@@ -51,7 +51,7 @@ const ConsultABox = ({ ansCont, isWriterUser, consultNum }) => {
 
   // 답변이 있는 경우 답변채택카드 렌더링
   const renderAns = () => {
-    const adoptBtn = isWriterUser ? (
+    const adoptBtn = userIsWriter ? (
       <Button
         className='consult-adopt-btn'
         variant='contained'
@@ -70,7 +70,7 @@ const ConsultABox = ({ ansCont, isWriterUser, consultNum }) => {
             src={require('../../assets/img/Consultation_A.png')}
           />
           <div className='consult-a-title-wrapper'>
-            <span className='laywer-name'>{ansCont.writer}</span>
+            <span className='laywer-name'>{ansCont.writer} 변호사</span>
           </div>
           <div className='consult-a-regdate-wrapper'>
             <span className='regdate'>{ansCont.regDate}</span>

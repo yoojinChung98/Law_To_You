@@ -16,28 +16,34 @@ export const ConsultABoxWrite = ({ consultNum }) => {
   const reqHammerRef = useRef(10);
 
   const regist = async () => {
-    let res = await fetch(`${BASE_URL}/answer/regist`, {
+    let reqHammer =
+      reqHammerRef.current.value === ''
+        ? 10
+        : parseInt(reqHammerRef.current.value, 10);
+
+    console.log('변경후 reqHammer : ', reqHammer);
+    console.log('shortAns: ', shortAnsRef.current.value);
+
+    let res = await fetch(`${BASE_URL}/answer/register`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         Authorization: 'Bearer ' + localStorage.getItem('accessToken'),
       },
       body: JSON.stringify({
-        answer: {
-          shortAns: shortAnsRef.current.innerText,
-          reqHammer: parseInt(reqHammerRef.current.valueOf),
-        },
+        consultNum: consultNum,
+        shortAns: shortAnsRef.current.value,
+        reqHammer: reqHammer,
       }),
     });
 
     if (res.status == 200) {
       alert('답변 등록이 완료되었습니다.');
-      navigate(`/counsel/detail/:${consultNum}`);
+      navigate(`/counsel/detail/${consultNum}`);
     } else {
       // 변호사가 아니거나 등록한 적이 없다면 여기 컴포넌트가 안뜨도록해서... 이게.. 왜... 에러가 뜨는지 확인해봐야함.
-      alert(
-        '답변 등록에 실패했습니다. 이유는,,, 몰?루. 아니면 하나의 질문엔 하나의 답변만 달 수 있습니다.'
-      );
+      const resText = await res.text();
+      alert(resText);
     }
   };
 
@@ -67,7 +73,7 @@ export const ConsultABoxWrite = ({ consultNum }) => {
           <Button
             className='consult-adopt-btn'
             variant='contained'
-            onClick={regist()}
+            onClick={() => regist()}
           >
             답변등록하기
           </Button>

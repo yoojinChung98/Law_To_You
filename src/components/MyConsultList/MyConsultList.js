@@ -13,25 +13,10 @@ const MyConsultList = ({ currentPage, setPBtnCnt }) => {
   // 로그인한 사용자가 질문(user)/답변(lawyer)한 총 리스트 개수
   const [contentCnt, setContentCnt] = useState(0);
 
-  // 더미 데이터 입력을 위한 임시 코드
-  const dispatch = useDispatch();
-
   // 깊은 상담으로 가기 위해 필요한 상태값들
   const [] = useState();
 
   const loggedUser = useSelector((state) => state.user);
-
-  useEffect(() => {
-    // setUser 액션을 통해 user 상태를 변경합니다.
-    dispatch(
-      setUser({
-        id: '', // 새로운 ID 값
-        name: '', // 새로운 이름 값
-        nickname: '', // 새로운 닉네임 값
-        mode: '', // 새로운 모드 값
-      })
-    );
-  }, [dispatch]);
 
   useEffect(() => {
     getQCounselList();
@@ -75,9 +60,6 @@ const MyConsultList = ({ currentPage, setPBtnCnt }) => {
 
   // 유저: 깊은 상담 하러가기 버튼을 눌렀을 때, 작성/상세 페이지 어디로 보낼지 결정하는 함수
   const chkToDeepU = async (cNm) => {
-    // 지금 이부분이 겹치는 호출을 부르는 부분임.
-    // 호출해서 받은 값을 여기서 세팅하자!!
-
     let res = await fetch(
       `${BASE_URL}/mypage/counsel/detail?consultNum=${cNm}`,
       {
@@ -86,36 +68,42 @@ const MyConsultList = ({ currentPage, setPBtnCnt }) => {
           Authorization: 'Bearer ' + localStorage.getItem('accessToken'),
         },
       }
-    );
-
-    let resJson = await res.json();
-    console.log('chkToDeepU의 resJson은: ', resJson);
-    if (resJson.status === 200) {
-      resJson.then((data) => {
-        data.ifUpdated ? navigate(`/deep/${cNm}`) : navigate('/counsel/deep/');
-      });
-    } else {
-      // 여기서 응답 상태메세지를 담는 부분을 넣자.
-      switch (resJson.message) {
-        case 'authority-problem':
-          alert(
-            '선택하신 깊은 상담 내역 조회 권한이 없습니다. 다시 로그인 해주세요.'
-          );
-          // 마이페이지에서 자신이 등록하지 않은 온라인 상담을 보는 경우는 직접 url을 적어서 들어오는 경우이거나 로그아웃되어있거나 둘 중 하나이므로
-          navigate('/');
-          break;
-        case 'no-short-answers':
-          alert('아직 답변이 달리지 않아 깊은 상담이 불가능합니다.');
-          break;
-        case 'no-adopted-answer':
-          alert('일반 상담의 답변을 채택한 후 깊은 상담을 진행할 수 있습니다.');
-          navigate(`counsel/detail/:${cNm}}`);
-          break;
-        default:
-          alert('잘못된 접근 입니다.');
-          break;
+    ).then((res) => {
+      console.log(res);
+      if (res.ok) {
+        const resJson = res.json();
+        console.log(resJson);
+        resJson.ifUpdated
+          ? navigate(`/deep/${cNm}`)
+          : navigate('/counsel/deep/');
+        return;
       }
-    }
+
+      res.text().then((data) => {
+        console.log(data);
+        switch (data) {
+          case 'authority-problem':
+            alert(
+              '선택하신 깊은 상담 내역 조회 권한이 없습니다. 다시 로그인 해주세요.'
+            );
+            // 마이페이지에서 자신이 등록하지 않은 온라인 상담을 보는 경우는 직접 url을 적어서 들어오는 경우이거나 로그아웃되어있거나 둘 중 하나이므로
+            navigate('/');
+            break;
+          case 'no-short-answer':
+            alert('아직 답변이 달리지 않아 깊은 상담이 불가능합니다.');
+            break;
+          case 'no-adopted-answer':
+            alert(
+              '일반 상담의 답변을 채택한 후 깊은 상담을 진행할 수 있습니다.'
+            );
+            navigate(`counsel/detail/${cNm}`);
+            break;
+          default:
+            alert('잘못된 접근 입니다.');
+            break;
+        }
+      });
+    });
   };
 
   // 변호사: 깊은 상담 하러가기 버튼을 눌렀을 때, 거절/상세 페이지 중 어디로 보낼지 결정하는 함수
@@ -130,21 +118,19 @@ const MyConsultList = ({ currentPage, setPBtnCnt }) => {
       }
     );
 
-    let resJson = await res.json();
-    console.log('chkToDeepU의 resJson은: ', resJson);
-    if (resJson.status === 200) {
-      resJson.then((data) => {
-        if (data.ifUpdated) {
-          navigate(`/deep/${cNm}`);
-        } else {
-          alert(
-            `아직 의뢰인이 깊은 상담을 등록하지 않았습니다.\n 깊은 상담이 등록될 때 까지 기다려주십시오.`
-          );
-        }
-      });
+    if (res.ok) {
+      const resJson = await res.json();
+      if (resJson.ifUpdated) {
+        navigate(`/deep/${cNm}`);
+      } else {
+        alert(
+          `아직 의뢰인이 깊은 상담을 등록하지 않았습니다.\n 깊은 상담이 등록될 때 까지 기다려주십시오.`
+        );
+      }
     } else {
+      const resText = await res.text();
       // 여기서 응답 상태메세지를 담는 부분을 넣자.
-      switch (resJson.message) {
+      switch (resText) {
         case 'authority-problem':
           alert(
             '선택하신 깊은 상담 내역 조회 권한이 없습니다. 다시 로그인 해주세요.'
@@ -193,7 +179,7 @@ const MyConsultList = ({ currentPage, setPBtnCnt }) => {
               <Button
                 variant='outlined'
                 style={{ width: '60px', margin: '0px 7px' }}
-                onClick={deleteCounsel(content.consultNum)}
+                onClick={() => deleteCounsel(content.consultNum)}
               >
                 삭제
               </Button>
@@ -208,7 +194,7 @@ const MyConsultList = ({ currentPage, setPBtnCnt }) => {
                 padding: '5px 1px',
                 backgroundColor: 'var(--deep-brown)',
               }}
-              onClick={chkToDeepU(content.consultNum)}
+              onClick={() => chkToDeepU(content.consultNum)}
             >
               깊은상담하러가기
             </Button>
@@ -270,7 +256,7 @@ const MyConsultList = ({ currentPage, setPBtnCnt }) => {
                   padding: '5px 1px',
                   backgroundColor: 'var(--deep-brown)',
                 }}
-                onClick={chkToDeepL(content.consultNum)}
+                onClick={() => chkToDeepL(content.consultNum)}
               >
                 깊은상담하러가기
               </Button>
