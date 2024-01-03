@@ -8,6 +8,8 @@ import './FAQPage.css';
 const FAQ = () => {
   const BASE_URL = API_BASE_URL;
 
+  const cateTitle = '대분류';
+
   const categories = [
     '가정법률',
     '교통/운전',
@@ -205,6 +207,7 @@ const FAQ = () => {
           clickedIdx={clickedCateIdx}
           cateClick={cateClick}
           categorySize={categorySize}
+          cateTitle={cateTitle}
         />
         <div className='faq-wrapper'>
           <h1 className='faq-major'>대분류</h1>

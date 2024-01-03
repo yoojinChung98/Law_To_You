@@ -1,13 +1,13 @@
-import Button from "@mui/material/Button";
-import React, { useRef, useState } from "react";
-import { putDeepRegistApi } from "../../api/board/CounselWriteApi";
-import "../scss/Board.scss";
+import Button from '@mui/material/Button';
+import React, { useRef, useState } from 'react';
+import { putDeepRegistApi } from '../../api/board/CounselWriteApi';
+import '../scss/Board.scss';
 
 const CounselDeepWrite = () => {
   const [data, setData] = useState({
     consultNum: 1,
-    title: "",
-    content: "",
+    title: '',
+    content: '',
   });
 
   const fileInput = useRef(null);
@@ -22,7 +22,7 @@ const CounselDeepWrite = () => {
     setData({ ...data, file: e.target.files[0] });
   };
   const counselregisthandler = () => {
-    console.log("clcl");
+    console.log('clcl');
     let params = {
       consultNum: data.consultNum,
       title: data.title,
@@ -31,19 +31,19 @@ const CounselDeepWrite = () => {
 
     let formData = new FormData();
 
-    let files = document.getElementById("files").files;
+    let files = document.getElementById('files').files;
     for (let x = 0; x < files.length; x++) {
-      formData.append("attachedFile", files[x]);
+      formData.append('attachedFile', files[x]);
     }
 
     formData.append(
-      "detailedConsulting",
-      new Blob([JSON.stringify(params)], { type: "application/json" })
+      'detailedConsulting',
+      new Blob([JSON.stringify(params)], { type: 'application/json' })
     );
 
     putDeepRegistApi(formData).then((res) => {
-      if (typeof res === "object") {
-        alert("깊은상담등록!");
+      if (typeof res === 'object') {
+        alert('깊은상담등록!');
       } else {
         //
       }
@@ -52,8 +52,8 @@ const CounselDeepWrite = () => {
 
   const counselcancelhandler = () => {};
   return (
-    <div className="board">
-      <div className="board-header">
+    <div className='board'>
+      <div className='board-header'>
         <span>깊은 상담</span>
         <div>
           깊은 상담입니다 ~~ 상담받고 싶은 내용을 입력하여 여러 전문 변호사에게
@@ -63,35 +63,41 @@ const CounselDeepWrite = () => {
           달라질 수 있습니다.
         </div>
       </div>
-      <div className="form-layout">
-        <div className="form-title">
+      <div className='form-layout'>
+        <div className='form-title'>
           <span>제목</span>
           <input
-            placeholder="상담 제목을 입력해주세요"
+            placeholder='상담 제목을 입력해주세요'
             onChange={titleOnchangeEventHandler}
           ></input>
         </div>
-        <div className="form-content">
+        <div className='form-content'>
           <span>내용</span>
-          <input
-            placeholder="깊은 상담 내용을 입력해주세요."
+          <textarea
+            placeholder='깊은 상담 내용을 입력해주세요.'
             onChange={contentOnchangeEventHandler}
-          ></input>
+          ></textarea>
         </div>
-        <div className="form-attach">
+        <div className='form-attach'>
           <span>첨부파일</span>
           <input
             ref={fileInput}
-            type="file"
-            id="files"
+            type='file'
+            id='files'
             onChange={fileOnChangeEventHandler}
           ></input>
         </div>
-        <div className="counsel-btn">
-          <Button className="counsel-regist-btn" onClick={counselregisthandler}>
+        <div className='counsel-btn'>
+          <Button
+            className='counsel-regist-btn'
+            onClick={counselregisthandler}
+          >
             등록하기
           </Button>
-          <Button className="counsel-cancel-btn" onClick={counselcancelhandler}>
+          <Button
+            className='counsel-cancel-btn'
+            onClick={counselcancelhandler}
+          >
             취소하기
           </Button>
         </div>

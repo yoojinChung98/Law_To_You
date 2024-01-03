@@ -18,11 +18,12 @@ import MyPostListPage from '../components/MyPostList/MyPostListPage';
 import LawyerModify from '../components/modify/LawyerModify';
 import UserModify from '../components/modify/UserModify';
 import DeepWrite from '../components/write/DeepWrite';
-import OnlineWrite from '../components/write/OnlineWrite';
 
 import MypageLayout from '../components/MypageLayout';
 import '../index.css';
 import commUtil from '../util/commUtil';
+import CounselWrite from '../components/Board/CounselWrite';
+import CounselDeepWrite from '../components/Board/CounselDeepWrite';
 const RouterIndex = () => {
   const isLogin = commUtil.isNotEmpty(localStorage.getItem('accessToken'));
 
@@ -87,24 +88,24 @@ const RouterIndex = () => {
         ></Route>
 
         <Route
-          path='/mypage/lawyer/'
-          element={<LawyerModify />}
-        ></Route>
-        <Route
           path='/counsel/write/'
-          element={<OnlineWrite />}
+          element={<CounselWrite />}
         ></Route>
+
         <Route
           path='/counsel/deep/'
-          element={<DeepWrite />}
+          element={<CounselDeepWrite />}
         ></Route>
       </Route>
-
       {/* 마이페이지 카테고리가 필요한 부분 */}
       <Route element={<MypageLayout />}>
         <Route
           path='/mypage/user/'
           element={<UserModify />}
+        ></Route>
+        <Route
+          path='/mypage/lawyer/'
+          element={<LawyerModify />}
         ></Route>
         <Route
           path='/myfree/'
