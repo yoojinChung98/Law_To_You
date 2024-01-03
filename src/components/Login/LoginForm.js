@@ -6,14 +6,13 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getLoginApi, getLogoutApi } from '../../api/login/LoginApi';
+import { getLoginApi } from '../../api/login/LoginApi';
 import { KAKAO_AUTH_URL } from '../../config/kakao-config';
 import { NAVER_AUTH_URL } from '../../config/naver-config';
 import { useAppDispatch } from '../../store';
-import { logout, setUser } from '../../store/userSlice';
+import { setUser } from '../../store/userSlice';
 import commUtil from '../../util/commUtil';
 import '../scss/Login.scss';
-
 const LoginForm = ({ mode, setMode }) => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();

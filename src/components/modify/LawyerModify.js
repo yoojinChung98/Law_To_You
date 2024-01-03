@@ -1,9 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import Category from '../layout/Category';
 import './LawyerModify.scss';
 import { API_BASE_URL } from '../../config/host-config';
-import Header from '../layout/Header';
-import Footer from '../layout/Footer';
 import { useNavigate } from 'react-router-dom';
 
 const LawyerModify = () => {
@@ -199,7 +196,7 @@ const LawyerModify = () => {
   };
   return (
     <>
-      <section>
+      <section className='lawyer-modify-section'>
         <div className='lawyerModify'>
           <div class='titlebox'>회원 정보</div>
           <form>

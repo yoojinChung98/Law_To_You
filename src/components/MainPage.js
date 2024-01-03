@@ -1,12 +1,13 @@
 import cn from 'classnames';
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { getLogoutApi } from '../api/login/LoginApi';
+// import { getLogoutApi } from '../api/login/LoginApi';
 import { useAppDispatch, useAppSelector } from '../store';
-import { logout } from '../store/userSlice';
+// import { logout } from '../store/userSlice';
 import commUtil from '../util/commUtil';
 import './MainPage.css';
 import { API_BASE_URL } from '../config/host-config';
+import { logout } from '../store/userSlice';
 
 const MainPage = () => {
   const isLogin = commUtil.isNotEmpty(localStorage.getItem('accessToken'));
