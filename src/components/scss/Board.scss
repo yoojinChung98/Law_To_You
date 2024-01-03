@@ -220,8 +220,20 @@
     font-family: Inter;
     font-size: 15px;
     letter-spacing: 1.5px;
-    height: 40px;
+    // height: 40px;
     border-bottom: 1px solid #d8cec2;
+    tr {
+      height: 50px;
+      border-bottom: 1px solid #d8cec2;
+      td {
+        .link {
+          color: #000;
+        }
+        .link:hover {
+          color: #aa9e8f;
+        }
+      }
+    }
   }
 }
 

@@ -153,9 +153,6 @@ const LoginForm = ({ mode, setMode }) => {
             {/* <Link to={`/join?mode=${mode}`}>회원가입</Link> */}
             <button onClick={handleJoinSelector}>회원가입</button>
           </div>
-          <div className="navigate-join">
-            <button onClick={logoutBtnOnclick}>로그아웃</button>
-          </div>
         </div>
 
         <Dialog

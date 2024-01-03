@@ -1,6 +1,6 @@
 import { Button } from "@mui/material";
 import React, { useEffect, useRef, useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import {
   deleteFreeDeleteApi,
   getFreeDetailApi,
@@ -18,6 +18,8 @@ import Editor from "../common/Editor";
 const dispatch = useAppDispatch;
 
 const BoardFreeReply = () => {
+  const navigate = useNavigate();
+
   const mode = useAppSelector((state) => state.user.mode);
   // const nick = useAppSelector((state) => state.user.nickname);
   const name = useAppSelector((state) => state.user.name);
@@ -29,24 +31,6 @@ const BoardFreeReply = () => {
   const editorRef = useRef(null);
 
   const [detail, setDetail] = useState({});
-
-  // 댓글 리스트 가져오기
-  const [reply, setReply] = useState({
-    count: "",
-    replyList: [
-      {
-        lawyerId: "",
-        userId: "",
-        bno: "",
-        rno: "",
-        content: "",
-        writer: "",
-        regDate: "",
-        deleteButton: "",
-      },
-    ],
-  });
-
   const [editor, setEditor] = useState(null);
   const [content, setContent] = useState("");
 
@@ -64,7 +48,7 @@ const BoardFreeReply = () => {
         console.log(error);
         if (bno === "1") {
           setDetail({
-            TrueFalse: 1,
+            trueFalse: 1,
             title: "제목",
             content: "<p>안녕하세요<strong>변호사</strong>에요</p>",
             writer: "작성자",
@@ -74,7 +58,7 @@ const BoardFreeReply = () => {
           setContent("<p>안녕하세요<strong>변호사</strong>에요</p>");
         } else {
           setDetail({
-            TrueFalse: 0,
+            trueFalse: 0,
             title: "두번째 제목",
             content: "<p>안녕하세요<strong>변호사</strong>아님</p>",
             writer: "작성자두번째",
@@ -87,14 +71,19 @@ const BoardFreeReply = () => {
       });
   };
 
+  // 댓글 리스트 가져오기
+  const [reply, setReply] = useState({
+    count: "",
+    replyList: [],
+  });
+
   const searchReply = () => {
     const params = { page: 1, size: 10, bno };
     getReplyListApi(params)
       .then((res) => {
-        if (typeof res === "object") {
-          setReply(res);
-          console.log(reply);
-        }
+        setReply(res);
+        // console.log(reply);
+        searchReply();
       })
       .catch((error) => {
         // dummy
@@ -130,19 +119,24 @@ const BoardFreeReply = () => {
       });
   };
 
-  const [replyContent, setReplyContent] = useState("");
+  const [replyContent, setReplyContent] = useState({
+    // bno: Number(bno),
+    content: "",
+  });
   // 댓글 등록
-  const onChaneReplyContent = (e) => {
+  const onChangeReplyContent = (e) => {
+    // console.log(e.target.value);
     setReplyContent(e.target.value);
   };
 
+  let params = {
+    bno: Number(bno),
+    content: replyContent,
+  };
   const replyRegistBtn = () => {
-    let pa = {
-      bno: Number(bno),
-      content: replyContent,
-    };
-    postReplyApi(pa).then((res) => {
-      if (res === 200) {
+    postReplyApi(params).then((res) => {
+      if (typeof res === "object") {
+        setReplyContent(res);
         alert("댓글등록");
         searchReply();
       }
@@ -181,7 +175,7 @@ const BoardFreeReply = () => {
 
   // 글 수정
   const detailModifyBtn = () => {
-    let para = {
+    let params = {
       freeboard: {
         bno: 3,
         title: "",
@@ -190,7 +184,7 @@ const BoardFreeReply = () => {
         attchedFile: [],
       },
     };
-    putFreeModifyApi(para).then((res) => {
+    putFreeModifyApi(params).then((res) => {
       if (res.status === 200) {
         alert("수정요");
         searchReply();
@@ -199,13 +193,13 @@ const BoardFreeReply = () => {
   };
   // 글 삭제
   const detailDeleteBtn = () => {
-    let par = {
-      bno: 3,
+    let param = {
+      bno: bno,
     };
-    deleteFreeDeleteApi(par).then((res) => {
-      if (res.status === 200) {
-        alert("삭제삭제");
-        searchReply();
+    deleteFreeDeleteApi(param).then((res) => {
+      if (typeof res === "string") {
+        // searchReply();
+        navigate("/free");
       }
     });
   };
@@ -225,11 +219,11 @@ const BoardFreeReply = () => {
               onChange={setContent} // setter 넣기
               data={content ?? ""} //getter 넣기
               editor={setEditor}
-              readOnly={detail.TrueFalse !== 1}
+              readOnly={detail.trueFalse !== 1}
             />
           )}
         </div>
-        {detail.TrueFalse === 1 && (
+        {detail.trueFalse === 1 && (
           <div className="detail-button">
             <Button
               className="detail-modify-button"
@@ -252,7 +246,7 @@ const BoardFreeReply = () => {
           <div className="reply-cb">
             <input
               className="reply-content"
-              onChange={onChaneReplyContent}
+              onChange={onChangeReplyContent}
               placeholder="댓글을 입력해주세요"
             ></input>
             <Button
@@ -265,10 +259,10 @@ const BoardFreeReply = () => {
           </div>
         </div>
         {reply.replyList.map((item) => (
-          <div className="replies" key={item.writer + item.content}>
-            <div className="replies-writer">{item.writer}</div>
+          <div className="replies" key={item.rno + item.content}>
+            {/* <div className="replies-writer">{item.writer}</div> */}
             <div className="replies-content">{item.content}</div>
-            <div className="replies-date">{item.regDate}</div>
+            {/* <div className="replies-date">{item.regDate}</div> */}
             {!item.deleteButton && (
               <Button
                 className="reply-delete-button"

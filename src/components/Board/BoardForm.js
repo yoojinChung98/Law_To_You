@@ -22,6 +22,8 @@ const BoardForm = ({ data, type = "freeboard" }) => {
                 <td>{no ?? index}</td>
                 <td>
                   <Link
+                    className="link"
+                    style={{ textDecoration: "none" }}
                     to={
                       type === "freeboard"
                         ? "/freereply?bno=" + no
@@ -31,8 +33,8 @@ const BoardForm = ({ data, type = "freeboard" }) => {
                     {item.title}
                   </Link>
                 </td>
-                <td>{item.title}</td>
                 <td>{item.writer}</td>
+                {/* <td>{item.writer}</td> */}
                 <td>{item.regDate}</td>
               </tr>
             );
