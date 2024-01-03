@@ -10,40 +10,53 @@ const BoardFreeWrite = () => {
   const navigate = useNavigate();
 
   const [editor, setEditor] = useState(null);
-  const [content, setContent] = useState("");
-  const [title, setTitle] = useState("");
-  const [attchedFile, setAttchedFile] = useState([]);
+  const [content, setContent] = useState(""); // 본문
+  const [title, setTitle] = useState(""); // 제목
+  const [attachedFile, setAttachedFile] = useState([]); // 파일
   const afOnChangeEventHandler = (e) => {
-    setAttchedFile({ attachedFile: e.target.files[0] });
+    setAttachedFile({ attachedFile: e.target.files[0] });
   };
+  const fileInput = useRef(null);
 
   const postBtnOnClick = () => {
     let param = {
-      freeboards: {
-        title: title,
-        content: content,
-      },
+      title: title,
+      content: content,
     };
 
-    let params = new FormData();
-    params.append("attachedFile", attchedFile);
-    params.append("freeboards", param);
-    postFreeWriteApi(params).then((res) => {
+    let formData = new FormData();
+
+    let files = document.getElementById("attachedFile").files;
+    for (let x = 0; x < files.length; x++) {
+      formData.append("attachedFile", files[x]);
+    }
+
+    // for (let i = 0; i < attachedFile.length; i++) {
+    //   formData.append("attachedFile", attachedFile[i]);
+    // }
+    // formData.append("attachedFile", attachedFile);
+    // saveFormData.forEach(function (item: any))
+
+    formData.append(
+      "freeboard",
+      new Blob([JSON.stringify(param)], { type: "application/json" })
+    );
+
+    // params.append("freeboards", param);
+    postFreeWriteApi(formData).then((res) => {
       console.log(res);
-      if (res.status === 200) {
-        navigate("/");
+      if (typeof res === "object") {
+        navigate("/free");
       } else {
       }
     });
   };
-
   const onChangeTitle = (e) => {
     setTitle(e.target.value);
   };
   // const afOnChangeEventHandler = (e) => {
-  //   setAttchedFile(e.target.files[0]);
+  //   setAttachedFile(e.target.files[0]);
   // };
-  const fileInput = useRef(null);
 
   return (
     <div className="board">

@@ -12,7 +12,11 @@ export const getFreeSearchApi = (params) => {
 
 // 자유게시판 글 작성 등록
 export const postFreeWriteApi = (params) => {
-  return axios.post("/freeboard/register", params).then((res) => res.data);
+  return axios
+    .post("/freeboard/register", params, {
+      headers: { "Content-Type": "multipart/form-data" },
+    })
+    .then((res) => res.data);
 };
 
 // 자유게시판 글 수정

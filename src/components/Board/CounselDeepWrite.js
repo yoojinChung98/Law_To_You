@@ -1,21 +1,55 @@
 import Button from "@mui/material/Button";
-import React from "react";
+import React, { useRef, useState } from "react";
+import { putDeepRegistApi } from "../../api/board/CounselWriteApi";
 import "../scss/Board.scss";
 
 const CounselDeepWrite = () => {
-  const counselregisthandler = () => {
-    //     (이름: “detailedConsulting”)
-    // {
-    // consultNum: 상담번호
-    // title: title,
-    // content: content
-    // },
-    // (이름: “files”)
-    // List<Multipart> multipartFiles,
-    // * 헤더에 토큰 담아서 보내주세요
-    // 배열에 첨부파일 경로 보내주시면 됩니다
-    // → formData객체 활용할 것
+  const [data, setData] = useState({
+    consultNum: 1,
+    title: "",
+    content: "",
+  });
+
+  const fileInput = useRef(null);
+
+  const titleOnchangeEventHandler = (e) => {
+    setData({ ...data, title: e.target.value });
   };
+  const contentOnchangeEventHandler = (e) => {
+    setData({ ...data, content: e.target.value });
+  };
+  const fileOnChangeEventHandler = (e) => {
+    setData({ ...data, file: e.target.files[0] });
+  };
+  const counselregisthandler = () => {
+    console.log("clcl");
+    let params = {
+      consultNum: data.consultNum,
+      title: data.title,
+      content: data.content,
+    };
+
+    let formData = new FormData();
+
+    let files = document.getElementById("files").files;
+    for (let x = 0; x < files.length; x++) {
+      formData.append("attachedFile", files[x]);
+    }
+
+    formData.append(
+      "detailedConsulting",
+      new Blob([JSON.stringify(params)], { type: "application/json" })
+    );
+
+    putDeepRegistApi(formData).then((res) => {
+      if (typeof res === "object") {
+        alert("깊은상담등록!");
+      } else {
+        //
+      }
+    });
+  };
+
   const counselcancelhandler = () => {};
   return (
     <div className="board">
@@ -32,21 +66,32 @@ const CounselDeepWrite = () => {
       <div className="form-layout">
         <div className="form-title">
           <span>제목</span>
-          <input placeholder="상담 제목을 입력해주세요"></input>
+          <input
+            placeholder="상담 제목을 입력해주세요"
+            onChange={titleOnchangeEventHandler}
+          ></input>
         </div>
         <div className="form-content">
           <span>내용</span>
-          <input placeholder="깊은 상담 내용을 입력해주세요."></input>
+          <input
+            placeholder="깊은 상담 내용을 입력해주세요."
+            onChange={contentOnchangeEventHandler}
+          ></input>
         </div>
         <div className="form-attach">
           <span>첨부파일</span>
-          <input></input>
+          <input
+            ref={fileInput}
+            type="file"
+            id="files"
+            onChange={fileOnChangeEventHandler}
+          ></input>
         </div>
         <div className="counsel-btn">
-          <Button className="counsel-regist-btn" onclick={counselregisthandler}>
+          <Button className="counsel-regist-btn" onClick={counselregisthandler}>
             등록하기
           </Button>
-          <Button className="counsel-cancel-btn" onclick={counselcancelhandler}>
+          <Button className="counsel-cancel-btn" onClick={counselcancelhandler}>
             취소하기
           </Button>
         </div>

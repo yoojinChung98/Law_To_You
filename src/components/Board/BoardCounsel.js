@@ -8,7 +8,7 @@ import BoardForm from "./BoardForm";
 
 const BoardCounsel = () => {
   const [data, setData] = useState({
-    count: "",
+    // count: "",
     pageInfo: {},
     consultingList: [],
   });
@@ -22,7 +22,7 @@ const BoardCounsel = () => {
     getCounselListApi(params)
       .then((res) => {
         if (typeof res === "object") {
-          data.setData(res);
+          setData(res);
         }
       })
       .catch((e) => {

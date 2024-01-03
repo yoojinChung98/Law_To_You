@@ -8,31 +8,45 @@ const CounselWrite = () => {
     title: "",
     content: "",
     largeSection: "",
-    file: [],
   });
+
   const fileInput = useRef(null);
 
   const titleOnchangeEventHandler = (e) => {
     setData({ ...data, title: e.target.value });
   };
   const contentOnchangeEventHandler = (e) => {
-    setData({ ...data, content: e.target.content });
+    setData({ ...data, content: e.target.value });
+  };
+  const selectionOnchangeEventHandler = (e) => {
+    setData({ ...data, largeSection: e.target.value });
   };
   const fileOnChangeEventHandler = (e) => {
-    data({ ...data, file: e.target.files });
+    setData({ ...data, file: e.target.files[0] });
   };
   const counselregisthandler = () => {
-    let params = new FormData();
-    params.append("files", data);
-    params.append("consulting", {
+    console.log("clcl");
+    let params = {
       title: data.title,
       content: data.content,
       largeSection: data.largeSection,
-    });
+    };
 
-    postCounselRegistApi(params).then((res) => {
+    let formData = new FormData();
+
+    let files = document.getElementById("files").files;
+    for (let x = 0; x < files.length; x++) {
+      formData.append("attachedFile", files[x]);
+    }
+
+    formData.append(
+      "consulting",
+      new Blob([JSON.stringify(params)], { type: "application/json" })
+    );
+
+    postCounselRegistApi(formData).then((res) => {
       if (typeof res === "object") {
-        //
+        alert("일반상담등록!");
       } else {
         //
       }
@@ -61,7 +75,41 @@ const CounselWrite = () => {
         </div>
         <div className="form-faq-category">
           <span>분류</span>
-          <input></input>
+          <select
+            onChange={selectionOnchangeEventHandler}
+            // className='groupinputplaceholder'
+            // onFocus={() => {
+            //   setIsGroupInputClicked(true);
+            // }}
+            // onBlur={() => {
+            //   setIsGroupInputClicked(false);
+            // }}
+          >
+            {/* <option
+              value=''
+              disabled
+              selected
+            >
+              {isGroupInputClicked === true ? '' : '대분류'}
+            </option> */}
+            <option value="가정법률">가정법률</option>
+            <option value="교통/운전">교통/운전</option>
+            <option value="국가 및 지자체">국가 및 지자체</option>
+            <option value="국방/보훈">국방/보훈</option>
+            <option value="근로/노동">근로/노동</option>
+            <option value="금융/금전">금융/금전</option>
+            <option value="무역/출입국">무역/출입국</option>
+            <option value="문화/여가생활">문화/여가생활</option>
+            <option value="민형사/소송">민형사/소송</option>
+            <option value="복지">복지</option>
+            <option value="사업">사업</option>
+            <option value="사회안전/범죄">사회안전/범죄</option>
+            <option value="소비자">소비자</option>
+            <option value="아동청소년/교육">아동청소년/교육</option>
+            <option value="정보통신/기술">정보통신/기술</option>
+            <option value="창업">창업</option>
+            <option value="환경/에너지">환경/에너지</option>
+          </select>
           <Button variant="contained" className="faq-browse">
             법률 백문백답 보러가기
           </Button>
@@ -80,15 +128,15 @@ const CounselWrite = () => {
           <input
             ref={fileInput}
             type="file"
-            id="file"
+            id="files"
             onChange={fileOnChangeEventHandler}
           ></input>
         </div>
         <div className="counsel-btn">
-          <Button className="counsel-regist-btn" onclick={counselregisthandler}>
+          <Button className="counsel-regist-btn" onClick={counselregisthandler}>
             등록하기
           </Button>
-          <Button className="counsel-cancel-btn" onclick={counselcancelhandler}>
+          <Button className="counsel-cancel-btn" onClick={counselcancelhandler}>
             취소하기
           </Button>
         </div>
