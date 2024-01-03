@@ -1,11 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import Category from '../layout/Category';
 import './UserModify.scss';
 import { API_BASE_URL } from '../../config/host-config';
-import Header from '../layout/Header';
-import Footer from '../layout/Footer';
 import { useNavigate } from 'react-router-dom';
-import storage from 'redux-persist/lib/storage';
 
 const UserModify = () => {
   const redirection = useNavigate();
@@ -260,7 +256,7 @@ const UserModify = () => {
 
   return (
     <>
-      <section>
+      <section className='user-modify-section'>
         <div className='userModify'>
           <div class='titlebox'>회원 정보</div>
           <form>
