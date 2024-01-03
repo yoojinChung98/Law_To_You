@@ -6,13 +6,13 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getLoginApi } from '../../api/login/LoginApi';
 import { KAKAO_AUTH_URL } from '../../config/kakao-config';
 import { NAVER_AUTH_URL } from '../../config/naver-config';
 import { useAppDispatch } from '../../store';
 import { setUser } from '../../store/userSlice';
 import commUtil from '../../util/commUtil';
 import '../scss/Login.scss';
+import { API_BASE_URL } from '../../config/host-config';
 const LoginForm = ({ mode, setMode }) => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
@@ -20,6 +20,7 @@ const LoginForm = ({ mode, setMode }) => {
   const [loginForm, setLoginForm] = useState({
     id: '',
     password: '',
+    reqAuthority: '',
   });
 
   const CLIENT_MODE = '의뢰인';
@@ -34,31 +35,47 @@ const LoginForm = ({ mode, setMode }) => {
   };
 
   const loginBtnOnClick = () => {
-    getLoginApi(loginForm)
-      .then((res) => {
-        if (typeof res === 'object') {
-          // 로그인 성공
-          localStorage.setItem('accessToken', res.accessToken);
-          const userInfo = { id: res.id, name: res.name, mode: res.authority };
-          console.log(mode);
-          console.log(userInfo.name);
-          dispatch(setUser(userInfo));
+    fetchLogin();
+  };
 
-          navigate('/');
-        } else {
-          alert(res);
-          // 로그인 실패
-          setOpen(true);
-        }
-      })
-      .catch((e) => {
-        alert(e);
-      });
+  const fetchLogin = async () => {
+    const requestBody = {
+      id: loginForm.id,
+      password: loginForm.password,
+      reqAuthority: mode,
+    };
 
-    //   const userInfo = { id: "jisu", mode: "user" };
-    //   localStorage.setItem("accessToken", "res.accessToken");
-    //   dispatch(setUser(userInfo));
-    //   navigate("/");
+    const res = await fetch(API_BASE_URL + '/user/login', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify(requestBody),
+    });
+
+    if (res.status === 200) {
+      const data = await res.json();
+      localStorage.setItem('accessToken', data.accessToken);
+      const userInfo = { id: data.id, name: data.name, mode: data.authority };
+      if (data.authority === 'notApproval') {
+        alert('미승인 상태의 변호사는 접근 권한이 제한될 수 있습니다.');
+        userInfo.mode = 'lawyer';
+      }
+      dispatch(setUser(userInfo));
+    } else {
+      const text = await res.text();
+
+      if (text === 'no-account') {
+        alert('가입된 회원이 아닙니다.');
+      } else if (text === 'wrong-password') {
+        alert('비밀번호가 잘못되었습니다!');
+      } else if (text === 'bad-request-authority') {
+        alert(
+          (mode === 'user' ? LAWYER_MODE : CLIENT_MODE + '으') +
+            '로 로그인 해주십시오.'
+        );
+      }
+    }
+
+    navigate('/');
   };
 
   const goBack = () => {
@@ -79,8 +96,6 @@ const LoginForm = ({ mode, setMode }) => {
   const handleJoinSelector = () => {
     navigate('/join', { state: { mode: mode } });
   };
-
-  // const join = `/join/?mode=${user}`;
 
   return (
     <>
@@ -175,5 +190,4 @@ const LoginForm = ({ mode, setMode }) => {
     </>
   );
 };
-
 export default LoginForm;

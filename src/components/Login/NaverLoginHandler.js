@@ -1,7 +1,7 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { API_BASE_URL } from '../../config/host-config';
-import initialState, { setUser } from '../../store/userSlice';
-import { Navigate, useNavigate } from 'react-router-dom';
+import { setUser } from '../../store/userSlice';
+import { useNavigate } from 'react-router-dom';
 import { useAppDispatch } from '../../store';
 
 const NaverLoginHandler = () => {

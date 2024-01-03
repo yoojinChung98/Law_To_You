@@ -79,59 +79,111 @@
 
 // export default RouterIndex;z
 
-import React, { useEffect } from "react";
-import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
-import BoardCounsel from "../components/Board/BoardCounsel";
-import BoardFree from "../components/Board/BoardFree";
-import BoardFreeReply from "../components/Board/BoardFreeReply";
-import BoardFreeWrite from "../components/Board/BoardFreeWrite";
-import Bupbong from "../components/Bupbong/Bupbong";
-import ConsultPage from "../components/Consult/ConsultPage";
-import FAQPage from "../components/FAQ/FAQPage";
-import JoinMain from "../components/Join/JoinMain";
-import LoginMain from "../components/Login/LoginMain";
-import MainLayout from "../components/MainLayout";
-import MainPage from "../components/MainPage";
-import LawyerModify from "../components/modify/LawyerModify";
-import UserModify from "../components/modify/UserModify";
+import React, { useEffect } from 'react';
+import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
+import BoardCounsel from '../components/Board/BoardCounsel';
+import BoardFree from '../components/Board/BoardFree';
+import BoardFreeReply from '../components/Board/BoardFreeReply';
+import BoardFreeWrite from '../components/Board/BoardFreeWrite';
+import Bupbong from '../components/Bupbong/Bupbong';
+import ConsultPage from '../components/Consult/ConsultPage';
+import FAQPage from '../components/FAQ/FAQPage';
+import JoinMain from '../components/Join/JoinMain';
+import LoginMain from '../components/Login/LoginMain';
+import MainLayout from '../components/MainLayout';
+import MainPage from '../components/MainPage';
+import LawyerModify from '../components/modify/LawyerModify';
+import UserModify from '../components/modify/UserModify';
 
-import CounselDeepWrite from "../components/Board/CounselDeepWrite";
-import CounselWrite from "../components/Board/CounselWrite";
-import "../index.css";
-import commUtil from "../util/commUtil";
+import CounselDeepWrite from '../components/Board/CounselDeepWrite';
+import CounselWrite from '../components/Board/CounselWrite';
+import '../index.css';
+import commUtil from '../util/commUtil';
+import KakaoLoginHandler from '../components/Login/KakaoLoginHandler';
+import NaverLoginHandler from '../components/Login/NaverLoginHandler';
 const RouterIndex = () => {
-  const isLogin = commUtil.isNotEmpty(localStorage.getItem("accessToken"));
+  const isLogin = commUtil.isNotEmpty(localStorage.getItem('accessToken'));
 
   const navigate = useNavigate();
   const location = useLocation();
 
   useEffect(() => {
     if (!isLogin) {
-      if (location.pathname !== "/login" && location.pathname !== "/faq") {
-        navigate("/"); //// ntwjd
+      if (location.pathname !== '/login' && location.pathname !== '/faq') {
+        navigate('/'); //// ntwjd
       }
     }
   }, []);
 
   return (
     <Routes>
-      <Route path="/login/" element={<LoginMain />} />
-      <Route path="/join/" element={<JoinMain />} />
-      <Route path="/" element={<MainPage />}></Route>
-      <Route path="/*" element={<></>}></Route>
+      <Route
+        path='/login/'
+        element={<LoginMain />}
+      />
+      <Route
+        path='/join/'
+        element={<JoinMain />}
+      />
+      <Route
+        path='/'
+        element={<MainPage />}
+      ></Route>
+      <Route
+        path='/*'
+        element={<></>}
+      ></Route>
       <Route element={<MainLayout />}>
-        <Route path="/counsel/" element={<BoardCounsel />}></Route>
-        <Route path="/free/" element={<BoardFree />}></Route>
-        <Route path="/freewrite/" element={<BoardFreeWrite />}></Route>
-        <Route path="/freereply/" element={<BoardFreeReply />}></Route>
-        <Route path="/bupbong/" element={<Bupbong />}></Route>
-        <Route path="/consult/" element={<ConsultPage />}></Route>
-        <Route path="/faq/" element={<FAQPage />}></Route>
-        <Route path="/mypage/" element={<UserModify />}></Route>
-        <Route path="/mypage/lawyer/" element={<LawyerModify />}></Route>
-        <Route path="/counsel/write/" element={<CounselWrite />}></Route>
         <Route
-          path="/counsel/deepwrite/"
+          path='/naverLogin/redirect'
+          element={<NaverLoginHandler />}
+        />
+        <Route
+          path='/oauth/redirected/kakao'
+          element={<KakaoLoginHandler />}
+        />
+        <Route
+          path='/counsel/'
+          element={<BoardCounsel />}
+        ></Route>
+        <Route
+          path='/free/'
+          element={<BoardFree />}
+        ></Route>
+        <Route
+          path='/freewrite/'
+          element={<BoardFreeWrite />}
+        ></Route>
+        <Route
+          path='/freereply/'
+          element={<BoardFreeReply />}
+        ></Route>
+        <Route
+          path='/bupbong/'
+          element={<Bupbong />}
+        ></Route>
+        <Route
+          path='/consult/'
+          element={<ConsultPage />}
+        ></Route>
+        <Route
+          path='/faq/'
+          element={<FAQPage />}
+        ></Route>
+        <Route
+          path='/mypage/'
+          element={<UserModify />}
+        ></Route>
+        <Route
+          path='/mypage/lawyer/'
+          element={<LawyerModify />}
+        ></Route>
+        <Route
+          path='/counsel/write/'
+          element={<CounselWrite />}
+        ></Route>
+        <Route
+          path='/counsel/deepwrite/'
           element={<CounselDeepWrite />}
         ></Route>
       </Route>
