@@ -217,6 +217,7 @@ const BoardFreeReply = () => {
                 // accept="image/*"
                 onChange={afOnChangeEventHandler}
                 type="file"
+                multiple
               />
               <input
                 id="attachedFile"
@@ -224,6 +225,7 @@ const BoardFreeReply = () => {
                 // accept="image/*"
                 onChange={afOnChangeEventHandler}
                 type="file"
+                multiple
               />
             </>
           )}
