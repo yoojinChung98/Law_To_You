@@ -82,14 +82,19 @@ const BoardFreeWrite = () => {
           data={content} //getter 넣기
           editor={setEditor}
         />
-        <Input
-          id='attachedFile'
-          ref={fileInput}
-          // accept="image/*"
-          onChange={afOnChangeEventHandler}
-          type='file'
-        />
       </div>
+      <input
+        style={{
+          position: 'relative',
+          top: '80px',
+          right: '600px',
+        }}
+        id='attachedFile'
+        ref={fileInput}
+        onChange={afOnChangeEventHandler}
+        type='file'
+        multiple
+      />
       <div className='button-wrapper'>
         <Button
           className='regist-button'

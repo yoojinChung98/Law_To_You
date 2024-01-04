@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import './MyPostForm.css';
 import { API_BASE_URL } from '../../config/host-config';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
+import { getFreeDetailApi } from '../../api/board/FreeBoardApi';
 
 const MyPostForm = ({ currentPage, setPBtnCnt }) => {
   const [token, setToken] = useState(localStorage.getItem('accessToken'));
@@ -53,12 +54,6 @@ const MyPostForm = ({ currentPage, setPBtnCnt }) => {
   // 페이지 번호를 클릭했을 때 실행되는 함수
   const paginate = (pageNumber) => setCPage(pageNumber);
 
-  const getContentHandler = (e) => {
-    e.preventDefault();
-
-    fetch(`${API_BASE_URL}/freeboard/content?`);
-  };
-
   return (
     <div className='board'>
       <span
@@ -88,13 +83,12 @@ const MyPostForm = ({ currentPage, setPBtnCnt }) => {
                 {(cPage - 1) * postsPerPage + index + 1}
               </td>
               <td style={{ paddingLeft: '25px' }}>
-                <a
+                <Link
                   style={{ textDecoration: 'none', color: 'inherit' }}
-                  href={`${BASE_URL}/freeboard/content?bno=${item.bno}`}
-                  onClick={getContentHandler}
+                  to={'/freereply?bno=' + item.bno}
                 >
                   {item.title}
-                </a>
+                </Link>
               </td>
               <td style={{ width: '100px', textAlign: 'center' }}>
                 {item.date}

@@ -28,6 +28,11 @@ const MainPage = () => {
   const mode = useAppSelector((state) => state.user.mode);
 
   const logoutBtnOnclick = async () => {
+    if (mode === 'lawyer') {
+      alert('로그아웃 되었습니다.');
+      localStorage.clear();
+      navigate('/');
+    }
     try {
       const res = await fetch(`${API_BASE_URL}/user/logout`, {
         headers: {
