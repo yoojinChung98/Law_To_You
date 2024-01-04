@@ -43,12 +43,10 @@ const CounselWrite = () => {
       content: data.content,
       largeSection: data.largeSection,
     };
-    console.log('params:', params);
 
     let formData = new FormData();
 
     let files = document.getElementById('files').files;
-    console.log('files: ', files);
     const paramsJsonBlob = new Blob([JSON.stringify(params)], {
       type: 'application/json',
     });

@@ -97,12 +97,33 @@
     font-style: normal;
     line-height: normal;
   }
+
   .login-btn-apis {
     img {
       margin: 0 10px;
       width: 245px;
       height: 65px;
       flex-shrink: 0;
+    }
+  }
+
+  .Join-button {
+    margin: 0 10px;
+    width: 150px;
+    height: 40px;
+    flex-shrink: 0;
+    border-radius: 10px;
+    background: var(--light-brown, #aa9e8f);
+    color: #fff !important;
+    font-family: 'SDSamliphopangche_Basic';
+    font-size: 22px;
+    font-weight: 550;
+    font-style: normal;
+    line-height: normal;
+    border: none;
+
+    &:hover {
+      cursor: pointer;
     }
   }
 }

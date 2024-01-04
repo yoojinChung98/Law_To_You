@@ -54,6 +54,12 @@ const JoinList = ({ setPBtnCnt, currentPage, onPageChange }) => {
     );
   };
 
+  const masterLogoutOnclick = (e) => {
+    alert('로그아웃 되었습니다.');
+    localStorage.clear();
+    navigate('/');
+  };
+
   const approvalOnChange = async (e) => {
     await fetch(
       `${BASE_URL}/master/history?authority=master&lawyerId=${lawyerIdClick}`,
@@ -202,6 +208,18 @@ const JoinList = ({ setPBtnCnt, currentPage, onPageChange }) => {
             </tbody>
           ))}
       </table>
+      <Button
+        style={{
+          position: 'relative',
+          left: '645px',
+          top: '100px',
+        }}
+        onClick={masterLogoutOnclick}
+        className='Join-button'
+        variant='contained'
+      >
+        로그아웃
+      </Button>
     </div>
   );
 };

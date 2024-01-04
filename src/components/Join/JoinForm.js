@@ -1,6 +1,6 @@
-import { Button, Input } from "@mui/material";
-import React, { useEffect, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Button, Input } from '@mui/material';
+import React, { useEffect, useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
   getEmailDuplicateApi,
   getIdDuplicateApi,
@@ -9,9 +9,9 @@ import {
   postMailAuthCheckApi,
   postMailSendApi,
   postUserJoinApi,
-} from "../../api/login/JoinApi";
-import commUtil from "../../util/commUtil";
-import "../scss/Join.scss";
+} from '../../api/login/JoinApi';
+import commUtil from '../../util/commUtil';
+import '../scss/Join.scss';
 
 const JoinForm = ({ mode, setMode, joinMethod }) => {
   // console.log(mode);
@@ -19,13 +19,13 @@ const JoinForm = ({ mode, setMode, joinMethod }) => {
   const navigate = useNavigate();
 
   const [joinForm, setJoinForm] = useState({
-    id: "",
-    nick: "", // (의로인)
-    name: "", // (변호사)
-    pw: "",
-    pwcheck: "",
-    email: "",
-    cnum: "",
+    id: '',
+    nick: '', // (의로인)
+    name: '', // (변호사)
+    pw: '',
+    pwcheck: '',
+    email: '',
+    cnum: '',
   });
 
   const [pwvalid, setPwvalid] = useState(false);
@@ -34,9 +34,11 @@ const JoinForm = ({ mode, setMode, joinMethod }) => {
   const [usableNick, setUsableNick] = useState(false);
   const [usableEmail, setUsableEmail] = useState(false);
   const [isSend, setIsSend] = useState(false);
-
-  const CLIENT_MODE = "의뢰인";
-  const LAWYER_MODE = "변호사";
+  const [isEmailSent, setIsEmailSent] = useState(false); // 이메일 인증번호 버튼
+  const [isAuthChecked, setIsAuthChecked] = useState(false); // 이메일 인증번호 확인 버튼
+  const [isJoinTrue, setIsJoinTrue] = useState(false); // 회원가입 빈칸 여부 확인
+  const CLIENT_MODE = '의뢰인';
+  const LAWYER_MODE = '변호사';
 
   const idOnChangeEventHandler = (e) => {
     setJoinForm({ ...joinForm, id: e.target.value });
@@ -74,14 +76,15 @@ const JoinForm = ({ mode, setMode, joinMethod }) => {
       id: joinForm.id,
     };
     getIdDuplicateApi(params).then((res) => {
-      if (typeof res === "object") {
+      if (res) {
         // 아이디 중복 검사 성공
-        alert("이미 사용중인 아이디 입니다.");
+        alert('이미 사용중인 아이디 입니다.');
         setUsableId(false);
+        setIsJoinTrue();
       } else {
         // 아이디 중복 검사 실패
         // 응답 받은 메세지 그대로 출력
-        alert("사용 가능한 아이디 입니다.");
+        alert('사용 가능한 아이디 입니다.');
         setUsableId(true);
       }
     });
@@ -95,38 +98,42 @@ const JoinForm = ({ mode, setMode, joinMethod }) => {
     };
 
     getNickDuplicateApi(params).then((res) => {
-      if (typeof res === "object") {
+      if (typeof res === 'object') {
         // 닉네임 중복 검사 성공
-        alert("이미 사용중인 닉네임 입니다.");
+        alert('이미 사용중인 닉네임 입니다.');
         setUsableNick(false);
       } else {
         // 닉네임 중복 검사 실패
         // 응답 받은 메세지 그대로 출력
-        alert("사용 가능한 닉네임 입니다.");
+        alert('사용 가능한 닉네임 입니다.');
         setUsableNick(true);
       }
     });
   };
 
   const emailSend = (e) => {
+    alert('인증번호가 전송 되었습니다.');
+    setIsEmailSent(true);
     e.preventDefault();
 
     let params = {
       email: joinForm.email,
     };
 
-    postMailSendApi(params).then((res) => {
-      if (typeof res === "object") {
+    postMailSendApi(params)
+      .then((res) => {
+        if (res === 'object') {
+          console.log('res인증번호감', res);
+          setIsSend(true);
+        }
+
         // 인증번호가 감
-        setIsSend(true);
-      } else {
-        // 에러메세지
-      }
-    });
-    // .catch((error) => {
-    //   // api  연동 후 제거
-    //   setIsSend(true);
-    // });
+      })
+      .catch((error) => {
+        console.log('res인증번호감 else', error);
+        alert('이메일을 제대로 작성해 주세요');
+        setIsEmailSent(false);
+      });
   };
 
   const emailAuthCheck = (e) => {
@@ -138,9 +145,13 @@ const JoinForm = ({ mode, setMode, joinMethod }) => {
     };
 
     postMailAuthCheckApi(params).then((res) => {
-      if (typeof res === "object") {
+      if (res === 'ok') {
+        console.log(res);
+        alert('인증이 완료되었습니다.');
+        setIsAuthChecked(true);
         // 인증 성공
       } else {
+        alert('인증번호를 다시 확인해 주세요');
         // 에러메세지
       }
     });
@@ -170,16 +181,18 @@ const JoinForm = ({ mode, setMode, joinMethod }) => {
     let params = {
       email: joinForm.email,
     };
+    console.log(joinForm.email);
 
     getEmailDuplicateApi(params).then((res) => {
-      if (typeof res === "object") {
+      if (res) {
         // 이메일 중복 검사 성공
-        alert("이미 사용중인 이메일 입니다.");
+        alert('이미 사용중인 이메일 입니다.');
         setUsableEmail(false);
       } else {
         // 이메일 중복 검사 실패
         // 응답 받은 메세지 그대로 출력
-        alert("사용 가능한 이메일 입니다.");
+        alert('사용 가능한 이메일 입니다.');
+        console.log(res);
         setUsableEmail(true);
       }
     });
@@ -189,24 +202,29 @@ const JoinForm = ({ mode, setMode, joinMethod }) => {
 
   const uploadBtnOnClick = (e) => {
     fileInput.current.click();
+    if (!fileInput.isEmpty) {
+    }
   };
 
   const joinBtnOnClick = () => {
-    const joinApi = mode === "user" ? postUserJoinApi : postLawyerJoinApi;
+    const joinApi = mode === 'user' ? postUserJoinApi : postLawyerJoinApi;
+
     let params = {};
-    if (mode === "user") {
+    if (mode === 'user') {
       // 사용자
       params = {
         id: joinForm.id,
         password: joinForm.pw,
         nickname: joinForm.nick,
         email: joinForm.email,
-        joinMethod: joinMethod ?? "web",
+        joinMethod: 'web',
       };
     } else {
       // 변호사
+
       params = new FormData();
-      params.append("attachedFile", joinForm.ac);
+
+      params.append('attachedFile', joinForm.ac);
 
       const lawyer = {
         lawyerId: joinForm.id,
@@ -216,39 +234,63 @@ const JoinForm = ({ mode, setMode, joinMethod }) => {
         lawyerNum: joinForm.cnum,
       };
 
-      params.append(
-        "lawyer",
-        new Blob([JSON.stringify(lawyer)], { type: "application/json" })
-      );
+      const paramsJsonBlob = new Blob([JSON.stringify(lawyer)], {
+        type: 'application/json',
+      });
+      params.append('lawyer', paramsJsonBlob);
+
+      console.log(params);
     }
 
-    joinApi(params).then((res) => {
-      if (typeof res === "object") {
-        // 회원가입 성공
-        navigate("/");
-      } else {
-        // 회원가입 실패
-        // 응답 받은 메세지 그대로 출력
-      }
-    });
+    joinApi(params)
+      .then((res) => {
+        if (res.status === 400) {
+          console.log('joinApi 들어와짐?', res);
+          res.text().then((data) => {
+            console.log('회원가입 클릭 data', data);
+            navigate('/login');
+          });
+        } else {
+          console.log('joinApi 들어와짐?', res);
+          res.text().then((data) => {
+            console.log('회원가입 클릭 data', data);
+            navigate('/login');
+          });
+          // 회원가입 실패
+          // 응답 받은 메세지 그대로 출력
+        }
+        // if (res) {
+        //   // 회원가입 성공
+        //   navigate('/');
+        // } else {
+        //   // 회원가입 실패
+        //   // 응답 받은 메세지 그대로 출력
+        // }
+      })
+      .catch((error) => {
+        console.log('에러?');
+        console.log(error);
+        navigate('/login');
+      });
   };
 
   return (
-    <div className="join-wrapper">
-      <div className="join-header">
-        {mode === "user" ? CLIENT_MODE : LAWYER_MODE} 회원가입
+    <div className='join-wrapper'>
+      <div className='join-header'>
+        {mode === 'user' ? CLIENT_MODE : LAWYER_MODE} 회원가입
       </div>
-      <div className="join-form">
+      <div className='join-form'>
         <div>
           <div>아이디</div>
           <Input
-            id="id"
+            id='id'
+            name='id'
             onChange={idOnChangeEventHandler}
-            placeholder="아이디 입력"
+            placeholder='아이디 입력'
           />
           <Button
-            className="input-button"
-            variant="contained"
+            className='input-button'
+            variant='contained'
             disabled={commUtil.isEmpty(joinForm.id)}
             onClick={idCheck}
           >
@@ -256,17 +298,18 @@ const JoinForm = ({ mode, setMode, joinMethod }) => {
           </Button>
         </div>
 
-        {mode === "user" ? (
+        {mode === 'user' ? (
           <div>
             <div>닉네임</div>
             <Input
-              id="nick"
+              id='nick'
+              name='nick'
               onChange={nickOnChangeEventHandler}
-              placeholder="닉네임 입력"
+              placeholder='닉네임 입력'
             />
             <Button
-              className="input-button"
-              variant="contained"
+              className='input-button'
+              variant='contained'
               disabled={commUtil.isEmpty(joinForm.nick)}
               onClick={nickCheck}
             >
@@ -277,22 +320,24 @@ const JoinForm = ({ mode, setMode, joinMethod }) => {
           <div>
             <div>이름</div>
             <Input
-              id="name"
+              id='name'
+              name='name'
               onChange={nameOnChangeEventHandler}
-              placeholder="이름 입력"
+              placeholder='이름 입력'
             />
           </div>
         )}
         <div>
           <div>비밀번호</div>
           <Input
-            id="pw"
-            type="password"
+            id='pw'
+            name='pw'
+            type='password'
             onChange={pwOnChangeEventHandler}
-            placeholder="비밀번호 입력"
+            placeholder='비밀번호 입력'
           />
           {!pwvalid && commUtil.isNotEmpty(joinForm.pw) && (
-            <p id="pwvalid">
+            <p id='pwvalid'>
               특수문자, 문자, 숫자 포함 8~15자리 이내로 작성하세요.
             </p>
           )}
@@ -300,26 +345,28 @@ const JoinForm = ({ mode, setMode, joinMethod }) => {
         <div>
           <div>비밀번호 확인</div>
           <Input
-            id="pwcheck"
-            type="password"
+            id='pwcheck'
+            name='pwcheck'
+            type='password'
             onChange={pwcheckOnChangeEventHandler}
-            placeholder="비밀번호 확인"
+            placeholder='비밀번호 확인'
           />
           {!pwCheck && commUtil.isNotEmpty(joinForm.pwcheck) && (
-            <p id="pwcheck">비밀번호가 일치하지 않습니다.</p>
+            <p id='pwcheck'>비밀번호가 일치하지 않습니다.</p>
           )}
         </div>
         <div>
           <div>이메일</div>
           <Input
-            id="email"
+            id='email'
+            name='email'
             onChange={emailOnChangeEventHandler}
-            placeholder="이메일 입력"
+            placeholder='이메일 입력'
           />
           {!usableEmail ? (
             <Button
-              className="input-button"
-              variant="contained"
+              className='input-button'
+              variant='contained'
               disabled={commUtil.isEmpty(joinForm.email)}
               onClick={emailCheck}
             >
@@ -327,9 +374,9 @@ const JoinForm = ({ mode, setMode, joinMethod }) => {
             </Button>
           ) : (
             <Button
-              className="input-button"
-              variant="contained"
-              disabled={!usableEmail}
+              className='input-button'
+              variant='contained'
+              disabled={isEmailSent}
               onClick={emailSend}
             >
               인증번호 전송
@@ -339,30 +386,32 @@ const JoinForm = ({ mode, setMode, joinMethod }) => {
         <div>
           <div>인증번호</div>
           <Input
-            id="cnum"
+            id='cnum'
+            name='cnum'
             onChange={cnumOnChangeEventHandler}
-            placeholder="인증번호 확인"
+            placeholder='인증번호 확인'
           />
           <Button
-            className="input-button"
-            variant="contained"
-            disabled={!isSend && commUtil.isEmpty(joinForm.cnum)}
+            className='input-button'
+            variant='contained'
+            disabled={isAuthChecked || commUtil.isEmpty(joinForm.cnum)}
             onClick={emailAuthCheck}
           >
             인증번호 확인
           </Button>
         </div>
 
-        {mode === "lawyer" && (
+        {mode === 'lawyer' && (
           <>
             <div>
               <div>변호사증</div>
               <Input
-                id="ac"
+                id='ac'
+                name='ac'
                 ref={fileInput}
-                accept="image/*"
+                accept='image/*'
                 onChange={acOnChangeEventHandler}
-                type="file"
+                type='file'
               />
               {/* <Button
                 className="input-button"
@@ -375,18 +424,19 @@ const JoinForm = ({ mode, setMode, joinMethod }) => {
             <div>
               <div>변호사 등록번호</div>
               <Input
-                id="arn"
+                id='arn'
+                name='arn'
                 onChange={arnOnChangeEventHandler}
-                placeholder="변호사 등록번호 입력"
+                placeholder='변호사 등록번호 입력'
               />
             </div>
           </>
         )}
 
-        {mode === "user" ? (
+        {mode === 'user' ? (
           <Button
-            className="join-button"
-            variant="contained"
+            className='join-button'
+            variant='contained'
             disabled={
               commUtil.isEmpty(joinForm.id) ||
               commUtil.isEmpty(joinForm.nick) ||
@@ -405,10 +455,10 @@ const JoinForm = ({ mode, setMode, joinMethod }) => {
           </Button>
         ) : (
           <Button
-            className="join-button"
-            variant="contained"
+            className='join-button'
+            variant='contained'
             disabled={
-              commUtil.isEmpty(joinForm.id) //||
+              commUtil.isEmpty(joinForm.id) // ||
               // commUtil.isEmpty(joinForm.name) ||
               // commUtil.isEmpty(joinForm.pw) ||
               // commUtil.isEmpty(joinForm.pwcheck) ||

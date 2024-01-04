@@ -107,8 +107,8 @@ const BoardFree = () => {
         <Select
           value={select}
           style={{
-            left: '380px',
-            top: '68px',
+            left: '455px',
+            top: '66px',
             height: '33px',
           }}
           onChange={handleChange}
