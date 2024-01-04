@@ -47,8 +47,17 @@ const ConsultABox = ({ ansCont, userWriter, consultNum, existAdopted }) => {
       );
       window.location.reload();
     } else {
-      // 응답코드 상태가 나뉘어있다면 에러코드에 따라 답변이 다르면 좋을 듯!
-      alert('해당 답변을 채택할 수 없습니다.');
+      console.log('response는: ', res);
+      switch (res.text()) {
+        case 'shortage-hammer':
+          alert('답변 채택에 필요한 법봉의 개수가 부족합니다.');
+          navigate('/bupbong/');
+          break;
+        default:
+          alert('답변 채택에 필요한 권한이 없습니다.');
+          navigate('/');
+          break;
+      }
     }
   };
 

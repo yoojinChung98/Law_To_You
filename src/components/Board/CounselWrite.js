@@ -47,6 +47,7 @@ const CounselWrite = () => {
     let formData = new FormData();
 
     let files = document.getElementById('files').files;
+
     const paramsJsonBlob = new Blob([JSON.stringify(params)], {
       type: 'application/json',
     });
@@ -63,16 +64,24 @@ const CounselWrite = () => {
         Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
       },
       body: formData,
-    })
-      .then((response) => response.json())
-      .then((result) => {
-        if (typeof result === 'object') {
-          alert('일반상담등록!');
-          navigate('/counsel/write');
-        } else {
-          console.error(result.error);
+    }).then((response) => {
+      if (response.ok) {
+        alert('일반상담등록!');
+        navigate('/mycounsel/');
+      } else {
+        console.log('response는: ', response);
+        switch (response.text()) {
+          case 'shortage-hammer':
+            alert('상담 등록에 필요한 법봉 1개가 부족합니다.');
+            navigate('/bupbong/');
+            break;
+          default:
+            alert('상담 등록이 거부되었습니다.');
+            navigate('/');
+            break;
         }
-      });
+      }
+    });
   };
   const counselcancelhandler = () => {
     navigate('/faq/');

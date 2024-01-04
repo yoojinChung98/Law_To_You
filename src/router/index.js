@@ -109,7 +109,7 @@ const RouterIndex = () => {
           element={<CounselWrite />}
         ></Route>
         <Route
-          path='/counsel/deep/'
+          path='/counsel/deep/:consultNum'
           element={<CounselDeepWrite />}
         ></Route>
       </Route>
@@ -134,6 +134,10 @@ const RouterIndex = () => {
         <Route
           path='/mycounsel/'
           element={<MyConsultListPage />}
+        ></Route>
+        <Route
+          path='/deep/:consultNum'
+          element={<DeepPage />}
         ></Route>
         <Route
           path='/bupbong/'

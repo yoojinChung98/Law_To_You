@@ -56,8 +56,8 @@ const JoinList = ({ setPBtnCnt, currentPage, onPageChange }) => {
 
   const masterLogoutOnclick = (e) => {
     alert('로그아웃 되었습니다.');
-    localStorage.clear();
     navigate('/');
+    localStorage.clear();
   };
 
   const approvalOnChange = async (e) => {
