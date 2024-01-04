@@ -55,7 +55,7 @@ const DeepPage = () => {
 
     // 응답 상태가 에러일 시 메인페이지로 이동 (counsel 로 보내면 권한에 따라 글쓰기로 보내지므로.)
     if (res.status != 200) {
-      alert('이 글의 진입 권한이 없습니다.');
+      let resText = alert('이 글의 진입 권한이 없습니다.');
       navigate('/');
     }
 
@@ -130,9 +130,15 @@ const DeepPage = () => {
       }
     } else {
       // 응답 상태가 에러일 시 메인페이지로 이동 (counsel 로 보내면 권한에 따라 글쓰기로 보내지므로.)
-      console.log(await res.text());
-      alert('이 글의 진입 권한이 없습니다.');
-      // navigate('/'); // 다시 살려야하는 부분
+      let resText = await res.text();
+      switch (resText) {
+        case 'no-detailed-answer':
+          break;
+        default:
+          alert('깊은 상담 페이지 진입에 오류가 있습니다.');
+          navigate('/');
+          break;
+      }
     }
 
     render(dataQ, dataA, hasDeepA);
@@ -140,6 +146,7 @@ const DeepPage = () => {
 
   const render = (dataQ, dataA, hasDeepA) => {
     console.log('---------render 함수 호출완료!--------');
+    console.log('loggedUser.mode의 값은: ', loggedUser);
     if (loggedUser.mode === 'user') {
       console.log('user 모드인 경우!');
       setRealContent(
@@ -157,8 +164,8 @@ const DeepPage = () => {
       setRealContent(
         <>
           <ConsultQBox
-            qContent={qContent}
-            aContentList={aContentList}
+            qContent={dataQ}
+            aContentList={dataA}
             IsDeep={IsDeep}
           />
           {hasDeepA ? '' : <DeepABoxWrite consultNum={consultNum} />}
