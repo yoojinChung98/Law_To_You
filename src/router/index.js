@@ -101,6 +101,9 @@ import '../index.css';
 import commUtil from '../util/commUtil';
 import KakaoLoginHandler from '../components/Login/KakaoLoginHandler';
 import NaverLoginHandler from '../components/Login/NaverLoginHandler';
+import MypageLayout from '../components/MypageLayout';
+import MyPostListPage from '../components/MyPostList/MyPostListPage';
+import MyConsultListPage from '../components/MyConsultList/MyConsultListPage';
 const RouterIndex = () => {
   const isLogin = commUtil.isNotEmpty(localStorage.getItem('accessToken'));
 
@@ -133,6 +136,34 @@ const RouterIndex = () => {
         path='/*'
         element={<></>}
       ></Route>
+      {/* 마이페이지 부분 */}
+      <Route
+        path='/'
+        element={<MypageLayout />}
+      >
+        <Route
+          path='/mypage/user/'
+          element={<UserModify />}
+        ></Route>
+        <Route
+          path='/mypage/lawyer/'
+          element={<LawyerModify />}
+        ></Route>
+        <Route
+          path='/myfree/'
+          element={<MyPostListPage />}
+        ></Route>
+        <Route
+          path='/mycounsel/'
+          element={<MyConsultListPage />}
+        ></Route>
+        <Route
+          path='/bupbong/'
+          element={<Bupbong />}
+        ></Route>
+      </Route>
+
+      {/* 메인 부분 */}
       <Route element={<MainLayout />}>
         <Route
           path='/naverLogin/redirect'
@@ -158,10 +189,7 @@ const RouterIndex = () => {
           path='/freereply/'
           element={<BoardFreeReply />}
         ></Route>
-        <Route
-          path='/bupbong/'
-          element={<Bupbong />}
-        ></Route>
+
         <Route
           path='/consult/'
           element={<ConsultPage />}
@@ -169,14 +197,6 @@ const RouterIndex = () => {
         <Route
           path='/faq/'
           element={<FAQPage />}
-        ></Route>
-        <Route
-          path='/mypage/'
-          element={<UserModify />}
-        ></Route>
-        <Route
-          path='/mypage/lawyer/'
-          element={<LawyerModify />}
         ></Route>
         <Route
           path='/counsel/write/'

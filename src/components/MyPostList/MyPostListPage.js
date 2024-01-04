@@ -1,6 +1,3 @@
-import Header from '../layout/Header';
-import Footer from '../layout/Footer';
-import Category from '../layout/Category';
 import './MyPostListPage.css';
 import MyPostForm from './MyPostForm';
 import { Pagination } from '@mui/material';
