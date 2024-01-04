@@ -51,7 +51,6 @@ const DeepPage = () => {
         },
       }
     );
-    console.log('getQCounsel의 res: ', res);
 
     // 응답 상태가 에러일 시 메인페이지로 이동 (counsel 로 보내면 권한에 따라 글쓰기로 보내지므로.)
     if (res.status != 200) {
@@ -60,7 +59,6 @@ const DeepPage = () => {
     }
 
     const dataQ = await res.json();
-    console.log('dataQ의 값은: ', dataQ);
     // 응답상태가 200 인 경우 조건에 따라 입밴 / 응답값 상태변수에 할당
     //의뢰인이라면 아이디가 같은 경우에만 본 페이지 열람이 가능함
     if (loggedUser.mode === 'user') {
@@ -70,12 +68,9 @@ const DeepPage = () => {
         alert('다른 의뢰인이 작성한 깊은 상담은 열람할 수 없습니다.');
         navigate('/');
       }
-
-      console.log('getQCounsel, setQContent직전, dataQ의 값은:  ', dataQ);
       setQContent(dataQ);
     } else {
       // 변호사라면 언제든지 열람가능
-      console.log('getQCounsel, setQContent직전, dataQ의 값은:  ', dataQ);
       setQContent(dataQ);
     }
 
@@ -84,8 +79,6 @@ const DeepPage = () => {
 
   const getAnss = async (dataQ) => {
     console.log('getAnss 함수 호출 완료!');
-    console.log('consultNum은: ', consultNum);
-    console.log('loggedUser.id', loggedUser.id);
     let res = await fetch(
       `${BASE_URL}/answer/detail?consultNum=${consultNum}`,
       {
@@ -96,14 +89,11 @@ const DeepPage = () => {
       }
     );
 
-    console.log('getAnss 함수, res 의 값은: ', res);
-
     let dataA;
     let hasDeepA = false;
     // 응답상태가 200일 때, 답변을 리스트에 담던지, 아니면 깊은 답변이 아직 달리지 않은 경우 이던지
     if (res.ok) {
       dataA = await res.json();
-      console.log('dataA의 값은: ', dataA);
 
       if (loggedUser.mode === 'lawyer') {
         console.log('data.writer: ', dataA.writer);
@@ -116,6 +106,7 @@ const DeepPage = () => {
 
       if (dataA == null) {
         // 깊은 답변 작성이 안되어있는 경우
+        hasDeepA = false;
         setWrote(false);
         // setAContentList(resJson); // 값이 없으니까 굳이 담을 필요 없음
         return;
@@ -125,7 +116,6 @@ const DeepPage = () => {
         setWrote(true);
         // 리스트이지만 결국 크기가 1인 배열이 들어갈 것(객체 하나만 들어감.)
         // 아닌가 객체가 들어가서 터지려나
-        // setAContentList([...dataA]); // 혹시 몰라서 스프레드 버전도 준비함.
         setAContentList(dataA);
       }
     } else {
@@ -146,7 +136,6 @@ const DeepPage = () => {
 
   const render = (dataQ, dataA, hasDeepA) => {
     console.log('---------render 함수 호출완료!--------');
-    console.log('loggedUser.mode의 값은: ', loggedUser);
     if (loggedUser.mode === 'user') {
       console.log('user 모드인 경우!');
       setRealContent(
@@ -178,51 +167,7 @@ const DeepPage = () => {
     console.log('---------render 함수 종료----------');
   };
 
-  // const chkUserMode = () => {
-  //   // 의뢰인의 질문 데이터 할당
-  //   getQCounsel();
-  //   // 변호사들의 답변들 데이터 할당
-  //   getAnss();
-
-  //   return loggedUser.mode === 'user' ? userMode() : lawyerMode();
-  // };
-
-  // // 유저의 경우 할당이 끝난 값들을 가지고 어떻게 컴포넌트를 배열할지 로직
-  // const userMode = () => {
-  //   return (
-  //     <>
-  //       <ConsultQBox
-  //         qContent={qContent}
-  //         aContentList={aContentList}
-  //         IsDeep={IsDeep}
-  //       />
-  //     </>
-  //   );
-  // };
-
-  // // 변호사의 경우 할당이 끝난 값들을 가지고 어떻게 컴포넌트를 배열할지  로직//
-  // const lawyerMode = () => {
-  //   return (
-  //     <>
-  //       <ConsultQBox
-  //         qContent={qContent}
-  //         aContentList={aContentList}
-  //         IsDeep={IsDeep}
-  //       />
-  //       {/* 조건부 렌더링 필요: 변호사의 답변 등록 유무 */}
-  //       {loggedUser.mode === 'lawyer' && !hasDeepA ? (
-  //         <DeepABoxWrite consultNum={consultNum} />
-  //       ) : (
-  //         ''
-  //       )}
-  //     </>
-  //   );
-  // };
-
   const renderABox = (dataQ, dataA, hasDeepA) => {
-    // 여기 dataA가 배열일지 확실하지 않아. 그냥 객체 하나일 수도 있는데
-    console.log('renderABox 호출 완료!');
-    console.log('renderABox 의 dataA의 값은: ', dataA);
     return (
       <DeepABox
         ansCont={dataA}
@@ -237,22 +182,6 @@ const DeepPage = () => {
     <>
       <div className='page'>
         <div className='consult-wrapper'>
-          {/* 1. 사용자계정 : V ConsultQBox 에 삭제버튼 X
-                  일반상담의 isUpdated = true(깊은 상담 작성 완료) 직후부터 입장 가능.
-
-              2. 변호사계정 : 아직 답변을 달지 않았다면 <DeepABoxWriter />
-                  일반상담이 isUpdated 인 직후부터 입장 가능. (아직 답변 작성하지 않았다면 DeepABoxWrite 를 띄우고, 답변작성완료라면 DeepABox 를 띄우기.)
-              답변을 달았다면 <DeepABox />/*}
-
-          {/*  ------------------- 사용자 질문 박스 -------------------------- */}
-          {/* deep한 상담인 경우 삭제버튼은 무조건 띄우면 안되므로, DeepPage에서 IsDeep? 의 값으로 True 값을 주어 삭제할 수없도록 하자. */}
-          {/* <ConsultQBox IsDeep={IsDeep} /> */}
-
-          {/* -------------------- 답변 조회/등록 박스 --------------------- */}
-          {/* 조건부 렌더링 필요: 변호사의 답변 등록 유무 */}
-          {/* <DeepABox /> */}
-          {/* <DeepABoxWrite /> */}
-
           {console.log('이제 진짜 렌더링 시작!')}
           {realContent}
           {realAnswer}

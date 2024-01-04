@@ -1,7 +1,7 @@
 // 브라우저에서 현재 클라이언트의 호스트 이름 얻어오기
 const clientHostName = window.location.hostname;
 
-// let backEndHostName = 'http://localhost:80';
+// // let backEndHostName = 'http://localhost:80';
 let backEndHostName = 'http://54.180.52.142'; // 백엔드 서버 호스트 이름
 
 // if (clientHostName === 'localhost') {
@@ -15,8 +15,8 @@ let backEndHostName = 'http://54.180.52.142'; // 백엔드 서버 호스트 이�
 //   'http://law-to-me.site.s3-website.ap-northeast-2.amazonaws.com'
 // ) {
 //   // 여기에 리액트의 도메인 주소값으로 비교하는 것임.
-//   // 배포해서 서비스 중
-//   backEndHostName = 'http://15.164.178.169'; // ec2 의 도메인주소가 들어와야 함.
+// //   // 배포해서 서비스 중
+// //   backEndHostName = 'http://15.164.178.169'; // ec2 의 도메인주소가 들어와야 함.
 // }
 
 export const API_BASE_URL = backEndHostName + '/api';

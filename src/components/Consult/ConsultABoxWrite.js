@@ -21,9 +21,6 @@ export const ConsultABoxWrite = ({ consultNum }) => {
         ? 10
         : parseInt(reqHammerRef.current.value, 10);
 
-    console.log('변경후 reqHammer : ', reqHammer);
-    console.log('shortAns: ', shortAnsRef.current.value);
-
     let res = await fetch(`${BASE_URL}/answer/register`, {
       method: 'POST',
       headers: {

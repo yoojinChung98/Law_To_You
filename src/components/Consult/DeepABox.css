@@ -39,10 +39,10 @@
 }
 
 .consult-a-content-area {
+  font-family: 'Pretendard-Regular';
   width: 1280px;
   background: transparent;
   border: none;
-  border-bottom: 2px solid #a9a9a9;
   padding: 40px 30px 50px 30px;
   font-size: 19px;
   line-height: 26px;

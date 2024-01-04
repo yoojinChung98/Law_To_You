@@ -38,7 +38,7 @@ const MyConsultListPage = () => {
         />
         <div className='bottom pagination'>
           <Pagination
-            count={pBtnCnt}
+            count={1}
             page={currentPage}
             onChange={onPageChange}
             variant='outlined'

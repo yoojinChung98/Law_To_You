@@ -133,7 +133,7 @@ const ConsultQBox = ({ qContent, aContentList, IsDeep }) => {
       <p className='consult-q-content-area'>{qContent.content}</p>
 
       <div className='consult-preview-area'>
-        <span>첨부파일</span>
+        {!qContent.routes && <span>첨부파일</span>}
         <div className='preview-box'>
           {bToImg()}
           <Modal
