@@ -12,5 +12,5 @@ export const postReplyApi = (params) => {
 
 // 댓글 삭제
 export const deleteReplyApi = (params) => {
-  return axios.delete("/reply", params).then((res) => res.data);
+  return axios.delete("/reply", { params }).then((res) => res.data);
 };

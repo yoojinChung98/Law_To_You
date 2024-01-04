@@ -69,50 +69,20 @@ const BoardFreeReply = () => {
     getReplyListApi(params)
       .then((res) => {
         setReply(res);
-        // console.log(reply);
-        searchReply();
       })
       .catch((error) => {
         // dummy
-        setReply({
-          count: 2,
-          replyList: [
-            {
-              lawyerId: "aaa",
-              userId: "ddd",
-              content: "ㅋㅋ",
-              writer: "ddd",
-              regDate: "23.12.7",
-              deleteButton: true,
-            },
-            {
-              lawyerId: "bbb",
-              userId: "eee",
-              content: "퓨ㅠㅠ",
-              writer: "eee",
-              regDate: "23.12.7",
-              deleteButton: true,
-            },
-            {
-              lawyerId: "ccc",
-              userId: "fff",
-              content: "ㅎㅎ",
-              writer: "fff",
-              regDate: "23.12.7",
-              deleteButton: true,
-            },
-          ],
-        });
+        setReply({});
       });
   };
 
   const [replyContent, setReplyContent] = useState({
     // bno: Number(bno),
+    rno: "",
     content: "",
   });
   // 댓글 등록
   const onChangeReplyContent = (e) => {
-    // console.log(e.target.value);
     setReplyContent(e.target.value);
   };
 
@@ -133,7 +103,7 @@ const BoardFreeReply = () => {
   // 댓글 삭제
   const replyDeleteBtn = () => {
     let params = {
-      rno: 3,
+      rno: replyContent.rno,
     };
     deleteReplyApi(params).then((res) => {
       if ((res.status = 200)) {
@@ -144,7 +114,6 @@ const BoardFreeReply = () => {
   };
 
   // 글 수정
-
   const afOnChangeEventHandler = (e) => {
     setAttachedFile({ attachedFile: e.target.files[0] });
   };
@@ -217,7 +186,6 @@ const BoardFreeReply = () => {
                 // accept="image/*"
                 onChange={afOnChangeEventHandler}
                 type="file"
-                multiple
               />
               <input
                 id="attachedFile"
@@ -225,7 +193,6 @@ const BoardFreeReply = () => {
                 // accept="image/*"
                 onChange={afOnChangeEventHandler}
                 type="file"
-                multiple
               />
             </>
           )}
@@ -267,10 +234,10 @@ const BoardFreeReply = () => {
         </div>
         {reply.replyList.map((item) => (
           <div className="replies" key={item.rno + item.content}>
-            {/* <div className="replies-writer">{item.writer}</div> */}
+            <div className="replies-writer">{item.writer}</div>
             <div className="replies-content">{item.content}</div>
-            {/* <div className="replies-date">{item.regDate}</div> */}
-            {!item.deleteButton && (
+            <div className="replies-date">{item.regDate}</div>
+            {item.deleteButton && (
               <Button
                 className="reply-delete-button"
                 variant="contained"
