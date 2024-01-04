@@ -39,7 +39,7 @@ export const ConsultABoxWrite = ({ consultNum }) => {
 
     if (res.status == 200) {
       alert('답변 등록이 완료되었습니다.');
-      navigate(`/counsel/detail/${consultNum}`);
+      window.location.reload();
     } else {
       // 변호사가 아니거나 등록한 적이 없다면 여기 컴포넌트가 안뜨도록해서... 이게.. 왜... 에러가 뜨는지 확인해봐야함.
       const resText = await res.text();

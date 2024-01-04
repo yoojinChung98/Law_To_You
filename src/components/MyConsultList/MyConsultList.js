@@ -67,42 +67,90 @@ const MyConsultList = ({ currentPage, setPBtnCnt }) => {
           Authorization: 'Bearer ' + localStorage.getItem('accessToken'),
         },
       }
-    ).then((res) => {
-      console.log(res);
-      if (res.ok) {
-        const resJson = res.json();
-        console.log(resJson);
-        resJson.ifUpdated
-          ? navigate(`/deep/${cNm}`)
-          : navigate('/counsel/deep/');
-        return;
+    );
+    console.log('res는 : ', res);
+    if (res.ok) {
+      const data = await res.json();
+      console.log('data는: ', data);
+      console.log('cNm은: ', cNm);
+      data.ifUpdated
+        ? navigate(`/deep/${cNm}`)
+        : navigate('/counsel/deep/', {
+            state: {
+              qTitle: data.title,
+              qRoutes: data.routes,
+              qWriter: data.writer,
+              qContent: data.content,
+            },
+          });
+    } else {
+      const data = await res.text();
+      console.log(data);
+      switch (data) {
+        case 'authority-problem':
+          alert(
+            '선택하신 깊은 상담 내역 조회 권한이 없습니다. 다시 로그인 해주세요.'
+          );
+          // 마이페이지에서 자신이 등록하지 않은 온라인 상담을 보는 경우는 직접 url을 적어서 들어오는 경우이거나 로그아웃되어있거나 둘 중 하나이므로
+          navigate('/');
+          break;
+        case 'no-short-answer':
+          alert('아직 답변이 달리지 않아 깊은 상담이 불가능합니다.');
+          break;
+        case 'no-adopted-answer':
+          alert('일반 상담의 답변을 채택한 후 깊은 상담을 진행할 수 있습니다.');
+          navigate(`/counsel/detail/${cNm}`);
+          break;
+        default:
+          alert('잘못된 접근 입니다.');
+          break;
       }
+    }
 
-      res.text().then((data) => {
-        console.log(data);
-        switch (data) {
-          case 'authority-problem':
-            alert(
-              '선택하신 깊은 상담 내역 조회 권한이 없습니다. 다시 로그인 해주세요.'
-            );
-            // 마이페이지에서 자신이 등록하지 않은 온라인 상담을 보는 경우는 직접 url을 적어서 들어오는 경우이거나 로그아웃되어있거나 둘 중 하나이므로
-            navigate('/');
-            break;
-          case 'no-short-answer':
-            alert('아직 답변이 달리지 않아 깊은 상담이 불가능합니다.');
-            break;
-          case 'no-adopted-answer':
-            alert(
-              '일반 상담의 답변을 채택한 후 깊은 상담을 진행할 수 있습니다.'
-            );
-            navigate(`counsel/detail/${cNm}`);
-            break;
-          default:
-            alert('잘못된 접근 입니다.');
-            break;
-        }
-      });
-    });
+    // let res = await fetch(
+    //   `${BASE_URL}/mypage/counsel/detail?consultNum=${cNm}`,
+    //   {
+    //     headers: {
+    //       'Content-Type': 'application/json',
+    //       Authorization: 'Bearer ' + localStorage.getItem('accessToken'),
+    //     },
+    //   }
+    // ).then((res) => {
+    //   console.log(res);
+    //   if (res.ok) {
+    //     const resJson = res.json();
+    //     console.log(resJson);
+    //     resJson.ifUpdated
+    //       ? navigate(`/deep/${cNm}`)
+    //       : navigate('/counsel/deep/');
+    //     return;
+    //   }
+
+    //   res.text().then((data) => {
+    //     console.log(data);
+    //     switch (data) {
+    //       case 'authority-problem':
+    //         alert(
+    //           '선택하신 깊은 상담 내역 조회 권한이 없습니다. 다시 로그인 해주세요.'
+    //         );
+    //         // 마이페이지에서 자신이 등록하지 않은 온라인 상담을 보는 경우는 직접 url을 적어서 들어오는 경우이거나 로그아웃되어있거나 둘 중 하나이므로
+    //         navigate('/');
+    //         break;
+    //       case 'no-short-answer':
+    //         alert('아직 답변이 달리지 않아 깊은 상담이 불가능합니다.');
+    //         break;
+    //       case 'no-adopted-answer':
+    //         alert(
+    //           '일반 상담의 답변을 채택한 후 깊은 상담을 진행할 수 있습니다.'
+    //         );
+    //         navigate(`counsel/detail/${cNm}`);
+    //         break;
+    //       default:
+    //         alert('잘못된 접근 입니다.');
+    //         break;
+    //     }
+    //   });
+    // });
   };
 
   // 변호사: 깊은 상담 하러가기 버튼을 눌렀을 때, 거절/상세 페이지 중 어디로 보낼지 결정하는 함수
@@ -154,6 +202,7 @@ const MyConsultList = ({ currentPage, setPBtnCnt }) => {
   const listRenderUser = () => {
     let sliceIdx = 10 * (currentPage - 1);
     return contentList.slice(sliceIdx, sliceIdx + 10).map((content, index) => {
+      console.log('content는 :', content);
       return (
         <tr key={content.consultNum}>
           <td style={{ width: '90px', textAlign: 'center' }}>
@@ -172,7 +221,7 @@ const MyConsultList = ({ currentPage, setPBtnCnt }) => {
           </td>
           <td>
             {/*  답변이 달렸다면 삭제할수 없고, 달리지 않은 경우엔 삭제가능. */}
-            {content.isAnswered ? (
+            {content.answered ? (
               ''
             ) : (
               <Button
@@ -207,6 +256,7 @@ const MyConsultList = ({ currentPage, setPBtnCnt }) => {
   const listRenderLawyer = () => {
     let sliceIdx = 10 * (currentPage - 1);
     return contentList.slice(sliceIdx, sliceIdx + 10).map((content, index) => {
+      console.log('content의 값은: ', content);
       return (
         <tr key={content.consultNum}>
           <td style={{ width: '90px', textAlign: 'center' }}>
@@ -225,7 +275,8 @@ const MyConsultList = ({ currentPage, setPBtnCnt }) => {
           </td>
           <td>
             {/*  채택되었다면 채택됨 div 를 보여주고, 채택되지 않았다면 빈칸. */}
-            {content.isAdopted ? (
+            {console.log('content.isAdopted의 값은: ', content.adopt)}
+            {content.adopt == 1 ? (
               <div
                 style={{
                   fontFamily: 'Pretendard-Regular',
@@ -246,7 +297,7 @@ const MyConsultList = ({ currentPage, setPBtnCnt }) => {
           </td>
           <td>
             {/*  채택되었다면 채택됨 div 를 보여주고, 채택되지 않았다면 빈칸. */}
-            {content.isAdopted ? (
+            {content.adopt == 1 ? (
               <Button
                 variant='contained'
                 style={{
@@ -270,7 +321,7 @@ const MyConsultList = ({ currentPage, setPBtnCnt }) => {
 
   // 일반 상담을 삭제하는 로직
   const deleteCounsel = async (cNm) => {
-    let res = await fetch(`${BASE_URL}/mypage/counsel`, {
+    let res = await fetch(`${BASE_URL}/mypage/counsel?consultNum=${cNm}`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
@@ -283,6 +334,7 @@ const MyConsultList = ({ currentPage, setPBtnCnt }) => {
 
     if (res.status === 200) {
       alert('질문이 삭제되었습니다.');
+      window.location.reload();
     } else {
       // 에러코드 뭐오는지 모름.
       alert('삭제할 수 없는 질문입니다.');
@@ -308,7 +360,9 @@ const MyConsultList = ({ currentPage, setPBtnCnt }) => {
             <th>상담번호</th>
             <th>제목</th>
             <th>작성일자</th>
-            <th>{loggedUser.mode === 'user' ? '삭제' : '채택여부'}</th>
+            <th style={{ width: '60px', margin: '0px 7px' }}>
+              {loggedUser.mode === 'user' ? '삭제' : '상태'}
+            </th>
             <th>깊은상담</th>
           </tr>
         </thead>

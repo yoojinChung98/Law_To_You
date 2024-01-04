@@ -177,7 +177,7 @@ const UserModify = () => {
         if (res.status === 200) return res.json();
         else if (res.status === 403) {
           alert('로그인이 필요한 서비스입니다.');
-          window.location.reload();
+          redirection('/login/');
           return;
         } else {
           alert('관리자에게 문의하세요!');

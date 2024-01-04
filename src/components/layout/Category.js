@@ -1,6 +1,6 @@
 import './Category.css';
 
-const Category = ({ categoryList, clickedIdx, cateClick, categorySize }) => {
+const Category = ({ categoryList, clickedIdx, cateClick, cateTitle }) => {
   const renderCategoryList = () => {
     return categoryList.map((category, index) => (
       <li
@@ -19,7 +19,7 @@ const Category = ({ categoryList, clickedIdx, cateClick, categorySize }) => {
 
   return (
     <ul className='category-wrapper'>
-      <li className='category-title'>카테고리제목</li>
+      <li className='category-title'>{cateTitle}</li>
       {renderCategoryList()}
     </ul>
   );
