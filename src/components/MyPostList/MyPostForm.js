@@ -3,10 +3,11 @@ import './MyPostForm.css';
 import { API_BASE_URL } from '../../config/host-config';
 import { useNavigate } from 'react-router-dom';
 
-const MyPostForm = () => {
+const MyPostForm = ({ currentPage, setPBtnCnt }) => {
   const [token, setToken] = useState(localStorage.getItem('accessToken'));
 
   const redirection = useNavigate();
+  const BASE_URL = API_BASE_URL;
 
   const requestHeader = {
     'content-type': 'application/json',
@@ -15,7 +16,7 @@ const MyPostForm = () => {
 
   const [freeList, setFreeList] = useState([]);
   const [count, setCount] = useState([]);
-  const [currentPage, setCurrentPage] = useState(1); // 현재 페이지
+  const [cPage, setCPage] = useState(1); // 현재 페이지
   const postsPerPage = 10; // 한 페이지에 보여줄 글 개수
 
   useEffect(() => {
@@ -40,16 +41,17 @@ const MyPostForm = () => {
         console.log(json);
         setFreeList(json.freeboardList);
         setCount(json.count);
+        setPBtnCnt(json.count / 10 + 1);
       });
   }, []);
 
   // 현재 페이지의 글 목록 계산
-  const indexOfLastPost = currentPage * postsPerPage;
+  const indexOfLastPost = cPage * postsPerPage;
   const indexOfFirstPost = indexOfLastPost - postsPerPage;
   const currentPosts = freeList.slice(indexOfFirstPost, indexOfLastPost);
 
   // 페이지 번호를 클릭했을 때 실행되는 함수
-  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+  const paginate = (pageNumber) => setCPage(pageNumber);
 
   const getContentHandler = (e) => {
     e.preventDefault();
@@ -83,12 +85,12 @@ const MyPostForm = () => {
             <tr key={item.bno}>
               <td style={{ width: '80px', textAlign: 'center' }}>
                 {/* 순차적인 번호 부여 */}
-                {(currentPage - 1) * postsPerPage + index + 1}
+                {(cPage - 1) * postsPerPage + index + 1}
               </td>
               <td style={{ paddingLeft: '25px' }}>
                 <a
                   style={{ textDecoration: 'none', color: 'inherit' }}
-                  href={`http://localhost:80/api/freeboard/content?bno=${item.bno}`}
+                  href={`${BASE_URL}/freeboard/content?bno=${item.bno}`}
                   onClick={getContentHandler}
                 >
                   {item.title}
@@ -101,19 +103,6 @@ const MyPostForm = () => {
           ))}
         </tbody>
       </table>
-      {/* 페이징 처리 */}
-      <div className='pagination'>
-        {Array.from({ length: Math.ceil(count / postsPerPage) }).map(
-          (_, index) => (
-            <button
-              key={index}
-              onClick={() => paginate(index + 1)}
-            >
-              {index + 1}
-            </button>
-          )
-        )}
-      </div>
     </div>
   );
 };

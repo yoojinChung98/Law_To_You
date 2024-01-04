@@ -87,8 +87,15 @@ const ConsultQBox = ({ qContent, aContentList, IsDeep }) => {
   };
 
   const deleteQContent = async () => {
-    const res = fetch(
-      `${BASE_URL}/mypage/counsel?consultNum=${qContent.consultNum}`
+    const res = await fetch(
+      `${BASE_URL}/mypage/counsel?consultNum=${qContent.consultNum}`,
+      {
+        method: 'delete',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: 'Bearer ' + localStorage.getItem('accessToken'),
+        },
+      }
     );
     if (res.ok) {
       alert('질문이 삭제되었습니다.');
@@ -154,9 +161,9 @@ const ConsultQBox = ({ qContent, aContentList, IsDeep }) => {
             </Box>
           </Modal>
         </div>
-        {qContent.writer == loggedUser.id &&
-          !aContentList &&
-          !IsDeep(
+        {qContent.writer == loggedUser.name &&
+          aContentList == null &&
+          !IsDeep && (
             <Button
               className='consult-del-btn'
               variant='outlined'

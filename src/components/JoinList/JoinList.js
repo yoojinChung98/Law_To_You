@@ -9,9 +9,14 @@ import {
 } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { useAppSelector } from '../../store';
+import { API_BASE_URL } from '../../config/host-config';
+import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router';
 
 const JoinList = ({ setPBtnCnt, currentPage, onPageChange }) => {
-  const URL = 'http://43.201.40.179';
+  const loggedUser = useSelector((state) => state.user);
+  const BASE_URL = API_BASE_URL;
+  const navigate = useNavigate();
 
   const [lawyerList, setLawyerList] = useState([]); // 변호사 회원가입 요청리스트 저장변수
   const [lawyerURL, setLawyerURL] = useState([]); // 변호사 회원가입 URL 리스트 저장
@@ -19,7 +24,7 @@ const JoinList = ({ setPBtnCnt, currentPage, onPageChange }) => {
 
   // 변호사 리스트
   const lawyerListPage = async () => {
-    await fetch(`${URL}/api/master/history?authority=master`, {
+    await fetch(`${BASE_URL}/master/history?authority=master`, {
       // authority=master 로그인 되면 수정필여
       headers: {
         'content-type': 'application/json',
@@ -37,7 +42,7 @@ const JoinList = ({ setPBtnCnt, currentPage, onPageChange }) => {
   const lawyerIdOnClick = async (e) => {
     const lawyerId = e.currentTarget.getAttribute('id');
     console.log(lawyerId);
-    await fetch(`${URL}/api/master/history/img?lawyerId=${lawyerId}`, {
+    await fetch(`${BASE_URL}/master/history/img?lawyerId=${lawyerId}`, {
       headers: {
         'content-type': 'application/json',
       },
@@ -51,7 +56,7 @@ const JoinList = ({ setPBtnCnt, currentPage, onPageChange }) => {
 
   const approvalOnChange = async (e) => {
     await fetch(
-      `${URL}/api/master/history?authority=master&lawyerId=${lawyerIdClick}`,
+      `${BASE_URL}/master/history?authority=master&lawyerId=${lawyerIdClick}`,
       {
         method: 'PUT',
         headers: {
@@ -67,7 +72,12 @@ const JoinList = ({ setPBtnCnt, currentPage, onPageChange }) => {
   };
 
   useEffect(() => {
-    lawyerListPage();
+    if (loggedUser.mode == 'user' || loggedUser.mode == 'lawyer') {
+      alert('페이지 접근 권한이 없습니다.');
+      navigate('/');
+    } else {
+      lawyerListPage();
+    }
   }, []);
 
   const modalImg = () => {
