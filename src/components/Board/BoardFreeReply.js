@@ -12,10 +12,10 @@ import {
   postReplyApi,
 } from '../../api/board/ReplyApi';
 import { useAppDispatch, useAppSelector } from '../../store';
-import { setUser } from '../../store/userSlice';
 import commUtil from '../../util/commUtil';
 import Editor from '../common/Editor';
 import { useSelector } from 'react-redux';
+import { API_BASE_URL } from '../../config/host-config';
 const BoardFreeReply = () => {
   const dispatch = useAppDispatch;
 
@@ -160,12 +160,12 @@ const BoardFreeReply = () => {
   };
 
   const [replyContent, setReplyContent] = useState({
-    // bno: Number(bno),
     content: '',
   });
+  const [rno, setRno] = useState({ rno: '' });
+
   // 댓글 등록
   const onChangeReplyContent = (e) => {
-    // console.log(e.target.value);
     setReplyContent(e.target.value);
   };
 
@@ -174,48 +174,43 @@ const BoardFreeReply = () => {
     content: replyContent,
   };
   const replyRegistBtn = () => {
+    if (replyContent === '') {
+      alert('내용을 입력해주세요!');
+      return;
+    }
+
     postReplyApi(params).then((res) => {
       if (typeof res === 'object') {
+        alert('댓글이 등록되었습니다.');
         setReplyContent(res);
-        alert('댓글등록');
+        setRno(res);
+        document.querySelector('.reply-content').value = '';
         searchReply();
       }
+      return;
     });
   };
 
-  //   // 댓글 리스트 가져오기
-  //   useEffect(() => {
-  //     getReplyList(3);
-  //   }, []);
-
-  //   const getReplyList = (bno) => {
-  //     let param = {
-  //       bno: bno,
-  //     };
-  //     getReplyListApi(param).then((res) => {
-  //       if (typeof res === "object") {
-  //         detail.setDetail(res);
-  //         console.log(detail);
-  //       }
-  //     });
-  //   };
-
   // 댓글 삭제
-  const replyDeleteBtn = () => {
-    console.log();
-    let params = {
-      rno: 3,
-    };
-    // console.log(rno);
-    deleteReplyApi(params).then((res) => {
-      if (res.status === 200) {
-        console.log(res);
-        // alert(res.text());
-        searchReply();
-      } else {
-        // alert(res.text());
-      }
+  const replyDeleteBtn = async (e) => {
+    const number = Number(e.target.value);
+    console.log(number);
+    console.log(typeof number);
+    const res = await fetch(`${API_BASE_URL}/reply?rno=` + number, {
+      method: 'DELETE',
+      headers: {
+        'content-type': 'application/json',
+        Authorization: 'Bearer ' + localStorage.getItem('accessToken'),
+      },
     });
+
+    if (res.status === 200) {
+      alert('댓글이 삭제되었습니다.');
+      document.querySelector('.reply-content').value = '';
+      searchReply();
+    } else {
+      alert('댓글 삭제에 실패했습니다.');
+    }
   };
 
   // 글 수정
@@ -342,27 +337,28 @@ const BoardFreeReply = () => {
             </Button>
           </div>
         </div>
-        <div>
-          {reply.replyList.map((item) => (
-            <div
-              className='replies'
-              key={item.rno + item.content}
-            >
-              <div className='replies-writer'>{item.writer}</div>
-              <div className='replies-content'>{item.content}</div>
-              <div className='replies-date'>{item.regDate}</div>
-              {item.deleteButton && (
-                <Button
-                  className='reply-delete-button'
-                  variant='contained'
-                  onClick={replyDeleteBtn}
-                >
-                  삭제
-                </Button>
-              )}
-            </div>
-          ))}
-        </div>
+
+        {reply.replyList.map((item) => (
+          <div
+            className='replies'
+            // key={item.rno + item.content}
+            key={item.rno}
+          >
+            <div className='replies-writer'>{item.writer}</div>
+            <div className='replies-content'>{item.content}</div>
+            <div className='replies-date'>{item.regDate}</div>
+            {item.deleteButton && (
+              <Button
+                className='reply-delete-button'
+                variant='contained'
+                onClick={replyDeleteBtn}
+                value={item.rno}
+              >
+                삭제
+              </Button>
+            )}
+          </div>
+        ))}
       </div>
     </>
   );

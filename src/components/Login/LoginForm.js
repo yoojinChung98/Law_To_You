@@ -65,7 +65,6 @@ const LoginForm = ({ mode, setMode }) => {
       const userInfo = { id: data.id, name: data.name, mode: data.authority };
       if (data.authority === 'notApproval') {
         alert('미승인 상태의 변호사는 접근 권한이 제한될 수 있습니다.');
-        userInfo.mode = 'lawyer';
       }
       dispatch(setUser(userInfo));
     } else {
