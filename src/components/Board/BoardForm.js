@@ -33,7 +33,7 @@ const BoardForm = ({
                     to={
                       type === 'freeboard'
                         ? '/freereply?bno=' + no
-                        : '/freereply?consultNum=' + no
+                        : '/counsel/detail/' + no
                     }
                   >
                     {item.title}

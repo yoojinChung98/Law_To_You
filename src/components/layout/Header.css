@@ -51,6 +51,11 @@
   text-align: center;
   padding: 0px 130px;
 }
+.htab-policy {
+  text-align: center;
+  padding: 0px 130px;
+  color: #675d50;
+}
 .hbtndiv {
   width: 100%;
   line-height: 50px;
@@ -61,4 +66,20 @@
   border-bottom: 5px solid #675d50;
   color: #675d50;
   cursor: pointer;
+}
+.policy-wrapper {
+  display: flex;
+  justify-content: center;
+  margin: 0px;
+}
+.policy-content {
+  width: 1000px;
+  background-color: #f8f8f8;
+  padding: 20px 50px;
+  font-size: 15px;
+}
+
+.footer-policy-copyright {
+  font-size: 13px;
+  color: #675d50;
 }

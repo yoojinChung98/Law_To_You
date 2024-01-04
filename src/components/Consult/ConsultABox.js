@@ -45,7 +45,7 @@ const ConsultABox = ({ ansCont, userWriter, consultNum, existAdopted }) => {
       alert(
         '답변이 채택되었습니다. 깊은 상담은 마이페이지에서 등록할 수 있습니다.'
       );
-      navigate(`/counsel/detail/${consultNum}`);
+      window.location.reload();
     } else {
       // 응답코드 상태가 나뉘어있다면 에러코드에 따라 답변이 다르면 좋을 듯!
       alert('해당 답변을 채택할 수 없습니다.');

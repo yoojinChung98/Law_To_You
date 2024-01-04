@@ -74,7 +74,16 @@ const MyConsultList = ({ currentPage, setPBtnCnt }) => {
       const data = await res.json();
       console.log('data는: ', data);
       console.log('cNm은: ', cNm);
-      data.ifUpdated ? navigate(`/deep/${cNm}`) : navigate('/counsel/deep/');
+      data.ifUpdated
+        ? navigate(`/deep/${cNm}`)
+        : navigate('/counsel/deep/', {
+            state: {
+              qTitle: data.title,
+              qRoutes: data.routes,
+              qWriter: data.writer,
+              qContent: data.content,
+            },
+          });
     } else {
       const data = await res.text();
       console.log(data);
@@ -91,7 +100,7 @@ const MyConsultList = ({ currentPage, setPBtnCnt }) => {
           break;
         case 'no-adopted-answer':
           alert('일반 상담의 답변을 채택한 후 깊은 상담을 진행할 수 있습니다.');
-          navigate(`counsel/detail/${cNm}`);
+          navigate(`/counsel/detail/${cNm}`);
           break;
         default:
           alert('잘못된 접근 입니다.');
@@ -313,7 +322,7 @@ const MyConsultList = ({ currentPage, setPBtnCnt }) => {
 
   // 일반 상담을 삭제하는 로직
   const deleteCounsel = async (cNm) => {
-    let res = await fetch(`${BASE_URL}/mypage/counsel`, {
+    let res = await fetch(`${BASE_URL}/mypage/counsel?consultNum=${cNm}`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
@@ -326,6 +335,7 @@ const MyConsultList = ({ currentPage, setPBtnCnt }) => {
 
     if (res.status === 200) {
       alert('질문이 삭제되었습니다.');
+      window.location.reload();
     } else {
       // 에러코드 뭐오는지 모름.
       alert('삭제할 수 없는 질문입니다.');

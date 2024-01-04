@@ -84,6 +84,8 @@ const DeepPage = () => {
 
   const getAnss = async (dataQ) => {
     console.log('getAnss 함수 호출 완료!');
+    console.log('consultNum은: ', consultNum);
+    console.log('loggedUser.id', loggedUser.id);
     let res = await fetch(
       `${BASE_URL}/answer/detail?consultNum=${consultNum}`,
       {
@@ -128,8 +130,9 @@ const DeepPage = () => {
       }
     } else {
       // 응답 상태가 에러일 시 메인페이지로 이동 (counsel 로 보내면 권한에 따라 글쓰기로 보내지므로.)
+      console.log(await res.text());
       alert('이 글의 진입 권한이 없습니다.');
-      navigate('/');
+      // navigate('/'); // 다시 살려야하는 부분
     }
 
     render(dataQ, dataA, hasDeepA);

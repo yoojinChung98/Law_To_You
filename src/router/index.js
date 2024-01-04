@@ -24,6 +24,7 @@ import '../index.css';
 import commUtil from '../util/commUtil';
 import CounselWrite from '../components/Board/CounselWrite';
 import CounselDeepWrite from '../components/Board/CounselDeepWrite';
+import Policy from '../components/layout/Policy';
 const RouterIndex = () => {
   const isLogin = commUtil.isNotEmpty(localStorage.getItem('accessToken'));
 
@@ -42,6 +43,10 @@ const RouterIndex = () => {
 
   return (
     <Routes>
+      <Route
+        path='/policy/:pIdx'
+        element={<Policy />}
+      />
       <Route
         path='/login/'
         element={<LoginMain />}
