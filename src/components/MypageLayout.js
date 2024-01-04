@@ -4,6 +4,8 @@ import Header from './layout/Header';
 import Category from './layout/Category';
 import Footer from './layout/Footer';
 import { useSelector } from 'react-redux';
+import { API_BASE_URL } from '../config/host-config';
+import { useAppDispatch } from '../store';
 
 const MypageLayout = () => {
   // .css 파일 만들기 실어서 걍 인라인으로 박기 위한 변수
@@ -15,6 +17,7 @@ const MypageLayout = () => {
     margin: '0px auto',
   };
 
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const loggedUser = useSelector((state) => state.user);
 
@@ -53,7 +56,31 @@ const MypageLayout = () => {
         navigate('/bupbong/');
         break;
       default:
-        // 여기는 로그아웃 부분. 로그아웃 로직이 연결되도록 해야함.
+        const logout = async () => {
+          if (loggedUser.mode === 'lawyer' || loggedUser.mode === 'user') {
+            alert('로그아웃 되었습니다.');
+            localStorage.clear();
+            navigate('/');
+          }
+          try {
+            const res = await fetch(`${API_BASE_URL}/user/logout`, {
+              headers: {
+                Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+              },
+            });
+            console.log('accessToken', localStorage.getItem('accessToken'));
+            if (res.status === 200) {
+              localStorage.clear();
+              dispatch(logout());
+              alert('로그아웃 되었습니다.');
+              navigate('/');
+            }
+          } catch (error) {
+            console.error('로그아웃 에러:', error);
+            alert('로그아웃 실패');
+          }
+        };
+        logout();
         break;
     }
   };

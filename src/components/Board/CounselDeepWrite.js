@@ -84,7 +84,7 @@ const CounselDeepWrite = () => {
           <input
             placeholder='상담 제목을 입력해주세요'
             onChange={titleOnchangeEventHandler}
-            value={qTitle}
+            // value={qTitle}
           ></input>
         </div>
         <div className='form-content'>
