@@ -1,3 +1,5 @@
+// 댓글작성, 댓글 삭제 버튼 띄우기 까지.
+
 import { Button } from "@mui/material";
 import React, { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
@@ -35,6 +37,7 @@ const BoardFreeReply = () => {
   const [detail, setDetail] = useState({});
   const [editor, setEditor] = useState(null);
   const [content, setContent] = useState("");
+  const [title, setTitle] = useState("");
 
   const searchDetail = () => {
     const params = { bno };
@@ -42,6 +45,7 @@ const BoardFreeReply = () => {
       .then((res) => {
         setDetail(res);
         setContent(res.content);
+        setTitle(res.title);
         searchReply();
         console.log(mode);
         console.log(loggedUser);
@@ -122,6 +126,7 @@ const BoardFreeReply = () => {
   const [replyContent, setReplyContent] = useState({
     // bno: Number(bno),
     content: "",
+    rno: "",
   });
   // 댓글 등록
   const onChangeReplyContent = (e) => {
@@ -129,7 +134,7 @@ const BoardFreeReply = () => {
   };
 
   let params = {
-    bno: Number(bno),
+    bno: bno,
     content: replyContent,
   };
   const replyRegistBtn = () => {
@@ -161,27 +166,71 @@ const BoardFreeReply = () => {
   };
 
   // 글 수정
+  const fileInput = useRef(null);
+  const [attachedFile, setAttachedFile] = useState(null); // 파일
   const afOnChangeEventHandler = (e) => {
-    setAttachedFile({ attachedFile: e.target.files[0] });
+    // setAttachedFile({ attachedFile: e.target.files });
+    setAttachedFile({ attachedFile });
+  };
+
+  const [newTitle, setNewTitle] = useState();
+  const [newContent, setNewContent] = useState();
+
+  const newTitleHandler = (e) => {
+    // setNewTitle(e.target.value);
+    setTitle(e.target.value);
+    console.log(e.target.value);
+  };
+  const newContentHandler = (e) => {
+    // setNewContent(content);
+    setContent(e.target.value);
   };
 
   const detailModifyBtn = () => {
+    const routes = detail.routes.join(", ");
+
+    console.log("routes", routes);
+    let formData = new FormData();
+
+    let files = document.getElementById("attachedFile").files;
+    for (let file of files) {
+      console.log("file: ", file);
+      formData.append("attchedFile", file);
+    }
+
     let params = {
       freeboard: {
-        bno: 3,
-        title: "",
-        content: "",
-        routes: "",
-        attchedFile: [],
+        bno: Number(bno),
+        title: title,
+        content: content,
+        routes: routes,
       },
     };
-    putFreeModifyApi(params).then((res) => {
+    // for (let x = 0; x < files.length; x++) {
+    //   formData.append("attchedFile", files[x]);
+    //   // formData.append("attachedFile", routes);
+    // }
+
+    console.log("params", params);
+    formData.append(
+      "freeboard",
+      new Blob([JSON.stringify(params)], { type: "application/json" })
+    );
+    console.log("api들어가기전");
+    console.log(formData);
+    putFreeModifyApi(formData).then((res) => {
+      console.log("api", res);
       if (res.status === 200) {
-        alert("게시글이 수정되었습니다.");
+        setTitle(newTitle);
+        console.log("newTitle", newTitle);
+        setContent(newContent);
         searchReply();
+        // searchDetail();
+        navigate("/free");
       }
     });
   };
+
   // 글 삭제
   const detailDeleteBtn = () => {
     let param = {
@@ -204,17 +253,59 @@ const BoardFreeReply = () => {
     <>
       <div className="board">
         <div className="detail-wrapper">
-          <div className="detail-title">{detail.title}</div>
-          {commUtil.isNotEmpty(detail) && (
-            <Editor
-              style={{ height: "200px" }}
-              onChange={setContent} // setter 넣기
-              data={content ?? ""} //getter 넣기
-              editor={setEditor}
-              readOnly={detail.trueFalse !== 1}
-            />
+          <div className="detail-title">
+            {detail.trueFalse !== 1 ? (
+              detail.title
+            ) : (
+              <input
+                // enctype="multipart/form-data"
+                defaultValue={detail.title}
+                onChange={newTitleHandler}
+                value={newTitle}
+              ></input>
+            )}
+          </div>
+          {
+            commUtil.isNotEmpty(detail) && (
+              // (detail.trueFalse === 1 ? (
+              <Editor
+                style={{ height: "200px" }}
+                onChange={setContent} // setter 넣기
+                data={content ?? ""} //getter 넣기
+                editor={setEditor}
+                readOnly={detail.trueFalse !== 1}
+              />
+            )
+            // ) : (
+            //   <Editor
+            //     style={{ height: "200px" }}
+            //     // onChange={setContent} // setter 넣기
+            //     // onChange={newContentHandler}
+            //     data={content ?? ""} //getter 넣기
+            //     editor={setEditor}
+            //     readOnly={detail.trueFalse !== 1}
+            //   />
+            // ))
+          }
+
+          {detail.trueFalse === 1 ? (
+            <>
+              <div>이미지이미지</div>
+              <input
+                // enctype="multipart/form-data"
+                id="attachedFile"
+                ref={fileInput}
+                // accept="image/*"
+                onChange={afOnChangeEventHandler}
+                type="file"
+                multiple
+              />
+            </>
+          ) : (
+            <img></img>
           )}
         </div>
+
         {detail.trueFalse === 1 && (
           <div className="detail-button">
             <Button

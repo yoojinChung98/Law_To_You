@@ -21,7 +21,11 @@ export const postFreeWriteApi = (params) => {
 
 // 자유게시판 글 수정
 export const putFreeModifyApi = (params) => {
-  return axios.put("/freeboard/modify", params).then((res) => res.data);
+  return axios
+    .post("/freeboard/update", params, {
+      headers: { "Content-Type": "multipart/form-data" },
+    })
+    .then((res) => res.data);
 };
 
 // 자유게시판 상세 글 불러오기
