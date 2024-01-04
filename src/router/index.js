@@ -22,6 +22,11 @@ import DeepWrite from '../components/write/DeepWrite';
 import MypageLayout from '../components/MypageLayout';
 import '../index.css';
 import commUtil from '../util/commUtil';
+import KakaoLoginHandler from '../components/Login/KakaoLoginHandler';
+import NaverLoginHandler from '../components/Login/NaverLoginHandler';
+import MypageLayout from '../components/MypageLayout';
+import MyPostListPage from '../components/MyPostList/MyPostListPage';
+import MyConsultListPage from '../components/MyConsultList/MyConsultListPage';
 import CounselWrite from '../components/Board/CounselWrite';
 import CounselDeepWrite from '../components/Board/CounselDeepWrite';
 import Policy from '../components/layout/Policy';
@@ -63,7 +68,34 @@ const RouterIndex = () => {
         path='/*'
         element={<></>}
       ></Route>
+      {/* 마이페이지 부분 */}
+      <Route
+        path='/'
+        element={<MypageLayout />}
+      >
+        <Route
+          path='/mypage/user/'
+          element={<UserModify />}
+        ></Route>
+        <Route
+          path='/mypage/lawyer/'
+          element={<LawyerModify />}
+        ></Route>
+        <Route
+          path='/myfree/'
+          element={<MyPostListPage />}
+        ></Route>
+        <Route
+          path='/mycounsel/'
+          element={<MyConsultListPage />}
+        ></Route>
+        <Route
+          path='/bupbong/'
+          element={<Bupbong />}
+        ></Route>
+      </Route>
 
+      {/* 메인 부분 */}
       <Route element={<MainLayout />}>
         <Route
           path='/faq/'
@@ -86,7 +118,6 @@ const RouterIndex = () => {
           path='/freereply/'
           element={<BoardFreeReply />}
         ></Route>
-
         <Route
           path='/counsel/detail/:consultNum'
           element={<ConsultPage />}
@@ -102,33 +133,7 @@ const RouterIndex = () => {
           element={<CounselDeepWrite />}
         ></Route>
       </Route>
-      {/* 마이페이지 카테고리가 필요한 부분 */}
-      <Route element={<MypageLayout />}>
-        <Route
-          path='/mypage/user/'
-          element={<UserModify />}
-        ></Route>
-        <Route
-          path='/mypage/lawyer/'
-          element={<LawyerModify />}
-        ></Route>
-        <Route
-          path='/myfree/'
-          element={<MyPostListPage />}
-        ></Route>
-        <Route
-          path='/mycounsel/'
-          element={<MyConsultListPage />}
-        ></Route>
-        <Route
-          path='/deep/:consultNum/'
-          element={<DeepPage />}
-        ></Route>
-        <Route
-          path='/bupbong/'
-          element={<Bupbong />}
-        ></Route>
-      </Route>
+      
 
       <Route
         path='/joinlist/'

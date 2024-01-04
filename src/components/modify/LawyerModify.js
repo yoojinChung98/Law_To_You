@@ -160,8 +160,10 @@ const LawyerModify = () => {
     if (res.status === 200) {
       alert('회원 정보가 수정되었습니다!');
       window.location.reload();
+      return;
     } else {
       alert('서버와의 통신이 원활하지 않습니다!');
+      return;
     }
   };
 
@@ -172,11 +174,14 @@ const LawyerModify = () => {
     if (isEventOccurred) {
       if (isValid()) {
         fetchUserModi();
+        return;
       } else {
         alert('입력란을 다시 확인해주세요!');
+        return;
       }
     }
     fetchUserModi();
+    return;
   };
 
   // 회원 탈퇴 처리 함수
@@ -189,9 +194,11 @@ const LawyerModify = () => {
     if (res.status === 200) {
       alert('회원 탈퇴 처리되었습니다.');
       redirection('/');
+      return;
     } else {
       alert('서버와의 통신이 원활하지 않습니다!');
       redirection('/');
+      return;
     }
   };
   return (

@@ -1,8 +1,7 @@
 import { Button } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { API_BASE_URL } from '../../config/host-config';
-import { useDispatch, useSelector } from 'react-redux';
-import { setUser } from '../../store/userSlice';
+import { useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 
 const MyConsultList = ({ currentPage, setPBtnCnt }) => {

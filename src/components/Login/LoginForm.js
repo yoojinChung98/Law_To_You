@@ -74,7 +74,6 @@ const LoginForm = ({ mode, setMode }) => {
         );
       }
     }
-
     navigate('/');
   };
 

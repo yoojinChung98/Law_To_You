@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Outlet, useNavigate } from 'react-router-dom';
 import Header from './layout/Header';
 import Category from './layout/Category';
@@ -39,7 +39,7 @@ const MypageLayout = () => {
     setClickedCateIdx(idx);
     switch (idx) {
       case 0:
-        loggedUser.mode == 'user'
+        loggedUser.mode === 'user'
           ? navigate('/mypage/user/')
           : navigate('/mypage/lawyer/');
         break;
