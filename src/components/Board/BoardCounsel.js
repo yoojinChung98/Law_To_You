@@ -25,9 +25,13 @@ const BoardCounsel = () => {
   };
 
   let params = {
-    page: 1,
+    page: currentPage,
     size: 10,
   };
+
+  useEffect(() => {
+    console.log(currentPage);
+  });
 
   useEffect(() => {
     getCounselListApi(params)

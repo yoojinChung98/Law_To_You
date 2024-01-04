@@ -1,4 +1,4 @@
-import { Button } from '@mui/material';
+import { Box, Button, Modal, TextField, Typography } from '@mui/material';
 import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import {
@@ -36,6 +36,30 @@ const BoardFreeReply = () => {
   const [detail, setDetail] = useState({});
   const [editor, setEditor] = useState(null);
   const [content, setContent] = useState('');
+  const [imgUrl, setImgUrl] = useState([]); // 게시판 이미지 url
+
+  // 모달창 제어 변수들
+  const [modalOpen, setModalOpen] = React.useState(false);
+  const handleModalOpen = () => setModalOpen(true);
+  const handleModalClose = () => setModalOpen(false);
+  const [clickedImgIdx, setClickedImgIdx] = useState();
+
+  // 모달창 스타일
+  const modalStyle = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    bgcolor: '#ffffff',
+    border: '2px solid #000',
+    boxShadow: 24,
+    p: 4,
+  };
+
+  const viewImg = (index) => {
+    setClickedImgIdx(index);
+    handleModalOpen();
+  };
 
   const searchDetail = () => {
     const params = { bno };
@@ -43,7 +67,9 @@ const BoardFreeReply = () => {
       .then((res) => {
         setDetail(res);
         setContent(res.content);
+        setImgUrl(res.routes);
         searchReply();
+        console.log('ImgUrl', res.routes);
         console.log(mode);
         console.log(loggedUser);
       })
@@ -72,6 +98,19 @@ const BoardFreeReply = () => {
         }
         searchReply();
       });
+  };
+
+  const modalImg = () => {
+    console.log('이미지 ', imgUrl);
+    if (imgUrl == null) return null;
+    return imgUrl.map((iUrl, index) => {
+      <img
+        className='previewImg'
+        alt='Img'
+        src={iUrl}
+        onClick={() => viewImg(index)}
+      />;
+    });
   };
 
   // 댓글 리스트 가져오기
@@ -215,16 +254,54 @@ const BoardFreeReply = () => {
       <div className='board'>
         <div className='detail-wrapper'>
           <div className='detail-title'>{detail.title}</div>
-          {commUtil.isNotEmpty(detail) && (
-            <Editor
-              style={{ height: '200px' }}
-              onChange={setContent} // setter 넣기
-              data={content ?? ''} //getter 넣기
-              editor={setEditor}
-              readOnly={detail.trueFalse !== 1}
-            />
-          )}
+          <Editor
+            style={{ height: '200px' }}
+            onChange={setContent} // setter 넣기
+            data={content ?? ''} //getter 넣기
+            editor={setEditor}
+            readOnly={detail.trueFalse !== 1}
+          />
         </div>
+        <div className='freeboardFiles'>
+          첨부파일
+          <div>
+            {imgUrl.map((imgFile, index) => (
+              <img
+                alt='freeboardImgFile'
+                src={imgFile}
+                style={{ width: '90px', height: '90px' }}
+                onClick={() => viewImg(index)}
+              />
+            ))}
+          </div>
+        </div>
+        <div className='preview-box'>
+          <Modal
+            open={modalOpen}
+            onClose={handleModalClose}
+            aria-labelledby='modal-modal-title'
+            aria-describedby='modal-modal-description'
+            style={{
+              backgroundColor: 'rgb(250,250,250,0.5)',
+            }}
+          >
+            <Box sx={modalStyle}>
+              <Typography
+                id='modal-modal-description'
+                sx={{ mt: 2 }}
+              >
+                {
+                  <img
+                    alt='freeboardImg'
+                    src={imgUrl[clickedImgIdx]}
+                    style={{ width: 'auto', height: 'auto' }}
+                  />
+                }
+              </Typography>
+            </Box>
+          </Modal>
+        </div>
+
         {detail.trueFalse === 1 && (
           <div className='detail-button'>
             <Button
@@ -260,6 +337,7 @@ const BoardFreeReply = () => {
             </Button>
           </div>
         </div>
+
         {reply.replyList.map((item) => (
           <div
             className='replies'

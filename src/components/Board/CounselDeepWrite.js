@@ -87,6 +87,7 @@ const CounselDeepWrite = () => {
           <span>제목</span>
           <input
             placeholder='상담 제목을 입력해주세요'
+            // onChange={titleOnchangeEventHandler}
             ref={cTitlRef}
           ></input>
         </div>
