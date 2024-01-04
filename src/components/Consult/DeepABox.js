@@ -29,6 +29,83 @@ const DeepABox = (ansCont, consultNum, hasDeepA, qContent) => {
     p: 4,
   };
 
+  // 프리뷰 이미지
+  const viewImg = (index) => {
+    setClickedImgIdx(index);
+    handleModalOpen();
+  };
+
+  // // 전달받은 바이트배열을 이미지로 변환시키는 함수
+  // const bToImg = () => {
+  //   let bList = qContent.routes;
+  //   let iUrlList = [];
+  //   bList.map((byteArray) => {
+  //     // 바이트 배열을 Blob 객체로 반환
+  //     let blob = new Blob([byteArray], { type: 'image/jpeg' });
+  //     // Blob 객체를 데이터 URL로 변환
+  //     let imageUrl = URL.createObjectURL(blob);
+  //     iUrlList.push(imageUrl);
+  //   });
+  //   setIUrlList(iUrlList);
+
+  //   return iUrlList.map((iUrl, index) => (
+  //     <img
+  //       className='previewImg'
+  //       alt='Img'
+  //       src={iUrl}
+  //       onClick={viewImg(index)}
+  //     />
+  //   ));
+  // };
+
+  // // 전달받은 바이트배열을 이미지로 변환시키는 함수
+  // const bToImg = () => {
+  //   let bList = qContent.routes;
+  //   let iUrlList = [];
+  //   bList.map((byteArray) => {
+  //     // 바이트 배열을 Blob 객체로 반환
+  //     let blob = new Blob([byteArray], { type: 'image/jpeg' });
+  //     // Blob 객체를 데이터 URL로 변환
+  //     let imageUrl = URL.createObjectURL(blob);
+  //     iUrlList.push(imageUrl);
+  //   });
+  //   setIUrlList(iUrlList);
+
+  //   return iUrlList.map((iUrl, index) => (
+  //     <img
+  //       className='previewImg'
+  //       alt='Img'
+  //       src={iUrl}
+  //       onClick={viewImg(index)}
+  //     />
+  //   ));
+  // };
+
+  // 전달받은 링크배열을 그냥 이미지 src 로 박아버리는 함수
+  const bToImg = () => {
+    let bList = qContent.routes;
+    // let iUrlList = [];
+    if (bList == null) return null;
+    // bList.map((byteArray) => {
+    //   // 바이트 배열을 Blob 객체로 반환
+    //   let blob = new Blob([byteArray], { type: 'image/jpeg' });
+    //   // Blob 객체를 데이터 URL로 변환
+    //   let imageUrl = URL.createObjectURL(blob);
+    //   iUrlList.push(imageUrl);
+    //   return byteArray;
+    // });
+    // setIUrlList(iUrlList);
+
+    return bList.map((bUrl, index) => (
+      <img
+        className='previewImg'
+        alt='Img'
+        src={bUrl}
+        onClick={() => viewImg(index)}
+      />
+    ));
+  };
+
   // 답변이 없는경우 (ansCont = null), 전문 변호사의 다변을 기다리고 있다는 박스가 단 하나만 떠야함.
   const renderAns = () => {
     if (hasDeepA) {
@@ -102,35 +179,6 @@ const DeepABox = (ansCont, consultNum, hasDeepA, qContent) => {
         </span>
       );
     }
-  };
-
-  // 프리뷰 이미지
-  const viewImg = (index) => {
-    setClickedImgIdx(index);
-    handleModalOpen();
-  };
-
-  // 전달받은 바이트배열을 이미지로 변환시키는 함수
-  const bToImg = () => {
-    let bList = qContent.routes;
-    let iUrlList = [];
-    bList.map((byteArray) => {
-      // 바이트 배열을 Blob 객체로 반환
-      let blob = new Blob([byteArray], { type: 'image/jpeg' });
-      // Blob 객체를 데이터 URL로 변환
-      let imageUrl = URL.createObjectURL(blob);
-      iUrlList.push(imageUrl);
-    });
-    setIUrlList(iUrlList);
-
-    return iUrlList.map((iUrl, index) => (
-      <img
-        className='previewImg'
-        alt='Img'
-        src={iUrl}
-        onClick={viewImg(index)}
-      />
-    ));
   };
 
   return <>{renderAns()}</>;

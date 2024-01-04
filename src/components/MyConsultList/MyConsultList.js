@@ -75,7 +75,7 @@ const MyConsultList = ({ currentPage, setPBtnCnt }) => {
       console.log('cNm은: ', cNm);
       data.ifUpdated
         ? navigate(`/deep/${cNm}`)
-        : navigate('/counsel/deep/', {
+        : navigate(`/counsel/deep/${cNm}`, {
             state: {
               qTitle: data.title,
               qRoutes: data.routes,
@@ -94,7 +94,7 @@ const MyConsultList = ({ currentPage, setPBtnCnt }) => {
           // 마이페이지에서 자신이 등록하지 않은 온라인 상담을 보는 경우는 직접 url을 적어서 들어오는 경우이거나 로그아웃되어있거나 둘 중 하나이므로
           navigate('/');
           break;
-        case 'no-short-answer':
+        case 'no-short-answers':
           alert('아직 답변이 달리지 않아 깊은 상담이 불가능합니다.');
           break;
         case 'no-adopted-answer':
