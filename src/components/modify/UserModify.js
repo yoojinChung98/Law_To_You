@@ -302,16 +302,16 @@ const UserModify = () => {
                       id='new-password-check'
                       onChange={pwCheckHandler}
                     />
-                    <span
-                      className='msg pwCheck'
-                      style={
-                        correct.pwCheck ? { color: 'green' } : { color: 'red' }
-                      }
-                    >
-                      {message.pwCheck}
-                    </span>
                   </td>
                 </tr>
+                <span
+                  className='msg pwCheck'
+                  style={
+                    correct.pwCheck ? { color: 'green' } : { color: 'red' }
+                  }
+                >
+                  {message.pwCheck}
+                </span>
                 <tr>
                   <td className='m-title nickname'>닉네임</td>
                   <td>

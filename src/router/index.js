@@ -94,6 +94,7 @@ import MainLayout from '../components/MainLayout';
 import MainPage from '../components/MainPage';
 import LawyerModify from '../components/modify/LawyerModify';
 import UserModify from '../components/modify/UserModify';
+import JoinListPage from '../components/JoinList/JoinListPage';
 
 import CounselDeepWrite from '../components/Board/CounselDeepWrite';
 import CounselWrite from '../components/Board/CounselWrite';
@@ -117,6 +118,10 @@ const RouterIndex = () => {
 
   return (
     <Routes>
+      <Route
+        path='/joinlist/'
+        element={<JoinListPage />}
+      />
       <Route
         path='/login/'
         element={<LoginMain />}

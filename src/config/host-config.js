@@ -2,7 +2,8 @@
 const clientHostName = window.location.hostname;
 
 // let backEndHostName = 'http://43.201.40.179'; // 백엔드 서버 호스트 이름
-let backEndHostName = 'http://localhost:80'; // 백엔드 서버 호스트 이름
+// let backEndHostName = 'http://54.180.52.142'; // 백엔드 서버 호스트 이름
+let backEndHostName = 'http://localhost:80';
 
 // if (clientHostName === 'localhost') {
 //   console.log('clientHostName는 : ', clientHostName);

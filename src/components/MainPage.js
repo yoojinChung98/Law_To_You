@@ -27,7 +27,6 @@ const MainPage = () => {
   const mode = useAppSelector((state) => state.user.mode);
 
   const logoutBtnOnclick = async () => {
-    console.log('logoutApi 실행 전');
     try {
       const res = await fetch(`${API_BASE_URL}/user/logout`, {
         headers: {
@@ -35,7 +34,6 @@ const MainPage = () => {
         },
       });
       console.log('accessToken', localStorage.getItem('accessToken'));
-      console.log('logoutApi 실행', res);
       if (res.status === 200) {
         localStorage.clear();
         dispatch(logout());
@@ -104,13 +102,25 @@ const MainPage = () => {
         {/* <span className="mainJoinBtn">회원가입</span> */}
         {/* <div className="mainBtnBar" /> */}
         {/* <span className="mainLoginBtn">로그인</span> */}
-        <Link
-          to='/join'
-          className='mainJoinBtn'
-        >
-          회원가입
-        </Link>
-        {}
+
+        {isLogin ? (
+          <>
+            <Link
+              to='/mypage'
+              className='mainJoinBtn'
+            >
+              마이페이지
+            </Link>
+          </>
+        ) : (
+          <Link
+            to='/join'
+            className='mainJoinBtn'
+          >
+            회원가입
+          </Link>
+        )}
+
         <div className='mainBtnBar' />
 
         {!isLogin ? (
@@ -124,6 +134,12 @@ const MainPage = () => {
           <Link
             className='mainLoginBtn'
             onClick={logoutBtnOnclick}
+            style={{
+              width: '100px',
+              height: '100px',
+              overflow: 'hidden',
+              whiteSpace: 'nowrap',
+            }}
           >
             로그아웃
           </Link>
