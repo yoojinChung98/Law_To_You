@@ -1,11 +1,7 @@
 import React, { useState } from 'react';
-import Header from '../layout/Header';
-import Footer from '../layout/Footer';
-import Category from '../layout/Category';
 import MyConsultList from './MyConsultList';
 import { Pagination } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
 
 const MyConsultListPage = () => {
   const navigate = useNavigate();

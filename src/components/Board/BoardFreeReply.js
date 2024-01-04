@@ -1,5 +1,6 @@
 import { Button } from "@mui/material";
 import React, { useEffect, useRef, useState } from "react";
+import { useSelector } from "react-redux";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import {
   deleteFreeDeleteApi,
@@ -12,21 +13,19 @@ import {
   postReplyApi,
 } from "../../api/board/ReplyApi";
 import { useAppDispatch, useAppSelector } from "../../store";
-import { setUser } from "../../store/userSlice";
 import commUtil from "../../util/commUtil";
 import Editor from "../common/Editor";
-
-const dispatch = useAppDispatch;
-
 const BoardFreeReply = () => {
-  const fileInput = useRef(null);
+  const dispatch = useAppDispatch;
 
+  const loggedUser = useSelector((state) => state.user);
   const navigate = useNavigate();
 
   const mode = useAppSelector((state) => state.user.mode);
-  // const nick = useAppSelector((state) => state.user.nickname);
-  const name = useAppSelector((state) => state.user.name);
-  dispatch(setUser({}));
+  const id = loggedUser.id;
+  const name = loggedUser.name;
+
+  // dispatch(setUser({}));
 
   const [queryParams] = useSearchParams();
   const bno = queryParams.get("bno") ?? null;
@@ -36,12 +35,6 @@ const BoardFreeReply = () => {
   const [detail, setDetail] = useState({});
   const [editor, setEditor] = useState(null);
   const [content, setContent] = useState("");
-  const [title, setTitle] = useState("");
-  const [attachedFile, setAttachedFile] = useState([]); // 파일
-
-  const titleOnchangeHandler = (e) => {
-    setTitle(e.target.value);
-  };
 
   const searchDetail = () => {
     const params = { bno };
@@ -51,16 +44,38 @@ const BoardFreeReply = () => {
         setContent(res.content);
         searchReply();
         console.log(mode);
-        console.log(name);
+        console.log(loggedUser);
       })
       .catch((error) => {
         console.log(error);
+        if (bno === "1") {
+          setDetail({
+            trueFalse: 1,
+            title: "제목",
+            content: "<p>안녕하세요<strong>변호사</strong>에요</p>",
+            writer: "작성자",
+            routes: [],
+            regDate: "23.1.1",
+          });
+          setContent("<p>안녕하세요<strong>변호사</strong>에요</p>");
+        } else {
+          setDetail({
+            trueFalse: 0,
+            title: "두번째 제목",
+            content: "<p>안녕하세요<strong>변호사</strong>아님</p>",
+            writer: "작성자두번째",
+            routes: [],
+            regDate: "23.1.1",
+          });
+          setContent("<p>안녕하세요<strong>변호사</strong>아님</p>");
+        }
+        searchReply();
       });
   };
 
   // 댓글 리스트 가져오기
   const [reply, setReply] = useState({
-    count: 2,
+    count: "",
     replyList: [],
   });
 
@@ -72,13 +87,40 @@ const BoardFreeReply = () => {
       })
       .catch((error) => {
         // dummy
-        setReply({});
+        setReply({
+          count: 2,
+          replyList: [
+            {
+              lawyerId: "aaa",
+              userId: "ddd",
+              content: "ㅋㅋ",
+              writer: "ddd",
+              regDate: "23.12.7",
+              deleteButton: true,
+            },
+            {
+              lawyerId: "bbb",
+              userId: "eee",
+              content: "퓨ㅠㅠ",
+              writer: "eee",
+              regDate: "23.12.7",
+              deleteButton: true,
+            },
+            {
+              lawyerId: "ccc",
+              userId: "fff",
+              content: "ㅎㅎ",
+              writer: "fff",
+              regDate: "23.12.7",
+              deleteButton: true,
+            },
+          ],
+        });
       });
   };
 
   const [replyContent, setReplyContent] = useState({
     // bno: Number(bno),
-    rno: "",
     content: "",
   });
   // 댓글 등록
@@ -102,13 +144,18 @@ const BoardFreeReply = () => {
 
   // 댓글 삭제
   const replyDeleteBtn = () => {
+    console.log();
     let params = {
       rno: replyContent.rno,
     };
+    // console.log(rno);
     deleteReplyApi(params).then((res) => {
-      if ((res.status = 200)) {
-        alert("댓글삭제");
+      if (res.status === 200) {
+        console.log(res);
+        // alert(res.text());
         searchReply();
+      } else {
+        // alert(res.text());
       }
     });
   };
@@ -120,29 +167,17 @@ const BoardFreeReply = () => {
 
   const detailModifyBtn = () => {
     let params = {
-      bno: bno,
-      title: title,
-      content: content,
-      routes: detail.routes,
+      freeboard: {
+        bno: 3,
+        title: "",
+        content: "",
+        routes: "",
+        attchedFile: [],
+      },
     };
-
-    let formData = new FormData();
-    let routes = detail.routes;
-
-    let files = document.getElementById("attachedFile").files;
-    for (let x = 0; x < files.length; x++) {
-      formData.append("attachedFile", files[x]);
-      formData.append("attachedFile", routes);
-    }
-
-    formData.append(
-      "freeboard",
-      new Blob([JSON.stringify(params)], { type: "application/json" })
-    );
-
-    putFreeModifyApi(formData).then((res) => {
+    putFreeModifyApi(params).then((res) => {
       if (res.status === 200) {
-        alert("수정요");
+        alert("게시글이 수정되었습니다.");
         searchReply();
       }
     });
@@ -154,7 +189,8 @@ const BoardFreeReply = () => {
     };
     deleteFreeDeleteApi(param).then((res) => {
       if (typeof res === "string") {
-        // searchReply();
+        alert("게시글이 삭제되었습니다.");
+        searchReply();
         navigate("/free");
       }
     });
@@ -168,33 +204,15 @@ const BoardFreeReply = () => {
     <>
       <div className="board">
         <div className="detail-wrapper">
-          <div className="detail-title" onChange={titleOnchangeHandler}>
-            {detail.title}
-          </div>
+          <div className="detail-title">{detail.title}</div>
           {commUtil.isNotEmpty(detail) && (
-            <>
-              <Editor
-                style={{ height: "200px" }}
-                onChange={setContent} // setter 넣기
-                data={content ?? ""} //getter 넣기
-                editor={setEditor}
-                readOnly={detail.trueFalse !== 1}
-              />
-              <input
-                id="files"
-                ref={fileInput}
-                // accept="image/*"
-                onChange={afOnChangeEventHandler}
-                type="file"
-              />
-              <input
-                id="attachedFile"
-                ref={fileInput}
-                // accept="image/*"
-                onChange={afOnChangeEventHandler}
-                type="file"
-              />
-            </>
+            <Editor
+              style={{ height: "200px" }}
+              onChange={setContent} // setter 넣기
+              data={content ?? ""} //getter 넣기
+              editor={setEditor}
+              readOnly={detail.trueFalse !== 1}
+            />
           )}
         </div>
         {detail.trueFalse === 1 && (

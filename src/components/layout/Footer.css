@@ -39,4 +39,6 @@
 }
 .footer-info {
   margin: 4px 0px;
+  display: flex;
+  flex-direction: row;
 }

@@ -9,6 +9,12 @@ const URL = API_BASE_URL;
 const CounselWrite = () => {
   const navigate = useNavigate();
 
+  // const [selectedValue, setSelectedValue] = useState('가정법률');
+  // const selectionOnchangeEventHandler = (e) => {
+  //   setSelectedValue(e.target.value);
+  //   console.log(e.target.value);
+  // };
+
   const [data, setData] = useState({
     title: "",
     content: "",
@@ -63,13 +69,20 @@ const CounselWrite = () => {
       .then((result) => {
         if (typeof result === "object") {
           alert("일반상담등록!");
-          navigate(`/counsel/write`);
+          navigate("/counsel/write");
         } else {
           console.error(result.error);
         }
       });
   };
-  const counselcancelhandler = () => {};
+  const counselcancelhandler = () => {
+    navigate("/faq/");
+  };
+
+  const goToFaq = () => {
+    let lSec = data.largeSection;
+    navigate("/faq/");
+  };
 
   return (
     <div className="board">
@@ -129,7 +142,11 @@ const CounselWrite = () => {
             <option value="창업">창업</option>
             <option value="환경/에너지">환경/에너지</option>
           </select>
-          <Button variant="contained" className="faq-browse">
+          <Button
+            variant="contained"
+            className="faq-browse"
+            onClick={() => goToFaq()}
+          >
             법률 백문백답 보러가기
           </Button>
         </div>

@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Outlet, useNavigate } from 'react-router-dom';
 import Header from './layout/Header';
 import Category from './layout/Category';
@@ -27,6 +27,8 @@ const MypageLayout = () => {
     '로그아웃',
   ];
 
+  const cateTitle = '마이페이지';
+
   // 클릭된 카테고리의 인덱스값. 가정법률 idx = 17
   const [clickedCateIdx, setClickedCateIdx] = useState();
 
@@ -37,7 +39,7 @@ const MypageLayout = () => {
     setClickedCateIdx(idx);
     switch (idx) {
       case 0:
-        loggedUser.mode == 'user'
+        loggedUser.mode === 'user'
           ? navigate('/mypage/user/')
           : navigate('/mypage/lawyer/');
         break;
@@ -100,6 +102,7 @@ const MypageLayout = () => {
           categoryList={categories}
           clickedIdx={clickedCateIdx}
           cateClick={cateClick}
+          cateTitle={cateTitle}
         />
         <Outlet />
       </div>

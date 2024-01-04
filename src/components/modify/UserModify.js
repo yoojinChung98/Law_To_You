@@ -177,7 +177,7 @@ const UserModify = () => {
         if (res.status === 200) return res.json();
         else if (res.status === 403) {
           alert('로그인이 필요한 서비스입니다.');
-          window.location.reload();
+          redirection('/login/');
           return;
         } else {
           alert('관리자에게 문의하세요!');
@@ -218,8 +218,11 @@ const UserModify = () => {
     if (res.status === 200) {
       alert('회원 정보가 수정되었습니다!');
       window.location.reload();
+      return;
     } else {
       alert('서버와의 통신이 원활하지 않습니다!');
+      redirection('/');
+      return;
     }
   };
 
@@ -230,11 +233,14 @@ const UserModify = () => {
     if (isEventOccurred) {
       if (isValid()) {
         fetchUserModi();
+        return;
       } else {
         alert('입력란을 다시 확인해주세요!');
+        return;
       }
     }
     fetchUserModi();
+    return;
   };
 
   // 회원 탈퇴 처리 함수
@@ -248,9 +254,11 @@ const UserModify = () => {
       localStorage.clear();
       alert('회원 탈퇴 처리되었습니다.');
       window.location.href = '/';
+      return;
     } else {
       alert('서버와의 통신이 원활하지 않습니다!');
       redirection('/');
+      return;
     }
   };
 
