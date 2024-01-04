@@ -21,32 +21,29 @@ const BoardForm = ({
           </tr>
         </thead>
         <tbody>
-          {data
-            .slice((currentPage - 1) * 10, currentPage * 10)
-            .map((item, index) => {
-              const no = type === "freeboard" ? item.bno : item.consultNum;
-              return (
-                <tr key={no ?? index}>
-                  <td>{no ?? index}</td>
-                  <td>
-                    <Link
-                      className="link"
-                      style={{ textDecoration: "none" }}
-                      to={
-                        type === "freeboard"
-                          ? "/freereply?bno=" + no
-                          : "/freereply?consultNum=" + no
-                      }
-                    >
-                      {item.title}
-                    </Link>
-                  </td>
-                  {/* <td>{item.title}</td> */}
-                  <td>{item.writer}</td>
-                  <td>{item.regDate}</td>
-                </tr>
-              );
-            })}
+          {data.map((item, index) => {
+            const no = type === "freeboard" ? item.bno : item.consultNum;
+            return (
+              <tr key={no ?? index}>
+                <td>{no ?? index}</td>
+                <td>
+                  <Link
+                    className="link"
+                    style={{ textDecoration: "none" }}
+                    to={
+                      type === "freeboard"
+                        ? "/freereply?bno=" + no
+                        : "/freereply?consultNum=" + no
+                    }
+                  >
+                    {item.title}
+                  </Link>
+                </td>
+                <td>{item.writer}</td>
+                <td>{item.regDate}</td>
+              </tr>
+            );
+          })}
         </tbody>
       </table>
     </div>

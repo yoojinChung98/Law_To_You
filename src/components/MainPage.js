@@ -34,6 +34,7 @@ const MainPage = () => {
           Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
         },
       });
+      console.log('accessToken', localStorage.getItem('accessToken'));
       console.log('logoutApi 실행', res);
       if (res.status === 200) {
         localStorage.clear();
