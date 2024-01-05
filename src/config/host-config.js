@@ -2,7 +2,7 @@
 const clientHostName = window.location.hostname;
 
 // let backEndHostName = 'http://localhost:80';
-let backEndHostName = 'http://54.180.52.142'; // 백엔드 서버 호스트 이름
+let backEndHostName = "http://54.180.52.142"; // 백엔드 서버 호스트 이름
 
 // if (clientHostName === 'localhost') {
 //   console.log('clientHostName는 : ', clientHostName);
@@ -19,7 +19,7 @@ let backEndHostName = 'http://54.180.52.142'; // 백엔드 서버 호스트 이�
 //   backEndHostName = 'http://15.164.178.169'; // ec2 의 도메인주소가 들어와야 함.
 // }
 
-export const API_BASE_URL = backEndHostName + '/api';
+export const API_BASE_URL = backEndHostName + "/api";
 // export const USER = "/api/user";
 // export const LAWYER = "/api/lawyer";
 // export const MYPAGE = "/api/mypage";

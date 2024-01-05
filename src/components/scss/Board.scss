@@ -1,5 +1,5 @@
 .board {
-  font-family: 'SDSamliphopangche_Basic';
+  font-family: "SDSamliphopangche_Basic";
   display: flex;
   justify-content: center;
   align-items: center;
@@ -11,7 +11,7 @@
   // 게시판 상단 설명 헤더
   .board-header {
     text-align: left;
-    font-family: 'SDSamliphopangche_Basic';
+    font-family: "SDSamliphopangche_Basic";
     font-style: normal;
     font-weight: 550;
 
@@ -68,7 +68,7 @@
       height: 71px;
       border: 2px solid #d9d9d9;
       color: #000;
-      font-family: S 'SDSamliphopangche_Basic';
+      font-family: S "SDSamliphopangche_Basic";
       font-size: 27px;
       font-style: normal;
       font-weight: 600;
@@ -100,13 +100,12 @@
 
   // 자유게시판 글 상세 및 댓글
   .detail-wrapper {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    width: 50%;
+    width: calc(100vw / 1.7);
+    height: 350px;
     flex-shrink: 0;
     border: 1px solid #d9d9d9;
-    background: #f8f8f8;
+    border-radius: 5px;
+    background: #fff;
     padding: 20px;
     color: #000;
     text-align: left;
@@ -120,11 +119,19 @@
     }
 
     .detail-title {
-      font-family: 'SDSamliphopangche_Basic';
+      font-family: "SDSamliphopangche_Basic";
       font-size: 15px;
       font-weight: 550;
       letter-spacing: 1.5px;
       margin-bottom: 20px;
+      input {
+        width: 300px;
+        height: 30px;
+        border-radius: 5px;
+        border: 1px solid #efefef;
+        font-family: "SDSamliphopangche_Basic";
+        padding-left: 10px;
+      }
     }
     .detail-content {
       font-family: Inter;
@@ -162,7 +169,7 @@
 
     .reply-writer {
       color: #000;
-      font-family: 'SDSamliphopangche_Basic';
+      font-family: "SDSamliphopangche_Basic";
       font-size: 15px;
       font-style: normal;
       font-weight: 550;
@@ -191,7 +198,7 @@
         flex-shrink: 0;
         border-radius: 5px;
         background: #aa9e8f;
-        font-family: 'SDSamliphopangche_Basic';
+        font-family: "SDSamliphopangche_Basic";
         color: #fff;
         margin-left: 10px;
       }
@@ -206,7 +213,7 @@
 
     .replies-writer {
       color: #000;
-      font-family: 'SDSamliphopangche_Basic';
+      font-family: "SDSamliphopangche_Basic";
       font-size: 15px;
       font-style: normal;
       font-weight: 550;
@@ -242,7 +249,7 @@
 
   thead {
     color: #000;
-    font-family: 'SDSamliphopangche_Basic';
+    font-family: "SDSamliphopangche_Basic";
     font-size: 20px;
     height: 70px;
     border-bottom: 2px solid black;
@@ -391,7 +398,7 @@
     background: var(--light-brown, #aa9e8f) !important;
     color: #fff;
     //   text-align: center;
-    font-family: 'SDSamliphopangche_Basic' !important;
+    font-family: "SDSamliphopangche_Basic" !important;
     font-size: 22px !important;
     font-style: normal;
     font-weight: 550;
@@ -406,7 +413,7 @@
     border-radius: 10px;
     background: #675d50;
     color: #fff;
-    font-family: 'SDSamliphopangche_Basic' !important;
+    font-family: "SDSamliphopangche_Basic" !important;
     font-size: 15px;
     font-style: normal;
     font-weight: 600;
@@ -420,7 +427,7 @@
     border-radius: 10px;
     background: #aa9e8f;
     color: #fff;
-    font-family: 'SDSamliphopangche_Basic' !important;
+    font-family: "SDSamliphopangche_Basic" !important;
     font-size: 15px;
     font-style: normal;
     font-weight: 600;
@@ -433,13 +440,13 @@
   .detail-modify-button {
     background: #aa9e8f;
     color: #fff;
-    font-family: 'SDSamliphopangche_Basic' !important;
+    font-family: "SDSamliphopangche_Basic" !important;
     margin-right: 5px;
   }
   .detail-delete-button {
     background: #675d50;
     color: #fff;
-    font-family: 'SDSamliphopangche_Basic' !important;
+    font-family: "SDSamliphopangche_Basic" !important;
   }
 }
 
