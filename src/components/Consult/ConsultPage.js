@@ -48,16 +48,20 @@ const ConsultPage = () => {
         },
       }
     );
+    console.log(res);
 
     // 응답 상태가 에러일 시 메인페이지로 이동 (counsel 로 보내면 권한에 따라 글쓰기로 보내지므로.)
-    if (res.status != 200) {
+    if (res.status !== 200) {
       alert('이 글의 진입 권한이 없습니다.');
+      alert(res.text());
       navigate('/');
     }
 
     const dataQ = await res.json();
     // 응답상태가 200 인 경우 조건에 따라 입밴 / 응답값 상태변수에 할당
-    //의뢰인이라면 아이디가 같은 경우에만 본 페이지 열람이 가능함
+    // 의뢰인이라면 아이디가 같은 경우에만 본 페이지 열람이 가능함
+
+    /*
     if (loggedUser.mode === 'user') {
       console.log('data.writer: ', dataQ.writer);
       console.log('loggedUser.id: ', loggedUser.name);
@@ -77,6 +81,9 @@ const ConsultPage = () => {
       console.log('qContent 세팅 직전');
       setQContent(dataQ);
     }
+    */
+
+    setQContent(dataQ);
 
     getAnss(dataQ);
   };
@@ -143,7 +150,10 @@ const ConsultPage = () => {
         );
         setRealAnswer(renderABox(dataQ, dataA, existAdopted));
       }
-    } else if (loggedUser.mode === 'lawyer') {
+    } else if (
+      loggedUser.mode === 'lawyer' ||
+      loggedUser.mode === 'notApproval'
+    ) {
       console.log('lawyer 모드인 경우!');
       if (!!qContent) {
         console.log('lawyer: qContent가 truthy 인 경우! ');
@@ -153,7 +163,11 @@ const ConsultPage = () => {
               qContent={dataQ}
               aContentList={dataA}
             />
-            {flg ? '' : <ConsultABoxWrite consultNum={consultNum} />}
+            {flg || loggedUser.mode === 'notApproval' ? (
+              ''
+            ) : (
+              <ConsultABoxWrite consultNum={consultNum} />
+            )}
           </>
         );
         setRealAnswer(renderABox(dataQ, dataA, existAdopted));

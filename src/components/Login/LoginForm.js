@@ -13,7 +13,9 @@ import { setUser } from '../../store/userSlice';
 import commUtil from '../../util/commUtil';
 import '../scss/Login.scss';
 import { API_BASE_URL } from '../../config/host-config';
+import { useSelector } from 'react-redux';
 const LoginForm = ({ mode, setMode }) => {
+  const loggedUser = useSelector((state) => state.user);
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
@@ -52,12 +54,17 @@ const LoginForm = ({ mode, setMode }) => {
     });
 
     if (res.status === 200) {
+      if (loggedUser.mode === 'master') {
+        console.log(loggedUser.mode);
+        console.log('master로그인');
+        navigate('/joinList/');
+        return;
+      }
       const data = await res.json();
       localStorage.setItem('accessToken', data.accessToken);
       const userInfo = { id: data.id, name: data.name, mode: data.authority };
       if (data.authority === 'notApproval') {
         alert('미승인 상태의 변호사는 접근 권한이 제한될 수 있습니다.');
-        userInfo.mode = 'lawyer';
       }
       dispatch(setUser(userInfo));
     } else {
@@ -121,6 +128,7 @@ const LoginForm = ({ mode, setMode }) => {
               variant='standard'
               onChange={passwordOnChangeEventHandler}
               fullWidth
+              type='password'
             />
           </div>
           <Button
@@ -160,7 +168,13 @@ const LoginForm = ({ mode, setMode }) => {
           <div className='navigate-join'>
             {/* <Link to={"/join?mode=" + mode}>회원가입</Link> */}
             {/* <Link to={`/join?mode=${mode}`}>회원가입</Link> */}
-            <button onClick={handleJoinSelector}>회원가입</button>
+            <Button
+              onClick={handleJoinSelector}
+              className='Join-button'
+              variant='contained'
+            >
+              회원가입
+            </Button>
           </div>
         </div>
 

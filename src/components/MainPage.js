@@ -6,14 +6,17 @@ import commUtil from '../util/commUtil';
 import './MainPage.css';
 import { API_BASE_URL } from '../config/host-config';
 import { logout } from '../store/userSlice';
+import { useSelector } from 'react-redux';
 
 const MainPage = () => {
   const isLogin = commUtil.isNotEmpty(localStorage.getItem('accessToken'));
+  const loggedUser = useSelector((state) => state.user);
 
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
   const [targetDivId, setTargetDivId] = useState(null);
+  const [myBtn, setMyBtn] = useState('');
 
   const handleMouseHover = (e) => {
     setTargetDivId(e.target.parentNode.id);
@@ -25,7 +28,11 @@ const MainPage = () => {
   const mode = useAppSelector((state) => state.user.mode);
 
   const logoutBtnOnclick = async () => {
-    console.log('logoutApi 실행 전');
+    if (mode === 'lawyer') {
+      alert('로그아웃 되었습니다.');
+      localStorage.clear();
+      navigate('/');
+    }
     try {
       const res = await fetch(`${API_BASE_URL}/user/logout`, {
         headers: {
@@ -33,7 +40,6 @@ const MainPage = () => {
         },
       });
       console.log('accessToken', localStorage.getItem('accessToken'));
-      console.log('logoutApi 실행', res);
       if (res.status === 200) {
         localStorage.clear();
         dispatch(logout());
@@ -43,6 +49,53 @@ const MainPage = () => {
     } catch (error) {
       console.error('로그아웃 에러:', error);
       alert('로그아웃 실패');
+    }
+  };
+
+  const renderMyBtn = () => {
+    if (isLogin && loggedUser.mode == 'user') {
+      return (
+        <>
+          <Link
+            to='/mypage/user'
+            className='mainJoinBtn'
+          >
+            마이페이지
+          </Link>
+        </>
+      );
+    } else if (isLogin && loggedUser.mode == 'lawyer') {
+      return (
+        <>
+          <Link
+            to='/mypage/lawyer'
+            className='mainJoinBtn'
+          >
+            마이페이지
+          </Link>
+        </>
+      );
+    } else if (isLogin) {
+      return (
+        <>
+          <Link
+            to='/joinlist/'
+            className='mainJoinBtn'
+            style={{ width: '170px' }}
+          >
+            회원가입 요청 리스트
+          </Link>
+        </>
+      );
+    } else {
+      return (
+        <Link
+          to='/join'
+          className='mainJoinBtn'
+        >
+          회원가입
+        </Link>
+      );
     }
   };
 
@@ -102,13 +155,26 @@ const MainPage = () => {
         {/* <span className="mainJoinBtn">회원가입</span> */}
         {/* <div className="mainBtnBar" /> */}
         {/* <span className="mainLoginBtn">로그인</span> */}
-        <Link
-          to='/join'
-          className='mainJoinBtn'
-        >
-          회원가입
-        </Link>
-        {}
+
+        {/* {isLogin ? (
+          <>
+            <Link
+              to='/mypage'
+              className='mainJoinBtn'
+            >
+              마이페이지
+            </Link>
+          </>
+        ) : (
+          <Link
+            to='/join'
+            className='mainJoinBtn'
+          >
+            회원가입
+          </Link>
+        )} */}
+        {renderMyBtn()}
+
         <div className='mainBtnBar' />
 
         {!isLogin ? (
@@ -122,6 +188,12 @@ const MainPage = () => {
           <Link
             className='mainLoginBtn'
             onClick={logoutBtnOnclick}
+            style={{
+              width: '100px',
+              height: '100px',
+              overflow: 'hidden',
+              whiteSpace: 'nowrap',
+            }}
           >
             로그아웃
           </Link>

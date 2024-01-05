@@ -9,7 +9,7 @@ import '../scss/Bupbong.scss';
 
 const Bupbong = (effect, deps) => {
   const URL = API_BASE_URL;
-  // const URL = 'http://localhost:8183';
+  const token = 'Bearer ' + localStorage.getItem('accessToken');
 
   const [bank, setBank] = useState(''); // 은행 선택
   const [accountNumber, setAccountNumber] = useState(''); // 계좌번호
@@ -17,7 +17,6 @@ const Bupbong = (effect, deps) => {
 
   const fetchUserCount = async () => {
     // 보유 법봉 불러오기
-    const token = 'Bearer ' + localStorage.getItem('accessToken');
 
     await fetch(`${URL}/mypage/hammer`, {
       headers: {
@@ -32,7 +31,6 @@ const Bupbong = (effect, deps) => {
   };
 
   const mode = useAppSelector((state) => state.user.mode);
-  // console.log(mode);
 
   const [hammer, setHammer] = useState(0);
 
@@ -70,9 +68,11 @@ const Bupbong = (effect, deps) => {
   const onClickPayment = async (event) => {
     const { IMP } = window;
 
-    const amount = event.currentTarget.getAttribute('data-amount');
+    const amountStr = event.currentTarget.getAttribute('data-amount');
     const name = event.currentTarget.getAttribute('product-name');
     const value = event.currentTarget.getAttribute('data-value');
+
+    const amount = parseInt(amountStr.replace(/,/g, ''), 10);
 
     IMP.init([['imp42507411']]);
     const datas = {
@@ -95,7 +95,7 @@ const Bupbong = (effect, deps) => {
             method: 'PUT',
             headers: {
               'content-type': 'application/json',
-              Authorization: 'Bearer ' + localStorage.getItem('accessToken'),
+              Authorization: token,
             },
           }).then((res) => {
             if (res.status === 200) {
@@ -156,7 +156,7 @@ const Bupbong = (effect, deps) => {
           method: 'PUT',
           headers: {
             'content-type': 'application/json',
-            Authorization: 'Bearer ' + localStorage.getItem('accessToken'),
+            Authorization: token,
           },
         }).then((res) => {
           if (res.status === 200) {
@@ -194,39 +194,38 @@ const Bupbong = (effect, deps) => {
             </span>
             <span className='own-count'>{userCount}</span>
           </div>
-          {/* {mode === 'lawyer' && (  변호사 로그인시 처리가 갑자기 안됨.. 수정 필요*/}
-          <div className='account-wrapper'>
-            <span className='account-num label'>계좌번호</span>
-            <div className='account-select'>
-              <Select
-                value={bank}
-                onChange={handleChange}
-                displayEmpty
-                inputProps={{ 'aria-label': 'Without label' }}
-              >
-                <MenuItem value=''>
-                  <em>--선택--</em>
-                </MenuItem>
-                <MenuItem value='국민은행'>국민은행</MenuItem>
-                <MenuItem value='신한은행'>신한은행</MenuItem>
-                <MenuItem value='하나은행'>하나은행</MenuItem>
-              </Select>
-              <input
-                className='account-input'
-                type='tel'
-                placeholder='계좌번호를 입력해주세요'
-                onChange={handlerValueChange}
-              ></input>
-              <Button
-                className='input-btn'
-                onClick={handleButtonClick}
-              >
-                입력
-              </Button>
-              {/* <Button onClick={}>Test</Button> */}
+          {mode === 'lawyer' && (
+            <div className='account-wrapper'>
+              <span className='account-num label'>계좌번호</span>
+              <div className='account-select'>
+                <Select
+                  value={bank}
+                  onChange={handleChange}
+                  displayEmpty
+                  inputProps={{ 'aria-label': 'Without label' }}
+                >
+                  <MenuItem value=''>
+                    <em>--선택--</em>
+                  </MenuItem>
+                  <MenuItem value='국민은행'>국민은행</MenuItem>
+                  <MenuItem value='신한은행'>신한은행</MenuItem>
+                  <MenuItem value='하나은행'>하나은행</MenuItem>
+                </Select>
+                <input
+                  className='account-input'
+                  type='tel'
+                  placeholder='계좌번호를 입력해주세요'
+                  onChange={handlerValueChange}
+                ></input>
+                <Button
+                  className='input-btn'
+                  onClick={handleButtonClick}
+                >
+                  입력
+                </Button>
+              </div>
             </div>
-          </div>
-          {/* )} */}
+          )}
         </div>
         <div className='box-wrapper'>
           <div

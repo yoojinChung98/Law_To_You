@@ -18,8 +18,6 @@ const JoinListPage = () => {
 
   return (
     <>
-      <Header />
-
       {/** 헤더푸터 제외 가운데정렬로 맞출 클래스 지정을 위해 div 태그로 감쌈 */}
       <div className='page'>
         <div className='page-content-wrapper'>
@@ -39,8 +37,6 @@ const JoinListPage = () => {
           </div>
         </div>
       </div>
-
-      <Footer />
     </>
   );
 };
