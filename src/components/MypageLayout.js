@@ -89,7 +89,7 @@ const MypageLayout = () => {
   const url = window.location.href;
   //(url에서 :3000 이후의 6문자 비교)
   const testFunc = () => {
-    let idxF = url.indexOf(':3000') + 5;
+    let idxF = url.indexOf('.site') + 5;
     let urlStr = url.substring(idxF, idxF + 6);
     // 무한렌더링을 막기 위해 cateFlag 변수 이용
     //

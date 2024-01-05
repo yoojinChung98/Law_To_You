@@ -55,6 +55,7 @@ const FAQ = () => {
     getMidSecContent(idx);
   };
 
+  // 중분류가 전체(0)인 경우 리스트 요청 및 페이지처리
   const pageChangeMidIdx0 = async (page) => {
     let largeSection = encodeURIComponent(
       categories[clickedCateIdx].substring(0, 2)
@@ -194,7 +195,7 @@ const FAQ = () => {
   useEffect(() => {
     //처음 들어올 때, 0번째 카테고리로 요청 한 번 보내서 값을 가져오긴 해야할 듯?
     getMidSecContent(clickedCateIdx);
-  }, []); // 중분류 변경 시도 추가
+  }, []);
 
   return (
     <>
