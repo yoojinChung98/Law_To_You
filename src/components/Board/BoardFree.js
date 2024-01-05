@@ -1,16 +1,16 @@
-import { Icon } from '@iconify/react';
-import { Button, MenuItem, Pagination, Select } from '@mui/material';
-import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { getFreeListApi, getFreeSearchApi } from '../../api/board/FreeBoardApi';
-import '../scss/Board.scss';
-import BoardForm from './BoardForm';
+import { Icon } from "@iconify/react";
+import { Button, MenuItem, Pagination, Select } from "@mui/material";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { getFreeListApi, getFreeSearchApi } from "../../api/board/FreeBoardApi";
+import "../scss/Board.scss";
+import BoardForm from "./BoardForm";
 
 const BoardFree = () => {
   const navigate = useNavigate();
 
-  const [searchVal, setSearchVal] = useState(''); // 검색창 입력값 저장
-  const [select, setSelect] = useState('writer'); // 검색창 옵션
+  const [searchVal, setSearchVal] = useState(""); // 검색창 입력값 저장
+  const [select, setSelect] = useState("writer"); // 검색창 옵션
   // 페이징버튼 개수
   const [pBtnCnt, setPBtnCnt] = useState(1);
   // 클릭 현재 페이지 번호
@@ -36,7 +36,7 @@ const BoardFree = () => {
 
     getFreeListApi(params)
       .then((res) => {
-        if (typeof res === 'object') {
+        if (typeof res === "object") {
           setData(res);
           console.log(res);
           console.log(res.count);
@@ -50,15 +50,15 @@ const BoardFree = () => {
           freeboards: [
             {
               bno: 1,
-              title: '제목1',
-              writer: '작성자1',
-              regDate: '2024.01.01',
+              title: "제목1",
+              writer: "작성자1",
+              regDate: "2024.01.01",
             },
             {
               bno: 2,
-              title: '제목2',
-              writer: '작성자2',
-              regDate: '2024.01.01',
+              title: "제목2",
+              writer: "작성자2",
+              regDate: "2024.01.01",
             },
           ],
         });
@@ -76,7 +76,7 @@ const BoardFree = () => {
 
   const freeSearchBtn = async () => {
     if (!searchVal.trim()) {
-      alert('검색어를 입력해주세요.');
+      alert("검색어를 입력해주세요.");
       return;
     }
     let params = {
@@ -85,7 +85,7 @@ const BoardFree = () => {
     };
 
     getFreeSearchApi(params).then((res) => {
-      if (typeof res === 'object') {
+      if (typeof res === "object") {
         setData({ ...data, freeboards: res.freeboardDetailResponseDTOS });
         console.log(res.count);
         setPBtnCnt(Math.floor(res.count / 10) + 1);
@@ -94,8 +94,8 @@ const BoardFree = () => {
   };
   return (
     <>
-      <div className='board'>
-        <div className='board-header'>
+      <div className="board">
+        <div className="board-header">
           <span>고민나누기</span>
           <div>
             자유게시판 설명 내용 작성하기! 사용자가 올린 온라인 상담 문의글에
@@ -107,26 +107,23 @@ const BoardFree = () => {
         <Select
           value={select}
           style={{
-            left: '330px',
-            top: '62px',
-            height: '31px',
+            left: "330px",
+            top: "62px",
+            height: "31px",
           }}
           onChange={handleChange}
           displayEmpty
-          inputProps={{ 'aria-label': 'Without label' }}
+          inputProps={{ "aria-label": "Without label" }}
         >
-          <MenuItem value='writer'>작성자</MenuItem>
-          <MenuItem value='titleAndContent'>제목 + 내용</MenuItem>
+          <MenuItem value="writer">작성자</MenuItem>
+          <MenuItem value="titleAndContent">제목 + 내용</MenuItem>
         </Select>
-        <div className='search-box'>
-          <input
-            className='search-input'
-            onChange={searchValTarget}
-          />
+        <div className="search-box">
+          <input className="search-input" onChange={searchValTarget} />
           <Icon
-            className='search-button'
-            icon='majesticons:search-line'
-            color='#675d50'
+            className="search-button"
+            icon="majesticons:search-line"
+            color="#675d50"
             onClick={freeSearchBtn}
           />
         </div>
@@ -136,23 +133,23 @@ const BoardFree = () => {
         currentPage={currentPage}
         onPageChange={onPageChange}
         data={data.freeboards}
-        type='freeboard'
+        type="freeboard"
       />
-      <div className='bottom pagination'>
+      <div className="bottom pagination">
         <Pagination
           count={pBtnCnt}
           page={currentPage}
           onChange={onPageChange}
-          variant='outlined'
-          shape='rounded'
+          variant="outlined"
+          shape="rounded"
         />
       </div>
-      <div className='button-wrapper'>
+      <div className="button-wrapper">
         <Button
-          className='board-write-btn'
-          variant='contained'
+          className="board-write-btn"
+          variant="contained"
           onClick={() => {
-            navigate('/freewrite');
+            navigate("/freewrite");
           }}
         >
           글 작성하기

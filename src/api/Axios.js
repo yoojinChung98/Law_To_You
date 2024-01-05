@@ -3,7 +3,7 @@ import { API_BASE_URL } from "../config/host-config";
 
 const axiosConfig = {
   baseURL: API_BASE_URL,
-  // timeout: 10000,
+  timeout: 10000,
   withCredentials: false,
 };
 

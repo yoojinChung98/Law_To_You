@@ -17,6 +17,7 @@ import MyConsultListPage from '../components/MyConsultList/MyConsultListPage';
 import MyPostListPage from '../components/MyPostList/MyPostListPage';
 import LawyerModify from '../components/modify/LawyerModify';
 import UserModify from '../components/modify/UserModify';
+import DeepWrite from '../components/write/DeepWrite';
 
 import MypageLayout from '../components/MypageLayout';
 import '../index.css';
@@ -34,7 +35,7 @@ const RouterIndex = () => {
 
   useEffect(() => {
     if (!isLogin) {
-      navigate('login');
+      navigate('/login');
     } else {
       if (location.pathname === '/login') {
         navigate('/');
